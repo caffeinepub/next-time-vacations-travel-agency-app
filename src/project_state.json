@@ -1,0 +1,69 @@
+{
+  "schemaVersion": "1.0.0",
+  "projectStateVersion": 5,
+  "summary": "New project",
+  "architectural_notes": [
+    "Email sending is not enabled; provide itinerary sharing via shareable links and downloadable PDFs instead of sending emails directly."
+  ],
+  "known_issues": [
+    "Draft/app build intermittently fails or expires (e.g., 'draft app has expired', 'application creation unsuccessful'), requiring rebuild/retry."
+  ],
+  "isFixRequest": false,
+  "existing_features": [
+    {
+      "id": "feature-update-the-phone-number-displayed-in-the-site-footer-the-call-us-line-from-1-800-cruise-now-to-434-238-8796",
+      "title": "Update the phone number displayed in the site footer (the \"Call us:\" line) from \"1-800-CRUISE-NOW\" to \"434-238-8796\".",
+      "reqIds": [
+        "REQ-1"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-add-an-interactive-admin-training-mode-guided-walkthrough-for-the-admin-dashboard-that-can-be-started-by-an-admin-user-and-steps-through-the-main-dashboard-areas-alerts-tab-bookings-tab-logos-tab-with-on-screen-explanations-and-next-back-controls",
+      "title": "Add an interactive \"Admin Training Mode\" guided walkthrough for the Admin Dashboard that can be started by an admin user and steps through the main dashboard areas (Alerts tab, Bookings tab, Logos tab) with on-screen explanations and Next/Back controls.",
+      "reqIds": [
+        "REQ-2"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-add-a-shareable-link-flow-for-itineraries-that-lets-a-user-generate-a-public-url-for-a-selected-itinerary-and-allows-anyone-with-that-url-to-view-the-itinerary-details-without-signing-in",
+      "title": "Add a shareable-link flow for itineraries that lets a user generate a public URL for a selected itinerary, and allows anyone with that URL to view the itinerary details without signing in.",
+      "reqIds": [
+        "REQ-3"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-add-a-download-as-pdf-option-for-itineraries-so-a-user-can-download-a-pdf-containing-the-itinerary-details-for-the-currently-viewed-itinerary",
+      "title": "Add a “Download as PDF” option for itineraries so a user can download a PDF containing the itinerary details for the currently viewed itinerary.",
+      "reqIds": [
+        "REQ-4"
+      ],
+      "version": 1
+    }
+  ],
+  "new_feature_requests": [
+    {
+      "id": "AR-1",
+      "summary": "Add interactive Admin Training Mode (guided walkthrough) for the admin dashboard",
+      "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-2",
+      "summary": "Update the phone number in the page footer to 434-238-8796",
+      "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-3",
+      "summary": "Add itinerary sharing options: generate a shareable link and allow downloading an itinerary as a PDF",
+      "reqIds": [],
+      "status": "pending"
+    }
+  ],
+  "projectName": "Next Time Vacations",
+  "clarification_mode": "instant",
+  "clarification_rounds": 0
+}

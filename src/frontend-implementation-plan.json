@@ -1,0 +1,71 @@
+{
+  "kind": "implementation_plan",
+  "version": "1.0",
+  "title": "Itinerary shareable links and PDF downloads (frontend)",
+  "requirements": [
+    {
+      "id": "REQ-3",
+      "summary": "Enable generating a public shareable URL for an itinerary and viewing shared itinerary details without authentication.",
+      "acceptanceCriteria": [
+        "From the itinerary details UI, the user can generate a shareable link for the currently viewed itinerary.",
+        "The generated link is a stable URL that can be opened in a new/private browser session without authentication and still shows the itinerary details.",
+        "If the share token/link is invalid or not found, the app shows an English error state indicating the shared itinerary is not available.",
+        "Shareable-link generation does not require any external email service or third-party integrations."
+      ],
+      "file_operations": [
+        {
+          "path": "frontend/src/hooks/useQueries.ts",
+          "operation": "modify",
+          "description": "Add React Query hooks to call existing backend capabilities for share links: a mutation hook that uses createShareableLink(itineraryId) and a query hook that uses getShareableLink(linkId). Ensure query/mutation errors are surfaced in English-friendly UI messages (no email integration)."
+        },
+        {
+          "path": "frontend/src/components/ItineraryDialog.tsx",
+          "operation": "modify",
+          "description": "Add a shareable-link UI action in the itinerary details dialog using existing shadcn-ui Button/toast patterns (do not edit ui components directly). The action should call the new createShareableLink hook, then construct a stable public URL containing the returned linkId, provide copy-to-clipboard, and show success/failure messaging in English. Keep this flow entirely in-app (no outbound email). Verify the component's usage instructions before implementing."
+        },
+        {
+          "path": "frontend/src/components/SharedItineraryPage.tsx",
+          "operation": "create",
+          "description": "Create a public, unauthenticated shared-itinerary view that reads the share linkId from the URL (query or hash) and fetches details via the new getShareableLink hook. Render itinerary details in a read-only layout and show an English error state when the link is invalid/not found. Verify the component's usage instructions before implementing."
+        },
+        {
+          "path": "frontend/src/utils/urlParams.ts",
+          "operation": "modify",
+          "description": "Extend URL parameter helpers to support extracting the share linkId robustly for both query-string and hash-based URLs (stable link behavior). Reuse existing patterns in this utility; do not add any email-related logic."
+        },
+        {
+          "path": "frontend/src/App.tsx",
+          "operation": "modify",
+          "description": "Wire SharedItineraryPage into the app so that when a share linkId is present in the URL the app renders the public shared-itinerary experience without requiring authentication. Ensure navigation does not introduce a new top-level route framework beyond what is needed for this requirement."
+        }
+      ]
+    },
+    {
+      "id": "REQ-4",
+      "summary": "Add a client-side “Download as PDF” action for itinerary details from the itinerary details UI.",
+      "acceptanceCriteria": [
+        "From the itinerary details UI, the user can trigger a PDF download for the currently viewed itinerary.",
+        "The downloaded PDF includes, at minimum, the itinerary’s ports of call, departure date, return date, ship specs, cabin categories/prices/availability, dining options, and entertainment (when present).",
+        "If itinerary data is unavailable, the PDF download action is disabled or shows an English error message explaining why it cannot be generated.",
+        "PDF generation and download works without using any external email sending capability."
+      ],
+      "file_operations": [
+        {
+          "path": "frontend/package.json",
+          "operation": "modify",
+          "description": "Add/adjust a client-side PDF generation dependency (e.g., a browser PDF library) required to generate and download PDFs directly in the browser, with no external services and no email integration."
+        },
+        {
+          "path": "frontend/src/utils/itineraryPdf.ts",
+          "operation": "create",
+          "description": "Implement a utility that takes an Itinerary and generates a downloadable PDF in the browser. Ensure the PDF includes ports of call, departure/return dates, ship specs, cabins (category/price/availability), dining options, and entertainment when present, and returns clear English errors when generation is not possible."
+        },
+        {
+          "path": "frontend/src/components/ItineraryDialog.tsx",
+          "operation": "modify",
+          "description": "Add a “Download as PDF” button to the itinerary details dialog. Disable the action (or show an English error) when itinerary data is unavailable, and trigger client-side PDF generation/download using the new utility. Use existing shadcn-ui components (Button, toast) without modifying any files under frontend/src/components/ui. Verify the component's usage instructions before implementing."
+        }
+      ]
+    }
+  ]
+}

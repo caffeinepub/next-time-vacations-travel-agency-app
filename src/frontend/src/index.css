@@ -1,0 +1,159 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+    :root {
+        --radius: 0.625rem;
+        --background: 0.99 0 0;
+        --foreground: 0.145 0 0;
+        --card: 1 0 0;
+        --card-foreground: 0.145 0 0;
+        --popover: 1 0 0;
+        --popover-foreground: 0.145 0 0;
+        --primary: 0.205 0 0;
+        --primary-foreground: 0.985 0 0;
+        --secondary: 0.97 0 0;
+        --secondary-foreground: 0.205 0 0;
+        --muted: 0.96 0 0;
+        --muted-foreground: 0.556 0 0;
+        --accent: 0.97 0 0;
+        --accent-foreground: 0.205 0 0;
+        --destructive: 0.577 0.245 27.325;
+        --destructive-foreground: 0.985 0 0;
+        --border: 0.922 0 0;
+        --input: 0.922 0 0;
+        --ring: 0.708 0 0;
+        --chart-1: 0.646 0.222 41.116;
+        --chart-2: 0.6 0.118 184.704;
+        --chart-3: 0.398 0.07 227.392;
+        --chart-4: 0.828 0.189 84.429;
+        --chart-5: 0.769 0.188 70.08;
+        --sidebar: 0.985 0 0;
+        --sidebar-foreground: 0.145 0 0;
+        --sidebar-primary: 0.205 0 0;
+        --sidebar-primary-foreground: 0.985 0 0;
+        --sidebar-accent: 0.97 0 0;
+        --sidebar-accent-foreground: 0.205 0 0;
+        --sidebar-border: 0.922 0 0;
+        --sidebar-ring: 0.708 0 0;
+        
+        /* Ocean theme colors */
+        --ocean-50: 0.97 0.02 220;
+        --ocean-100: 0.94 0.04 220;
+        --ocean-200: 0.88 0.08 220;
+        --ocean-300: 0.78 0.12 220;
+        --ocean-400: 0.65 0.15 220;
+        --ocean-500: 0.52 0.18 220;
+        --ocean-600: 0.42 0.16 220;
+        --ocean-700: 0.35 0.14 220;
+        --ocean-800: 0.28 0.12 220;
+        --ocean-900: 0.20 0.10 220;
+        --ocean-950: 0.12 0.08 220;
+        
+        /* Sunset/coral accent colors */
+        --sunset-50: 0.97 0.02 35;
+        --sunset-100: 0.94 0.05 35;
+        --sunset-200: 0.88 0.10 35;
+        --sunset-300: 0.80 0.15 35;
+        --sunset-400: 0.72 0.18 35;
+        --sunset-500: 0.65 0.20 35;
+        --sunset-600: 0.58 0.18 35;
+        --sunset-700: 0.48 0.15 35;
+        --sunset-800: 0.40 0.12 35;
+        --sunset-900: 0.32 0.10 35;
+    }
+
+    .dark {
+        --background: 0.145 0 0;
+        --foreground: 0.985 0 0;
+        --card: 0.18 0 0;
+        --card-foreground: 0.985 0 0;
+        --popover: 0.20 0 0;
+        --popover-foreground: 0.985 0 0;
+        --primary: 0.88 0.08 220;
+        --primary-foreground: 0.145 0 0;
+        --secondary: 0.25 0 0;
+        --secondary-foreground: 0.985 0 0;
+        --muted: 0.25 0 0;
+        --muted-foreground: 0.708 0 0;
+        --accent: 0.30 0 0;
+        --accent-foreground: 0.985 0 0;
+        --destructive: 0.65 0.20 27;
+        --destructive-foreground: 0.985 0 0;
+        --border: 1 0 0 / 12%;
+        --input: 1 0 0 / 18%;
+        --ring: 0.556 0 0;
+        --chart-1: 0.488 0.243 264.376;
+        --chart-2: 0.696 0.17 162.48;
+        --chart-3: 0.769 0.188 70.08;
+        --chart-4: 0.627 0.265 303.9;
+        --chart-5: 0.645 0.246 16.439;
+        --sidebar: 0.18 0 0;
+        --sidebar-foreground: 0.985 0 0;
+        --sidebar-primary: 0.65 0.15 220;
+        --sidebar-primary-foreground: 0.985 0 0;
+        --sidebar-accent: 0.25 0 0;
+        --sidebar-accent-foreground: 0.985 0 0;
+        --sidebar-border: 1 0 0 / 12%;
+        --sidebar-ring: 0.439 0 0;
+    }
+
+    * {
+        @apply border-border;
+    }
+    body {
+        @apply bg-background text-foreground;
+    }
+}
+
+@layer utilities {
+    .text-ocean-50 { color: oklch(var(--ocean-50)); }
+    .text-ocean-100 { color: oklch(var(--ocean-100)); }
+    .text-ocean-200 { color: oklch(var(--ocean-200)); }
+    .text-ocean-300 { color: oklch(var(--ocean-300)); }
+    .text-ocean-400 { color: oklch(var(--ocean-400)); }
+    .text-ocean-500 { color: oklch(var(--ocean-500)); }
+    .text-ocean-600 { color: oklch(var(--ocean-600)); }
+    .text-ocean-700 { color: oklch(var(--ocean-700)); }
+    .text-ocean-800 { color: oklch(var(--ocean-800)); }
+    .text-ocean-900 { color: oklch(var(--ocean-900)); }
+    .text-ocean-950 { color: oklch(var(--ocean-950)); }
+    
+    .bg-ocean-50 { background-color: oklch(var(--ocean-50)); }
+    .bg-ocean-100 { background-color: oklch(var(--ocean-100)); }
+    .bg-ocean-200 { background-color: oklch(var(--ocean-200)); }
+    .bg-ocean-300 { background-color: oklch(var(--ocean-300)); }
+    .bg-ocean-400 { background-color: oklch(var(--ocean-400)); }
+    .bg-ocean-500 { background-color: oklch(var(--ocean-500)); }
+    .bg-ocean-600 { background-color: oklch(var(--ocean-600)); }
+    .bg-ocean-700 { background-color: oklch(var(--ocean-700)); }
+    .bg-ocean-800 { background-color: oklch(var(--ocean-800)); }
+    .bg-ocean-900 { background-color: oklch(var(--ocean-900)); }
+    .bg-ocean-950 { background-color: oklch(var(--ocean-950)); }
+    
+    .text-sunset-50 { color: oklch(var(--sunset-50)); }
+    .text-sunset-100 { color: oklch(var(--sunset-100)); }
+    .text-sunset-200 { color: oklch(var(--sunset-200)); }
+    .text-sunset-300 { color: oklch(var(--sunset-300)); }
+    .text-sunset-400 { color: oklch(var(--sunset-400)); }
+    .text-sunset-500 { color: oklch(var(--sunset-500)); }
+    .text-sunset-600 { color: oklch(var(--sunset-600)); }
+    .text-sunset-700 { color: oklch(var(--sunset-700)); }
+    .text-sunset-800 { color: oklch(var(--sunset-800)); }
+    .text-sunset-900 { color: oklch(var(--sunset-900)); }
+    
+    .bg-sunset-50 { background-color: oklch(var(--sunset-50)); }
+    .bg-sunset-100 { background-color: oklch(var(--sunset-100)); }
+    .bg-sunset-200 { background-color: oklch(var(--sunset-200)); }
+    .bg-sunset-300 { background-color: oklch(var(--sunset-300)); }
+    .bg-sunset-400 { background-color: oklch(var(--sunset-400)); }
+    .bg-sunset-500 { background-color: oklch(var(--sunset-500)); }
+    .bg-sunset-600 { background-color: oklch(var(--sunset-600)); }
+    .bg-sunset-700 { background-color: oklch(var(--sunset-700)); }
+    .bg-sunset-800 { background-color: oklch(var(--sunset-800)); }
+    .bg-sunset-900 { background-color: oklch(var(--sunset-900)); }
+    
+    .border-ocean-600 { border-color: oklch(var(--ocean-600)); }
+    .border-sunset-600 { border-color: oklch(var(--sunset-600)); }
+}
