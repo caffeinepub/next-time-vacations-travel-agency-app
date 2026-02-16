@@ -1,6 +1,6 @@
 {
   "schemaVersion": "1.0.0",
-  "projectStateVersion": 5,
+  "projectStateVersion": 7,
   "summary": "New project",
   "architectural_notes": [
     "Email sending is not enabled; provide itinerary sharing via shareable links and downloadable PDFs instead of sending emails directly."
@@ -41,6 +41,30 @@
         "REQ-4"
       ],
       "version": 1
+    },
+    {
+      "id": "feature-add-an-admin-accessible-ui-in-the-admin-dashboard-to-edit-and-save-branding-settings-for-the-public-shared-itinerary-page-including-brand-name-text-tagline-subtitle-text-contact-phone-number-text-logo-image-url-text-and-primary-accent-color-values-text-inputs-that-accept-css-color-strings-such-as-hex",
+      "title": "Add an admin-accessible UI in the Admin Dashboard to edit and save branding settings for the public shared itinerary page, including: brand name (text), tagline/subtitle (text), contact phone number (text), logo image URL (text), and primary/accent color values (text inputs that accept CSS color strings such as hex).",
+      "reqIds": [
+        "REQ-5"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-update-the-public-shared-itinerary-page-to-use-the-stored-branding-settings-instead-of-hardcoded-values-including-replacing-the-brand-name-text-next-time-vacations-the-tagline-subtitle-the-contact-phone-number-and-displaying-the-logo-when-provided",
+      "title": "Update the public Shared Itinerary page to use the stored branding settings instead of hardcoded values, including replacing the brand name text (“Next Time Vacations”), the tagline/subtitle, the contact phone number, and displaying the logo when provided.",
+      "reqIds": [
+        "REQ-7"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-apply-configurable-primary-accent-colors-from-branding-settings-to-the-shared-itinerary-page-in-a-controlled-way-e-g-header-title-accents-icon-accent-colors-and-key-ui-highlights-while-maintaining-readability-in-both-light-and-dark-mode",
+      "title": "Apply configurable primary/accent colors from branding settings to the Shared Itinerary page in a controlled way (e.g., header/title accents, icon accent colors, and key UI highlights) while maintaining readability in both light and dark mode.",
+      "reqIds": [
+        "REQ-8"
+      ],
+      "version": 1
     }
   ],
   "new_feature_requests": [
@@ -60,6 +84,20 @@
       "id": "AR-3",
       "summary": "Add itinerary sharing options: generate a shareable link and allow downloading an itinerary as a PDF",
       "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-4",
+      "summary": "Add customization options for the look/branding of the shared itinerary public page",
+      "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-6",
+      "summary": "Add backend storage and APIs for shared itinerary page branding settings, including: a public query to fetch the current branding settings and an admin-only update method to set them.",
+      "reqIds": [
+        "REQ-6"
+      ],
       "status": "pending"
     }
   ],

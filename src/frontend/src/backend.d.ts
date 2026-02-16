@@ -26,16 +26,27 @@ export interface Cabin {
     category: string;
     price: bigint;
 }
-export interface AdminAlert {
-    id: string;
-    userName: string;
-    bookingId: string;
-    createdAt: Time;
-    totalCost: bigint;
-    numberOfCabins: bigint;
-    isPersistent: boolean;
-    cruiseName: string;
-    viewed: boolean;
+export interface BrandingSettings {
+    backgroundColor: string;
+    instagramLink: string;
+    logoPosition: string;
+    youtubeLink: string;
+    bannerText: string;
+    enableAnalytics: boolean;
+    termsConditionsUrl: string;
+    accentColor: string;
+    showNewsletterSignup: boolean;
+    heroBannerImage: string;
+    defaultLanguage: string;
+    showLogo: boolean;
+    privacyPolicyUrl: string;
+    facebookLink: string;
+    enableSocialLinks: boolean;
+    headerImage: string;
+    heroBannerText: string;
+    fontColor: string;
+    footerText: string;
+    customCss: string;
 }
 export interface CruiseDeal {
     id: string;
@@ -65,6 +76,17 @@ export interface Itinerary {
     returnDate: string;
     shipSpecs: string;
     images: Array<string>;
+}
+export interface AdminAlert {
+    id: string;
+    userName: string;
+    bookingId: string;
+    createdAt: Time;
+    totalCost: bigint;
+    numberOfCabins: bigint;
+    isPersistent: boolean;
+    cruiseName: string;
+    viewed: boolean;
 }
 export interface InviteCode {
     created: Time;
@@ -131,6 +153,7 @@ export interface backendInterface {
     getAverageRatingByCruiseId(cruiseId: string): Promise<number>;
     getBookingsByUser(arg0: {
     }): Promise<Array<Booking>>;
+    getBrandingSettings(): Promise<BrandingSettings>;
     getCallerUserProfile(): Promise<UserProfile | null>;
     getCallerUserRole(): Promise<UserRole>;
     getFavorites(): Promise<Array<string>>;
@@ -155,6 +178,7 @@ export interface backendInterface {
     searchItineraries(searchText: string): Promise<Array<Itinerary>>;
     submitRSVP(name: string, attending: boolean, inviteCode: string): Promise<void>;
     submitReview(cruiseId: string, rating: bigint, title: string, comment: string): Promise<void>;
+    updateBrandingSettings(newSettings: BrandingSettings): Promise<void>;
     updateCabinAvailability(itineraryId: string, category: string, availability: bigint): Promise<void>;
     updateCruiseDeal(id: string, cruiseLine: string, shipName: string, destination: string, duration: bigint, startingPrice: bigint, promotional: boolean): Promise<void>;
     updateCruiseLineLogo(name: string, imageUrl: string): Promise<void>;

@@ -1,68 +1,107 @@
 {
   "kind": "build_request",
-  "title": "Add itinerary shareable links and PDF downloads",
+  "title": "Add branding customization for the public Shared Itinerary page",
   "projectName": "Next Time Vacations",
   "priority": "normal",
   "requirements": [
     {
-      "id": "REQ-3",
-      "text": "Add a shareable-link flow for itineraries that lets a user generate a public URL for a selected itinerary, and allows anyone with that URL to view the itinerary details without signing in.",
-      "target": "both",
-      "source": {
-        "messageIds": [
-          "msg-12",
-          "msg-15",
-          "msg-18"
-        ],
-        "quotes": [
-          "Please allow me to send selected itineraries to a customer's email for review",
-          "Please add an option to send a shareable link or a downloadable pdf of an itinerary to a client.",
-          "Please add both features"
-        ]
-      },
-      "acceptanceCriteria": [
-        "From the itinerary details UI, the user can generate a shareable link for the currently viewed itinerary.",
-        "The generated link is a stable URL that can be opened in a new/private browser session without authentication and still shows the itinerary details.",
-        "If the share token/link is invalid or not found, the app shows an English error state indicating the shared itinerary is not available.",
-        "Shareable-link generation does not require any external email service or third-party integrations."
-      ]
-    },
-    {
-      "id": "REQ-4",
-      "text": "Add a “Download as PDF” option for itineraries so a user can download a PDF containing the itinerary details for the currently viewed itinerary.",
+      "id": "REQ-5",
+      "text": "Add an admin-accessible UI in the Admin Dashboard to edit and save branding settings for the public shared itinerary page, including: brand name (text), tagline/subtitle (text), contact phone number (text), logo image URL (text), and primary/accent color values (text inputs that accept CSS color strings such as hex).",
       "target": "frontend",
       "source": {
         "messageIds": [
-          "msg-14",
-          "msg-15",
-          "msg-18"
+          "msg-4"
         ],
         "quotes": [
-          "Please add an option to send a shareable link or a downloadable pdf of an itinerary to a client.",
-          "Sure — I can add both options.",
-          "Please add both features"
+          "yes please"
         ]
       },
       "acceptanceCriteria": [
-        "From the itinerary details UI, the user can trigger a PDF download for the currently viewed itinerary.",
-        "The downloaded PDF includes, at minimum, the itinerary’s ports of call, departure date, return date, ship specs, cabin categories/prices/availability, dining options, and entertainment (when present).",
-        "If itinerary data is unavailable, the PDF download action is disabled or shows an English error message explaining why it cannot be generated.",
-        "PDF generation and download works without using any external email sending capability."
+        "Admin Dashboard includes a new section/tab for “Shared Page Branding” (or equivalent) that is visible to admins only.",
+        "The form includes inputs for: brand name, tagline/subtitle, contact phone number, logo image URL, primary color, accent color.",
+        "Clicking “Save” persists the settings via a backend call and shows a success toast; failures show an error toast.",
+        "A “Reset to defaults” action restores the current default branding values used today (e.g., Next Time Vacations and the current phone number) and persists them after confirmation."
+      ]
+    },
+    {
+      "id": "REQ-6",
+      "text": "Add backend storage and APIs for shared itinerary page branding settings, including: a public query to fetch the current branding settings and an admin-only update method to set them.",
+      "target": "backend",
+      "source": {
+        "messageIds": [
+          "msg-4"
+        ],
+        "quotes": [
+          "yes please"
+        ]
+      },
+      "acceptanceCriteria": [
+        "Backend defines a single branding settings record (global app settings) containing: brandName, tagline, phoneNumber, logoUrl, primaryColor, accentColor.",
+        "A public query method returns the current branding settings without requiring authentication (so shared links can render for anonymous visitors).",
+        "An admin-only update method persists branding settings and rejects non-admin callers.",
+        "If branding settings have never been set, the backend returns sensible defaults that match the existing shared itinerary page text and styling intent (e.g., default brand name and phone number currently shown on the page)."
+      ]
+    },
+    {
+      "id": "REQ-7",
+      "text": "Update the public Shared Itinerary page to use the stored branding settings instead of hardcoded values, including replacing the brand name text (“Next Time Vacations”), the tagline/subtitle, the contact phone number, and displaying the logo when provided.",
+      "target": "frontend",
+      "source": {
+        "messageIds": [
+          "msg-4"
+        ],
+        "quotes": [
+          "yes please"
+        ]
+      },
+      "acceptanceCriteria": [
+        "Shared itinerary header uses the configured brand name and tagline (with fallback to defaults when unset).",
+        "The contact card uses the configured phone number (with fallback to defaults when unset).",
+        "If a logo URL is configured, the shared itinerary page renders the logo in the header area with appropriate sizing and accessible alt text.",
+        "If logo URL is empty/invalid, the page still renders cleanly without broken layout."
+      ]
+    },
+    {
+      "id": "REQ-8",
+      "text": "Apply configurable primary/accent colors from branding settings to the Shared Itinerary page in a controlled way (e.g., header/title accents, icon accent colors, and key UI highlights) while maintaining readability in both light and dark mode.",
+      "target": "frontend",
+      "source": {
+        "messageIds": [
+          "msg-4"
+        ],
+        "quotes": [
+          "yes please"
+        ]
+      },
+      "acceptanceCriteria": [
+        "Primary/accent color settings influence prominent accents on the Shared Itinerary page (e.g., title text and/or section icon highlights) without reducing contrast below readable levels.",
+        "If color values are missing/invalid, the page falls back to the existing ocean/sunset styling tokens.",
+        "Dark mode remains readable and visually coherent after applying branding colors."
       ]
     }
   ],
   "constraints": [
-    "Do not implement email sending (no outbound email integration).",
-    "Backend must remain a single Motoko actor in backend/main.mo; only add a migration file if state upgrades are required.",
-    "Do not edit files under frontend/src/components/ui or any paths listed as immutable in SYSTEM_CONTEXT."
+    "Do not edit any files under frontend/src/components/ui (Shadcn components must be composed, not modified).",
+    "Do not edit frontend/src/hooks/useInternetIdentity.ts, frontend/src/hooks/useInternetIdentity.tsx, frontend/src/hooks/useActor.ts, or frontend/src/main.tsx (immutable paths).",
+    "Backend must remain a single Motoko actor with all logic in backend/main.mo; only add backend/migration.mo if a stable-state upgrade is required."
   ],
   "nonGoals": [
-    "Adding third-party email services or paid email features.",
-    "Adding real-time collaboration or live updating shared itinerary pages.",
-    "Adding custom branding templates beyond the existing app styling."
+    "Do not add per-itinerary or per-share-link branding overrides (branding is global for the shared itinerary experience).",
+    "Do not add third-party authentication providers; keep Internet Identity as-is.",
+    "Do not add external databases or services for theme storage."
   ],
   "imageRequirements": {
     "required": [],
     "edits": []
+  },
+  "userProfileUpdate": {
+    "goalsToAdd": [],
+    "goalsToRemove": [],
+    "preferencesToAdd": [],
+    "preferencesToRemove": [],
+    "miscToAdd": [],
+    "miscToRemove": [],
+    "fieldsToSet": {},
+    "fieldsToDelete": []
   }
 }

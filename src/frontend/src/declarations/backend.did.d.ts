@@ -33,6 +33,28 @@ export interface Booking {
 export type BookingStatus = { 'pending' : null } |
   { 'confirmed' : null } |
   { 'declined' : null };
+export interface BrandingSettings {
+  'backgroundColor' : string,
+  'instagramLink' : string,
+  'logoPosition' : string,
+  'youtubeLink' : string,
+  'bannerText' : string,
+  'enableAnalytics' : boolean,
+  'termsConditionsUrl' : string,
+  'accentColor' : string,
+  'showNewsletterSignup' : boolean,
+  'heroBannerImage' : string,
+  'defaultLanguage' : string,
+  'showLogo' : boolean,
+  'privacyPolicyUrl' : string,
+  'facebookLink' : string,
+  'enableSocialLinks' : boolean,
+  'headerImage' : string,
+  'heroBannerText' : string,
+  'fontColor' : string,
+  'footerText' : string,
+  'customCss' : string,
+}
 export interface Cabin {
   'availability' : bigint,
   'category' : string,
@@ -166,6 +188,7 @@ export interface _SERVICE {
   'getAllShareableLinks' : ActorMethod<[{}], Array<ShareableLink>>,
   'getAverageRatingByCruiseId' : ActorMethod<[string], number>,
   'getBookingsByUser' : ActorMethod<[{}], Array<Booking>>,
+  'getBrandingSettings' : ActorMethod<[], BrandingSettings>,
   'getCallerUserProfile' : ActorMethod<[], [] | [UserProfile]>,
   'getCallerUserRole' : ActorMethod<[], UserRole>,
   'getFavorites' : ActorMethod<[], Array<string>>,
@@ -191,6 +214,7 @@ export interface _SERVICE {
   'searchItineraries' : ActorMethod<[string], Array<Itinerary>>,
   'submitRSVP' : ActorMethod<[string, boolean, string], undefined>,
   'submitReview' : ActorMethod<[string, bigint, string, string], undefined>,
+  'updateBrandingSettings' : ActorMethod<[BrandingSettings], undefined>,
   'updateCabinAvailability' : ActorMethod<[string, string, bigint], undefined>,
   'updateCruiseDeal' : ActorMethod<
     [string, string, string, string, bigint, bigint, boolean],

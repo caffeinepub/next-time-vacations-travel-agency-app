@@ -1,11 +1,13 @@
 # Specification
 
 ## Summary
-**Goal:** Let users share itineraries via public links and download itinerary details as a PDF, without requiring email sending or external integrations.
+**Goal:** Allow admins to configure branding (text, logo, and colors) for the public Shared Itinerary page, and have the shared page render using those saved settings.
 
 **Planned changes:**
-- Add a “Share” action on the itinerary details screen to generate and display a stable, public shareable URL for the currently viewed itinerary.
-- Add a public shared-itinerary view route that renders itinerary details without requiring sign-in, including an English “not available” error state for invalid/unknown links.
-- Add a “Download as PDF” action on the itinerary details screen to generate and download a PDF of the currently viewed itinerary details (ports of call, dates, ship specs, cabin categories/prices/availability, dining, entertainment when present), with a disabled state or English error when data is unavailable.
+- Add an admin-only “Shared Page Branding” section in the Admin Dashboard with inputs for brand name, tagline/subtitle, contact phone number, logo image URL, primary color, and accent color.
+- Implement save behavior that persists branding settings via a backend call and shows success/error toasts.
+- Add a “Reset to defaults” action (with confirmation) that restores and persists the current default branding values used today.
+- Add backend storage for a single global branding settings record and expose: a public read method (no auth) and an admin-only update method.
+- Update the public Shared Itinerary page to fetch branding settings, apply configured text/logo, and apply primary/accent colors with fallbacks for missing/invalid values while remaining readable in light/dark mode.
 
-**User-visible outcome:** A user can generate a public link to an itinerary for client review and download the itinerary as a PDF directly from the itinerary details page; recipients can open the shared link without logging in.
+**User-visible outcome:** Admins can update shared itinerary branding in the dashboard, and anyone viewing a shared itinerary link sees the configured brand name/tagline/phone/logo and controlled color accents (with sensible defaults when unset).

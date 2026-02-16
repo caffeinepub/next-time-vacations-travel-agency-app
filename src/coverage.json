@@ -1,78 +1,84 @@
 {
   "kind": "coverage_report",
   "version": "1.0",
-  "generatedAt": "2026-02-16T21:52:21.930Z",
+  "generatedAt": "2026-02-16T22:01:02.340Z",
   "sources": {
     "buildRequest": true,
     "implementationPlan": true
   },
   "requirements": {
-    "total": 2,
-    "implemented": 2,
+    "total": 4,
+    "implemented": 3,
     "items": [
       {
-        "id": "REQ-3",
-        "summary": "Add a shareable-link flow for itineraries that lets a user generate a public URL for a selected itinerary, and allows anyone with that URL to view the itinerary details without signing in.",
+        "id": "REQ-5",
+        "summary": "Add an admin-accessible UI in the Admin Dashboard to edit and save branding settings for the public shared itinerary page, including: brand name (text), tagline/subtitle (text), contact phone number (text), logo image URL (text), and primary/accent color values (text inputs that accept CSS color strings such as hex).",
         "status": "implemented",
         "plannedFiles": [
+          "frontend/src/backend.d.ts",
           "frontend/src/hooks/useQueries.ts",
-          "frontend/src/components/ItineraryDialog.tsx",
-          "frontend/src/components/SharedItineraryPage.tsx",
-          "frontend/src/utils/urlParams.ts",
-          "frontend/src/App.tsx"
+          "frontend/src/components/SharedPageBrandingSettingsTab.tsx",
+          "frontend/src/components/AdminDashboardDialog.tsx"
         ],
         "matchedFiles": [
+          "frontend/src/backend.d.ts",
           "frontend/src/hooks/useQueries.ts",
-          "frontend/src/components/ItineraryDialog.tsx",
-          "frontend/src/components/SharedItineraryPage.tsx",
-          "frontend/src/App.tsx"
+          "frontend/src/components/SharedPageBrandingSettingsTab.tsx",
+          "frontend/src/components/AdminDashboardDialog.tsx"
         ]
       },
       {
-        "id": "REQ-4",
-        "summary": "Add a “Download as PDF” option for itineraries so a user can download a PDF containing the itinerary details for the currently viewed itinerary.",
+        "id": "REQ-6",
+        "summary": "Add backend storage and APIs for shared itinerary page branding settings, including: a public query to fetch the current branding settings and an admin-only update method to set them.",
+        "status": "unknown",
+        "plannedFiles": [],
+        "matchedFiles": []
+      },
+      {
+        "id": "REQ-7",
+        "summary": "Update the public Shared Itinerary page to use the stored branding settings instead of hardcoded values, including replacing the brand name text (“Next Time Vacations”), the tagline/subtitle, the contact phone number, and displaying the logo when provided.",
         "status": "implemented",
         "plannedFiles": [
-          "frontend/package.json",
-          "frontend/src/utils/itineraryPdf.ts",
-          "frontend/src/components/ItineraryDialog.tsx"
+          "frontend/src/utils/sharedItineraryBranding.ts",
+          "frontend/src/components/SharedItineraryPage.tsx"
         ],
         "matchedFiles": [
-          "frontend/src/utils/itineraryPdf.ts",
-          "frontend/src/components/ItineraryDialog.tsx"
+          "frontend/src/utils/sharedItineraryBranding.ts",
+          "frontend/src/components/SharedItineraryPage.tsx"
+        ]
+      },
+      {
+        "id": "REQ-8",
+        "summary": "Apply configurable primary/accent colors from branding settings to the Shared Itinerary page in a controlled way (e.g., header/title accents, icon accent colors, and key UI highlights) while maintaining readability in both light and dark mode.",
+        "status": "implemented",
+        "plannedFiles": [
+          "frontend/src/utils/colorValidation.ts",
+          "frontend/src/components/SharedItineraryPage.tsx"
+        ],
+        "matchedFiles": [
+          "frontend/src/utils/colorValidation.ts",
+          "frontend/src/components/SharedItineraryPage.tsx"
         ]
       }
     ]
   },
   "changedFiles": [
-    "backend/blob-storage/Mixin.mo",
-    "backend/blob-storage/Storage.mo",
-    "backend/http-outcalls/outcall.mo",
-    "backend/invite-links/invite-links-module.mo",
     "backend/main.mo",
+    "backend/migration.mo",
     "build-request.json",
-    "build-template/Dockerfile",
-    "build-template/LICENSE",
-    "build-template/README.md",
-    "build-template/deploy.sh",
-    "build-template/icp.yaml",
-    "build-template/src/backend/canister.yaml",
-    "build-template/src/frontend/canister.yaml",
-    "caffeine.lock.json",
     "feature_evidence.json",
     "frontend-file-summaries.txt",
     "frontend-implementation-plan.json",
-    "frontend/src/App.tsx",
     "frontend/src/backend.d.ts",
     "frontend/src/backend.ts",
-    "frontend/src/components/ItineraryDialog.tsx",
+    "frontend/src/components/AdminDashboardDialog.tsx",
     "frontend/src/components/SharedItineraryPage.tsx",
-    "frontend/src/config.ts",
+    "frontend/src/components/SharedPageBrandingSettingsTab.tsx",
     "frontend/src/declarations/backend.did.d.ts",
     "frontend/src/declarations/backend.did.js",
-    "frontend/src/hooks/useInternetIdentity.ts",
     "frontend/src/hooks/useQueries.ts",
-    "frontend/src/utils/itineraryPdf.ts",
+    "frontend/src/utils/colorValidation.ts",
+    "frontend/src/utils/sharedItineraryBranding.ts",
     "project_state.json",
     "scratch/component-selection.json",
     "spec.md",

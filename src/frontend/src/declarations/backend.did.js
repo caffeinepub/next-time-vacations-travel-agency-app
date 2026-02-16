@@ -94,6 +94,28 @@ export const ShareableLink = IDL.Record({
   'isActive' : IDL.Bool,
   'itinerary' : Itinerary,
 });
+export const BrandingSettings = IDL.Record({
+  'backgroundColor' : IDL.Text,
+  'instagramLink' : IDL.Text,
+  'logoPosition' : IDL.Text,
+  'youtubeLink' : IDL.Text,
+  'bannerText' : IDL.Text,
+  'enableAnalytics' : IDL.Bool,
+  'termsConditionsUrl' : IDL.Text,
+  'accentColor' : IDL.Text,
+  'showNewsletterSignup' : IDL.Bool,
+  'heroBannerImage' : IDL.Text,
+  'defaultLanguage' : IDL.Text,
+  'showLogo' : IDL.Bool,
+  'privacyPolicyUrl' : IDL.Text,
+  'facebookLink' : IDL.Text,
+  'enableSocialLinks' : IDL.Bool,
+  'headerImage' : IDL.Text,
+  'heroBannerText' : IDL.Text,
+  'fontColor' : IDL.Text,
+  'footerText' : IDL.Text,
+  'customCss' : IDL.Text,
+});
 export const UserProfile = IDL.Record({ 'name' : IDL.Text });
 export const InviteCode = IDL.Record({
   'created' : Time,
@@ -193,6 +215,7 @@ export const idlService = IDL.Service({
       [IDL.Vec(Booking)],
       ['query'],
     ),
+  'getBrandingSettings' : IDL.Func([], [BrandingSettings], ['query']),
   'getCallerUserProfile' : IDL.Func([], [IDL.Opt(UserProfile)], ['query']),
   'getCallerUserRole' : IDL.Func([], [UserRole], ['query']),
   'getFavorites' : IDL.Func([], [IDL.Vec(IDL.Text)], ['query']),
@@ -231,6 +254,7 @@ export const idlService = IDL.Service({
   'searchItineraries' : IDL.Func([IDL.Text], [IDL.Vec(Itinerary)], ['query']),
   'submitRSVP' : IDL.Func([IDL.Text, IDL.Bool, IDL.Text], [], []),
   'submitReview' : IDL.Func([IDL.Text, IDL.Nat, IDL.Text, IDL.Text], [], []),
+  'updateBrandingSettings' : IDL.Func([BrandingSettings], [], []),
   'updateCabinAvailability' : IDL.Func([IDL.Text, IDL.Text, IDL.Nat], [], []),
   'updateCruiseDeal' : IDL.Func(
       [IDL.Text, IDL.Text, IDL.Text, IDL.Text, IDL.Nat, IDL.Nat, IDL.Bool],
@@ -329,6 +353,28 @@ export const idlFactory = ({ IDL }) => {
     'sharedBy' : IDL.Principal,
     'isActive' : IDL.Bool,
     'itinerary' : Itinerary,
+  });
+  const BrandingSettings = IDL.Record({
+    'backgroundColor' : IDL.Text,
+    'instagramLink' : IDL.Text,
+    'logoPosition' : IDL.Text,
+    'youtubeLink' : IDL.Text,
+    'bannerText' : IDL.Text,
+    'enableAnalytics' : IDL.Bool,
+    'termsConditionsUrl' : IDL.Text,
+    'accentColor' : IDL.Text,
+    'showNewsletterSignup' : IDL.Bool,
+    'heroBannerImage' : IDL.Text,
+    'defaultLanguage' : IDL.Text,
+    'showLogo' : IDL.Bool,
+    'privacyPolicyUrl' : IDL.Text,
+    'facebookLink' : IDL.Text,
+    'enableSocialLinks' : IDL.Bool,
+    'headerImage' : IDL.Text,
+    'heroBannerText' : IDL.Text,
+    'fontColor' : IDL.Text,
+    'footerText' : IDL.Text,
+    'customCss' : IDL.Text,
   });
   const UserProfile = IDL.Record({ 'name' : IDL.Text });
   const InviteCode = IDL.Record({
@@ -441,6 +487,7 @@ export const idlFactory = ({ IDL }) => {
         [IDL.Vec(Booking)],
         ['query'],
       ),
+    'getBrandingSettings' : IDL.Func([], [BrandingSettings], ['query']),
     'getCallerUserProfile' : IDL.Func([], [IDL.Opt(UserProfile)], ['query']),
     'getCallerUserRole' : IDL.Func([], [UserRole], ['query']),
     'getFavorites' : IDL.Func([], [IDL.Vec(IDL.Text)], ['query']),
@@ -479,6 +526,7 @@ export const idlFactory = ({ IDL }) => {
     'searchItineraries' : IDL.Func([IDL.Text], [IDL.Vec(Itinerary)], ['query']),
     'submitRSVP' : IDL.Func([IDL.Text, IDL.Bool, IDL.Text], [], []),
     'submitReview' : IDL.Func([IDL.Text, IDL.Nat, IDL.Text, IDL.Text], [], []),
+    'updateBrandingSettings' : IDL.Func([BrandingSettings], [], []),
     'updateCabinAvailability' : IDL.Func([IDL.Text, IDL.Text, IDL.Nat], [], []),
     'updateCruiseDeal' : IDL.Func(
         [IDL.Text, IDL.Text, IDL.Text, IDL.Text, IDL.Nat, IDL.Nat, IDL.Bool],

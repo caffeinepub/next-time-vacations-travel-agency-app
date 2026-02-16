@@ -112,16 +112,27 @@ export interface Cabin {
     category: string;
     price: bigint;
 }
-export interface AdminAlert {
-    id: string;
-    userName: string;
-    bookingId: string;
-    createdAt: Time;
-    totalCost: bigint;
-    numberOfCabins: bigint;
-    isPersistent: boolean;
-    cruiseName: string;
-    viewed: boolean;
+export interface BrandingSettings {
+    backgroundColor: string;
+    instagramLink: string;
+    logoPosition: string;
+    youtubeLink: string;
+    bannerText: string;
+    enableAnalytics: boolean;
+    termsConditionsUrl: string;
+    accentColor: string;
+    showNewsletterSignup: boolean;
+    heroBannerImage: string;
+    defaultLanguage: string;
+    showLogo: boolean;
+    privacyPolicyUrl: string;
+    facebookLink: string;
+    enableSocialLinks: boolean;
+    headerImage: string;
+    heroBannerText: string;
+    fontColor: string;
+    footerText: string;
+    customCss: string;
 }
 export interface _CaffeineStorageRefillInformation {
     proposed_top_up_amount?: bigint;
@@ -158,6 +169,17 @@ export interface Itinerary {
     returnDate: string;
     shipSpecs: string;
     images: Array<string>;
+}
+export interface AdminAlert {
+    id: string;
+    userName: string;
+    bookingId: string;
+    createdAt: Time;
+    totalCost: bigint;
+    numberOfCabins: bigint;
+    isPersistent: boolean;
+    cruiseName: string;
+    viewed: boolean;
 }
 export interface InviteCode {
     created: Time;
@@ -231,6 +253,7 @@ export interface backendInterface {
     getAverageRatingByCruiseId(cruiseId: string): Promise<number>;
     getBookingsByUser(arg0: {
     }): Promise<Array<Booking>>;
+    getBrandingSettings(): Promise<BrandingSettings>;
     getCallerUserProfile(): Promise<UserProfile | null>;
     getCallerUserRole(): Promise<UserRole>;
     getFavorites(): Promise<Array<string>>;
@@ -255,6 +278,7 @@ export interface backendInterface {
     searchItineraries(searchText: string): Promise<Array<Itinerary>>;
     submitRSVP(name: string, attending: boolean, inviteCode: string): Promise<void>;
     submitReview(cruiseId: string, rating: bigint, title: string, comment: string): Promise<void>;
+    updateBrandingSettings(newSettings: BrandingSettings): Promise<void>;
     updateCabinAvailability(itineraryId: string, category: string, availability: bigint): Promise<void>;
     updateCruiseDeal(id: string, cruiseLine: string, shipName: string, destination: string, duration: bigint, startingPrice: bigint, promotional: boolean): Promise<void>;
     updateCruiseLineLogo(name: string, imageUrl: string): Promise<void>;
@@ -630,6 +654,20 @@ export class Backend implements backendInterface {
             return from_candid_vec_n10(this._uploadFile, this._downloadFile, result);
         }
     }
+    async getBrandingSettings(): Promise<BrandingSettings> {
+        if (this.processError) {
+            try {
+                const result = await this.actor.getBrandingSettings();
+                return result;
+            } catch (e) {
+                this.processError(e);
+                throw new Error("unreachable");
+            }
+        } else {
+            const result = await this.actor.getBrandingSettings();
+            return result;
+        }
+    }
     async getCallerUserProfile(): Promise<UserProfile | null> {
         if (this.processError) {
             try {
@@ -937,6 +975,20 @@ export class Backend implements backendInterface {
             }
         } else {
             const result = await this.actor.submitReview(arg0, arg1, arg2, arg3);
+            return result;
+        }
+    }
+    async updateBrandingSettings(arg0: BrandingSettings): Promise<void> {
+        if (this.processError) {
+            try {
+                const result = await this.actor.updateBrandingSettings(arg0);
+                return result;
+            } catch (e) {
+                this.processError(e);
+                throw new Error("unreachable");
+            }
+        } else {
+            const result = await this.actor.updateBrandingSettings(arg0);
             return result;
         }
     }

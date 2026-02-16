@@ -1,69 +1,80 @@
 {
   "kind": "implementation_plan",
   "version": "1.0",
-  "title": "Itinerary shareable links and PDF downloads (frontend)",
+  "title": "Branding customization for public Shared Itinerary page",
   "requirements": [
     {
-      "id": "REQ-3",
-      "summary": "Enable generating a public shareable URL for an itinerary and viewing shared itinerary details without authentication.",
+      "id": "REQ-5",
+      "summary": "Add an admin-only Admin Dashboard tab to edit, save, and reset Shared Itinerary page branding settings.",
       "acceptanceCriteria": [
-        "From the itinerary details UI, the user can generate a shareable link for the currently viewed itinerary.",
-        "The generated link is a stable URL that can be opened in a new/private browser session without authentication and still shows the itinerary details.",
-        "If the share token/link is invalid or not found, the app shows an English error state indicating the shared itinerary is not available.",
-        "Shareable-link generation does not require any external email service or third-party integrations."
+        "Admin Dashboard includes a new section/tab for “Shared Page Branding” (or equivalent) that is visible to admins only.",
+        "The form includes inputs for: brand name, tagline/subtitle, contact phone number, logo image URL, primary color, accent color.",
+        "Clicking “Save” persists the settings via a backend call and shows a success toast; failures show an error toast.",
+        "A “Reset to defaults” action restores the current default branding values used today (e.g., Next Time Vacations and the current phone number) and persists them after confirmation."
       ],
       "file_operations": [
         {
+          "path": "frontend/src/backend.d.ts",
+          "operation": "modify",
+          "description": "Extend the typed backend interface with the new Shared Itinerary branding settings type and the required read/update backend capabilities so the admin UI can fetch and persist these values."
+        },
+        {
           "path": "frontend/src/hooks/useQueries.ts",
           "operation": "modify",
-          "description": "Add React Query hooks to call existing backend capabilities for share links: a mutation hook that uses createShareableLink(itineraryId) and a query hook that uses getShareableLink(linkId). Ensure query/mutation errors are surfaced in English-friendly UI messages (no email integration)."
+          "description": "Add React Query hooks for Shared Itinerary branding settings (a public fetch hook and an admin update mutation) and ensure cache invalidation so the Shared Itinerary page and admin form reflect saved changes."
         },
         {
-          "path": "frontend/src/components/ItineraryDialog.tsx",
-          "operation": "modify",
-          "description": "Add a shareable-link UI action in the itinerary details dialog using existing shadcn-ui Button/toast patterns (do not edit ui components directly). The action should call the new createShareableLink hook, then construct a stable public URL containing the returned linkId, provide copy-to-clipboard, and show success/failure messaging in English. Keep this flow entirely in-app (no outbound email). Verify the component's usage instructions before implementing."
-        },
-        {
-          "path": "frontend/src/components/SharedItineraryPage.tsx",
+          "path": "frontend/src/components/SharedPageBrandingSettingsTab.tsx",
           "operation": "create",
-          "description": "Create a public, unauthenticated shared-itinerary view that reads the share linkId from the URL (query or hash) and fetches details via the new getShareableLink hook. Render itinerary details in a read-only layout and show an English error state when the link is invalid/not found. Verify the component's usage instructions before implementing."
+          "description": "Create an admin-only tab panel component that renders the “Shared Page Branding” form (brand name, tagline, phone, logo URL, primary color, accent color), performs Save via the branding update hook, shows Sonner success/error toasts, and provides a confirmation-gated “Reset to defaults” action that persists defaults. Use shadcn-ui composed components (e.g., Card, TabsContent, Input, Label, Button, AlertDialog) and verify the component's usage instructions before implementing."
         },
         {
-          "path": "frontend/src/utils/urlParams.ts",
+          "path": "frontend/src/components/AdminDashboardDialog.tsx",
           "operation": "modify",
-          "description": "Extend URL parameter helpers to support extracting the share linkId robustly for both query-string and hash-based URLs (stable link behavior). Reuse existing patterns in this utility; do not add any email-related logic."
-        },
-        {
-          "path": "frontend/src/App.tsx",
-          "operation": "modify",
-          "description": "Wire SharedItineraryPage into the app so that when a share linkId is present in the URL the app renders the public shared-itinerary experience without requiring authentication. Ensure navigation does not introduce a new top-level route framework beyond what is needed for this requirement."
+          "description": "Wire the new “Shared Page Branding” tab into the existing Admin Dashboard TabsList/TabsContent, ensuring it remains admin-only by virtue of the existing admin-only dialog wiring. Use shadcn-ui Tabs primitives by composition (do not modify files under frontend/src/components/ui) and verify the component's usage instructions before implementing."
         }
       ]
     },
     {
-      "id": "REQ-4",
-      "summary": "Add a client-side “Download as PDF” action for itinerary details from the itinerary details UI.",
+      "id": "REQ-7",
+      "summary": "Update the public Shared Itinerary page header/contact card to use stored branding settings with sensible fallbacks and optional logo rendering.",
       "acceptanceCriteria": [
-        "From the itinerary details UI, the user can trigger a PDF download for the currently viewed itinerary.",
-        "The downloaded PDF includes, at minimum, the itinerary’s ports of call, departure date, return date, ship specs, cabin categories/prices/availability, dining options, and entertainment (when present).",
-        "If itinerary data is unavailable, the PDF download action is disabled or shows an English error message explaining why it cannot be generated.",
-        "PDF generation and download works without using any external email sending capability."
+        "Shared itinerary header uses the configured brand name and tagline (with fallback to defaults when unset).",
+        "The contact card uses the configured phone number (with fallback to defaults when unset).",
+        "If a logo URL is configured, the shared itinerary page renders the logo in the header area with appropriate sizing and accessible alt text.",
+        "If logo URL is empty/invalid, the page still renders cleanly without broken layout."
       ],
       "file_operations": [
         {
-          "path": "frontend/package.json",
-          "operation": "modify",
-          "description": "Add/adjust a client-side PDF generation dependency (e.g., a browser PDF library) required to generate and download PDFs directly in the browser, with no external services and no email integration."
-        },
-        {
-          "path": "frontend/src/utils/itineraryPdf.ts",
+          "path": "frontend/src/utils/sharedItineraryBranding.ts",
           "operation": "create",
-          "description": "Implement a utility that takes an Itinerary and generates a downloadable PDF in the browser. Ensure the PDF includes ports of call, departure/return dates, ship specs, cabins (category/price/availability), dining options, and entertainment when present, and returns clear English errors when generation is not possible."
+          "description": "Add Shared Itinerary branding defaults (matching today’s hardcoded shared-page values, e.g., current brand name and phone number) plus small helpers to merge fetched settings with defaults and to safely handle missing values."
         },
         {
-          "path": "frontend/src/components/ItineraryDialog.tsx",
+          "path": "frontend/src/components/SharedItineraryPage.tsx",
           "operation": "modify",
-          "description": "Add a “Download as PDF” button to the itinerary details dialog. Disable the action (or show an English error) when itinerary data is unavailable, and trigger client-side PDF generation/download using the new utility. Use existing shadcn-ui components (Button, toast) without modifying any files under frontend/src/components/ui. Verify the component's usage instructions before implementing."
+          "description": "Fetch Shared Itinerary branding settings (public query hook), replace hardcoded brand name/tagline/phone with configured values merged with defaults, and render an optional logo image (from logo URL) with accessible alt text and a graceful onError fallback to avoid broken layout. Use shadcn-ui components by composition where applicable and verify the component's usage instructions before implementing."
+        }
+      ]
+    },
+    {
+      "id": "REQ-8",
+      "summary": "Apply configurable primary/accent colors to Shared Itinerary page accents with validation, fallbacks, and light/dark readability preserved.",
+      "acceptanceCriteria": [
+        "Primary/accent color settings influence prominent accents on the Shared Itinerary page (e.g., title text and/or section icon highlights) without reducing contrast below readable levels.",
+        "If color values are missing/invalid, the page falls back to the existing ocean/sunset styling tokens.",
+        "Dark mode remains readable and visually coherent after applying branding colors."
+      ],
+      "file_operations": [
+        {
+          "path": "frontend/src/utils/colorValidation.ts",
+          "operation": "create",
+          "description": "Implement lightweight frontend utilities to validate/normalize CSS color strings (e.g., hex/rgb/hsl keywords) and to decide whether to apply a user-provided color or fall back to existing ocean/sunset tokens; keep application limited to accents (icons/badges/highlights) to maintain readability in light/dark mode."
+        },
+        {
+          "path": "frontend/src/components/SharedItineraryPage.tsx",
+          "operation": "modify",
+          "description": "Apply validated primary/accent colors to controlled accent surfaces on the Shared Itinerary page (e.g., icon color, small highlight elements, subtle borders), while keeping core text/background driven by existing theme tokens for readability; ensure invalid/missing values fall back to current ocean/sunset classes and that dark mode remains coherent."
         }
       ]
     }

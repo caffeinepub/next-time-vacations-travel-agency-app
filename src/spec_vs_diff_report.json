@@ -1,37 +1,88 @@
 {
   "kind": "spec_vs_diff_report",
   "version": "1.0",
-  "generatedAt": "2026-02-16T21:52:21.928Z",
-  "summary": "Diff adds itinerary shareable-link viewing via a public URL query param (?share=...), share-link generation from the itinerary details dialog (copied to clipboard), and a PDF download/print flow that opens a browser print dialog with itinerary content formatted for printing. Backend appears to add ShareableLink state/types, and frontend adds query hooks and a SharedItineraryPage for unauthenticated viewing with an English error state when invalid.",
+  "generatedAt": "2026-02-16T22:01:02.336Z",
+  "summary": "Branding UI and Shared Itinerary page updates were added, along with new branding-related utilities and backend branding settings type/defaults. However, several BuildRequest specifics are either not evidenced in the diff summary (notably the exact backend APIs and admin-only enforcement) or appear mismatched (backend branding record/defaults differ from requested fields/default values), and some extra unrequested branding fields were introduced.",
   "missing_requirements": [
     {
-      "id": "REQ-4",
-      "requirement": "If itinerary data is unavailable, the PDF download action is disabled or shows an English error message explaining why it cannot be generated.",
-      "reason": "The click handler shows a toast error when itinerary is missing, but the diff snippet does not show the actual button rendering/disabled state, so it is not evidenced that the action is disabled or that the UI clearly prevents the download when data is unavailable.",
+      "id": "REQ-6",
+      "requirement": "Backend defines a single global branding settings record containing exactly: brandName, tagline, phoneNumber, logoUrl, primaryColor, accentColor (and returns sensible defaults matching the existing shared page).",
+      "reason": "The backend `BrandingSettings` type shown contains many different/extra fields (e.g., `backgroundColor`, `footerText`, `fontColor`, `showLogo`, social links, analytics, etc.) and the default values shown do not match the requested defaults for the shared itinerary page (e.g., default `footerText` is \"© 2023 Cruise Island\" and `bannerText` is \"Your Dream Cruise Awaits!\" / \"Your Dream Cruise Awaits!\"). This does not clearly implement the required record shape and default values.",
       "evidence": [
-        "frontend/src/components/ItineraryDialog.tsx"
+        "backend/main.mo",
+        "frontend/src/utils/sharedItineraryBranding.ts"
+      ]
+    },
+    {
+      "id": "REQ-6",
+      "requirement": "Backend provides a public query method to fetch branding settings without authentication, and an admin-only update method that rejects non-admin callers.",
+      "reason": "The diff summary shows the `BrandingSettings` type and a `brandingSettings` variable, but does not show any public query function or an admin-only update function (nor evidence of rejecting non-admin callers).",
+      "evidence": [
+        "backend/main.mo",
+        "frontend/src/hooks/useQueries.ts"
+      ]
+    },
+    {
+      "id": "REQ-5",
+      "requirement": "Admin UI includes a “Reset to defaults” action that persists defaults after confirmation.",
+      "reason": "The new tab implements `handleReset` and imports `AlertDialog` components, but the truncated diff does not show an actual confirmation dialog wiring before resetting/persisting.",
+      "evidence": [
+        "frontend/src/components/SharedPageBrandingSettingsTab.tsx"
+      ]
+    },
+    {
+      "id": "REQ-7",
+      "requirement": "Shared itinerary page replaces the contact phone number with configured value (with fallback to defaults).",
+      "reason": "The shared page now fetches branding settings and uses them for the header/brand name/tagline and logo, but the provided snippet does not show the contact card/phone number being rendered from `branding.phoneNumber` (the phone number usage is not evidenced in the truncated portion).",
+      "evidence": [
+        "frontend/src/components/SharedItineraryPage.tsx"
+      ]
+    },
+    {
+      "id": "REQ-8",
+      "requirement": "Primary/accent color application maintains readability in both light and dark mode; invalid/missing values fall back to existing ocean/sunset styling tokens.",
+      "reason": "There is validation and fallback to Tailwind classes (`text-ocean-700 dark:text-ocean-400`, `text-ocean-600`) when invalid, but no evidence of any contrast/readability safeguards beyond basic validation (e.g., ensuring sufficient contrast in dark mode) as required by the acceptance criteria.",
+      "evidence": [
+        "frontend/src/utils/colorValidation.ts",
+        "frontend/src/components/SharedItineraryPage.tsx"
       ]
     }
   ],
   "hallucinated_features": [
     {
-      "description": "Adds a project_state.json file describing project features/requests.",
-      "reason": "The BuildRequest does not ask for tracking project state metadata files; this appears unrelated to implementing share links/PDF.",
+      "description": "Backend branding settings expanded to include many additional fields (social links, analytics, newsletter signup, custom CSS, multiple hero/banner fields, etc.) beyond the requested 6 fields.",
+      "reason": "BuildRequest explicitly scoped branding settings to brand name, tagline, phone number, logo URL, primary color, accent color; the diff shows a much larger settings record.",
       "evidence": [
-        "project_state.json"
+        "backend/main.mo"
+      ]
+    },
+    {
+      "description": "Default backend branding values appear to introduce unrelated branding (e.g., \"© 2023 Cruise Island\", Spotify-green accent `#1db954`) not requested for the shared itinerary page defaults.",
+      "reason": "Acceptance criteria require defaults matching the existing shared itinerary page’s current text/styling intent (e.g., Next Time Vacations and current phone number). The shown backend defaults do not align.",
+      "evidence": [
+        "backend/main.mo"
+      ]
+    },
+    {
+      "description": "Added a backend stable-state migration module (`backend/migration.mo`).",
+      "reason": "BuildRequest allows adding `backend/migration.mo` only if a stable-state upgrade is required; the diff summary does not provide evidence that such an upgrade was necessary (it may be justified, but it is not evidenced here).",
+      "evidence": [
+        "backend/migration.mo",
+        "backend/main.mo"
       ]
     }
   ],
   "confidence": 0.62,
   "changed_files": [
     "backend/main.mo",
+    "backend/migration.mo",
     "frontend-file-summaries.txt",
-    "frontend/src/App.tsx",
-    "frontend/src/components/ItineraryDialog.tsx",
+    "frontend/src/components/AdminDashboardDialog.tsx",
     "frontend/src/components/SharedItineraryPage.tsx",
-    "frontend/src/hooks/useInternetIdentity.ts",
+    "frontend/src/components/SharedPageBrandingSettingsTab.tsx",
     "frontend/src/hooks/useQueries.ts",
-    "frontend/src/utils/itineraryPdf.ts",
+    "frontend/src/utils/colorValidation.ts",
+    "frontend/src/utils/sharedItineraryBranding.ts",
     "project_state.json"
   ]
 }

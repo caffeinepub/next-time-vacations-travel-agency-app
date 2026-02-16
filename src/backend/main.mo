@@ -12,7 +12,9 @@ import InviteLinksModule "invite-links/invite-links-module";
 import MixinAuthorization "authorization/MixinAuthorization";
 import AccessControl "authorization/access-control";
 import MixinStorage "blob-storage/Mixin";
+import Migration "migration";
 
+(with migration = Migration.run)
 actor {
   include MixinStorage();
 
@@ -116,6 +118,29 @@ actor {
     imageUrl : Text;
   };
 
+  public type BrandingSettings = {
+    backgroundColor : Text;
+    headerImage : Text;
+    footerText : Text;
+    fontColor : Text;
+    accentColor : Text;
+    showLogo : Bool;
+    logoPosition : Text;
+    bannerText : Text;
+    enableSocialLinks : Bool;
+    facebookLink : Text;
+    instagramLink : Text;
+    youtubeLink : Text;
+    privacyPolicyUrl : Text;
+    termsConditionsUrl : Text;
+    enableAnalytics : Bool;
+    defaultLanguage : Text;
+    showNewsletterSignup : Bool;
+    customCss : Text;
+    heroBannerText : Text;
+    heroBannerImage : Text;
+  };
+
   let cruiseDeals = Map.empty<Text, CruiseDeal>();
   let itineraries = Map.empty<Text, Itinerary>();
   let userFavorites = Map.empty<Principal, [Text]>();
@@ -126,6 +151,30 @@ actor {
   var viewingAlerts = Map.empty<Text, AdminAlert>();
   var cruiseLineLogos = Map.empty<Text, CruiseLineLogo>();
   var shareableLinks = Map.empty<Text, ShareableLink>();
+
+  // Default branding settings
+  var brandingSettings : BrandingSettings = {
+    backgroundColor = "#ffffff";
+    headerImage = "";
+    footerText = "© 2023 Cruise Island";
+    fontColor = "#000000";
+    accentColor = "#1db954";
+    showLogo = true;
+    logoPosition = "top-left";
+    bannerText = "Your Dream Cruise Awaits!";
+    enableSocialLinks = true;
+    facebookLink = "";
+    instagramLink = "";
+    youtubeLink = "";
+    privacyPolicyUrl = "";
+    termsConditionsUrl = "";
+    enableAnalytics = false;
+    defaultLanguage = "en";
+    showNewsletterSignup = false;
+    customCss = "";
+    heroBannerText = "Sail the World in Style";
+    heroBannerImage = "";
+  };
 
   module CruiseDeal {
     public func compareByPrice(a : CruiseDeal, b : CruiseDeal) : Order.Order {
@@ -823,5 +872,18 @@ actor {
     };
 
     shareableLinks.values().toArray();
+  };
+
+  // New backend for branding settings
+  public query func getBrandingSettings() : async BrandingSettings {
+    brandingSettings;
+  };
+
+  public shared ({ caller }) func updateBrandingSettings(newSettings : BrandingSettings) : async () {
+    if (not (AccessControl.hasPermission(accessControlState, caller, #admin))) {
+      Runtime.trap("Unauthorized: Only admins can update branding settings");
+    };
+
+    brandingSettings := newSettings;
   };
 };

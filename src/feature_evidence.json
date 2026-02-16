@@ -2,12 +2,11 @@
   "kind": "feature_evidence_report",
   "features": [
     {
-      "featureId": "feature-add-a-shareable-link-flow-for-itineraries-that-lets-a-user-generate-a-public-url-for-a-selected-itinerary-and-allows-anyone-with-that-url-to-view-the-itinerary-details-without-signing-in",
-      "featureTitle": "Add a shareable-link flow for itineraries that lets a user generate a public URL for a selected itinerary, and allows anyone with that URL to view the itinerary details without signing in.",
+      "featureId": "feature-add-an-admin-accessible-ui-in-the-admin-dashboard-to-edit-and-save-branding-settings-for-the-public-shared-itinerary-page-including-brand-name-text-tagline-subtitle-text-contact-phone-number-text-logo-image-url-text-and-primary-accent-color-values-text-inputs-that-accept-css-color-strings-such-as-hex",
+      "featureTitle": "Add an admin-accessible UI in the Admin Dashboard to edit and save branding settings for the public shared itinerary page, including: brand name (text), tagline/subtitle (text), contact phone number (text), logo image URL (text), and primary/accent color values (text inputs that accept CSS color strings such as hex).",
       "files": [
-        "frontend/src/App.tsx",
-        "frontend/src/components/ItineraryDialog.tsx",
-        "frontend/src/components/SharedItineraryPage.tsx",
+        "frontend/src/components/AdminDashboardDialog.tsx",
+        "frontend/src/components/SharedPageBrandingSettingsTab.tsx",
         "frontend/src/hooks/useQueries.ts"
       ],
       "components": [
@@ -22,16 +21,16 @@
         "invite-links@3.0.0"
       ],
       "testIds": [
-        "REQ-3"
+        "REQ-5"
       ],
       "confidence": "high"
     },
     {
-      "featureId": "feature-add-a-download-as-pdf-option-for-itineraries-so-a-user-can-download-a-pdf-containing-the-itinerary-details-for-the-currently-viewed-itinerary",
-      "featureTitle": "Add a “Download as PDF” option for itineraries so a user can download a PDF containing the itinerary details for the currently viewed itinerary.",
+      "featureId": "feature-update-the-public-shared-itinerary-page-to-use-the-stored-branding-settings-instead-of-hardcoded-values-including-replacing-the-brand-name-text-next-time-vacations-the-tagline-subtitle-the-contact-phone-number-and-displaying-the-logo-when-provided",
+      "featureTitle": "Update the public Shared Itinerary page to use the stored branding settings instead of hardcoded values, including replacing the brand name text (“Next Time Vacations”), the tagline/subtitle, the contact phone number, and displaying the logo when provided.",
       "files": [
-        "frontend/src/components/ItineraryDialog.tsx",
-        "frontend/src/utils/itineraryPdf.ts"
+        "frontend/src/components/SharedItineraryPage.tsx",
+        "frontend/src/utils/sharedItineraryBranding.ts"
       ],
       "components": [
         "http-outcalls@3.0.0",
@@ -45,7 +44,30 @@
         "invite-links@3.0.0"
       ],
       "testIds": [
-        "REQ-4"
+        "REQ-7"
+      ],
+      "confidence": "high"
+    },
+    {
+      "featureId": "feature-apply-configurable-primary-accent-colors-from-branding-settings-to-the-shared-itinerary-page-in-a-controlled-way-e-g-header-title-accents-icon-accent-colors-and-key-ui-highlights-while-maintaining-readability-in-both-light-and-dark-mode",
+      "featureTitle": "Apply configurable primary/accent colors from branding settings to the Shared Itinerary page in a controlled way (e.g., header/title accents, icon accent colors, and key UI highlights) while maintaining readability in both light and dark mode.",
+      "files": [
+        "frontend/src/components/SharedItineraryPage.tsx",
+        "frontend/src/utils/colorValidation.ts"
+      ],
+      "components": [
+        "http-outcalls@3.0.0",
+        "blob-storage@4.0.0",
+        "core-infrastructure@1.0.2",
+        "shadcn-ui@1.0.0",
+        "build-template-react@1.0.0",
+        "initial-app@1.0.0",
+        "authorization@4.0.0",
+        "github-export-icp-cli@1.0.0",
+        "invite-links@3.0.0"
+      ],
+      "testIds": [
+        "REQ-8"
       ],
       "confidence": "high"
     }

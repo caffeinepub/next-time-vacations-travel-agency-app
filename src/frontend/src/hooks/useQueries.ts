@@ -1,7 +1,7 @@
 import { useQuery, useMutation, useQueryClient, MutationCache } from '@tanstack/react-query';
 import { useActor } from './useActor';
 import { useInternetIdentity } from './useInternetIdentity';
-import type { CruiseDeal, Itinerary, SearchFilters, UserProfile, Review, Booking, Cabin, BookingStatus, AdminAlert, UserRole, CruiseLineLogo, ShareableLink } from '../backend';
+import type { CruiseDeal, Itinerary, SearchFilters, UserProfile, Review, Booking, Cabin, BookingStatus, AdminAlert, UserRole, CruiseLineLogo, ShareableLink, BrandingSettings } from '../backend';
 import { Principal } from '@dfinity/principal';
 
 export function useGetFeaturedDeals() {
@@ -594,6 +594,35 @@ export function useCreateShareableLink() {
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['shareableLinks'] });
+    },
+  });
+}
+
+// Branding Settings Queries
+export function useGetBrandingSettings() {
+  const { actor, isFetching } = useActor();
+
+  return useQuery<BrandingSettings>({
+    queryKey: ['brandingSettings'],
+    queryFn: async () => {
+      if (!actor) throw new Error('Actor not available');
+      return actor.getBrandingSettings();
+    },
+    enabled: !!actor && !isFetching,
+  });
+}
+
+export function useUpdateBrandingSettings() {
+  const { actor } = useActor();
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: async (settings: BrandingSettings) => {
+      if (!actor) throw new Error('Actor not initialized');
+      return actor.updateBrandingSettings(settings);
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['brandingSettings'] });
     },
   });
 }
