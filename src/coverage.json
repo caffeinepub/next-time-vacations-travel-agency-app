@@ -1,23 +1,48 @@
 {
   "kind": "coverage_report",
   "version": "1.0",
-  "generatedAt": "2026-02-16T22:14:52.701Z",
+  "generatedAt": "2026-02-16T22:34:38.117Z",
   "sources": {
     "buildRequest": true,
     "implementationPlan": true
   },
   "requirements": {
-    "total": 0,
-    "implemented": 0,
-    "items": []
+    "total": 2,
+    "implemented": 2,
+    "items": [
+      {
+        "id": "REQ-10",
+        "summary": "Add a simple, code-based configuration point for footer social links (e.g., a single exported object/array in a new frontend config file) so non-developers can update social URLs by editing one place without touching the Footer component markup.",
+        "status": "implemented",
+        "plannedFiles": [
+          "frontend/src/config/footerSocialLinks.ts",
+          "frontend/src/components/Footer.tsx"
+        ],
+        "matchedFiles": [
+          "frontend/src/config/footerSocialLinks.ts",
+          "frontend/src/components/Footer.tsx"
+        ]
+      },
+      {
+        "id": "REQ-9",
+        "summary": "Update the site footer social icons so they link to configurable social media URLs instead of using placeholder href=\"#\" links.",
+        "status": "implemented",
+        "plannedFiles": [
+          "frontend/src/components/Footer.tsx"
+        ],
+        "matchedFiles": [
+          "frontend/src/components/Footer.tsx"
+        ]
+      }
+    ]
   },
   "changedFiles": [
-    "backend/main.mo",
     "build-request.json",
     "feature_evidence.json",
     "frontend-file-summaries.txt",
     "frontend-implementation-plan.json",
     "frontend/src/components/Footer.tsx",
+    "frontend/src/config/footerSocialLinks.ts",
     "project_state.json",
     "scratch/component-selection.json",
     "spec.md",

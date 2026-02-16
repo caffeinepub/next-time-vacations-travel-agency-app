@@ -1,37 +1,15 @@
 {
   "kind": "spec_vs_diff_report",
   "version": "1.0",
-  "generatedAt": "2026-02-16T22:14:52.698Z",
-  "summary": "The diff updates the footer phone number as requested, but also modifies unrelated files (including backend/main.mo and project_state.json) that were not part of the BuildRequest.",
+  "generatedAt": "2026-02-16T22:34:38.113Z",
+  "summary": "REQ-9 and REQ-10 appear fully implemented: footer social icon links now come from a single exported config (SOCIAL_LINKS), render only when URLs are present, and open in a new tab with proper rel and accessible aria-labels. The existing footer phone number line remains unchanged.",
   "missing_requirements": [],
-  "hallucinated_features": [
-    {
-      "description": "Backend actor file modified even though the request was only to update the footer phone number (a frontend-only change).",
-      "reason": "BuildRequest scope is updating the footer phone number and explicitly includes a non-goal of not changing other areas; no backend changes were requested or implied.",
-      "evidence": [
-        "backend/main.mo"
-      ]
-    },
-    {
-      "description": "Project metadata/state updated to include multiple features/REQ IDs unrelated to the requested footer phone number update.",
-      "reason": "BuildRequest lists Requirements: none and only asks for a footer phone number update; updating feature tracking/state content is not requested.",
-      "evidence": [
-        "project_state.json"
-      ]
-    },
-    {
-      "description": "Frontend file summaries index modified (documentation/metadata) without being requested.",
-      "reason": "BuildRequest does not request updating any documentation/summary files; only the footer phone number was in scope.",
-      "evidence": [
-        "frontend-file-summaries.txt"
-      ]
-    }
-  ],
-  "confidence": 0.72,
+  "hallucinated_features": [],
+  "confidence": 0.9,
   "changed_files": [
-    "backend/main.mo",
     "frontend-file-summaries.txt",
     "frontend/src/components/Footer.tsx",
+    "frontend/src/config/footerSocialLinks.ts",
     "project_state.json"
   ]
 }

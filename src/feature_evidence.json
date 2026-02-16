@@ -1,4 +1,50 @@
 {
   "kind": "feature_evidence_report",
-  "features": []
+  "features": [
+    {
+      "featureId": "feature-update-the-site-footer-social-icons-so-they-link-to-configurable-social-media-urls-instead-of-using-placeholder-href-links",
+      "featureTitle": "Update the site footer social icons so they link to configurable social media URLs instead of using placeholder href=\"#\" links.",
+      "files": [
+        "frontend/src/components/Footer.tsx"
+      ],
+      "components": [
+        "http-outcalls@3.0.0",
+        "blob-storage@4.0.0",
+        "core-infrastructure@1.0.2",
+        "shadcn-ui@1.0.0",
+        "build-template-react@1.0.0",
+        "initial-app@1.0.0",
+        "authorization@4.0.0",
+        "github-export-icp-cli@1.0.0",
+        "invite-links@3.0.0"
+      ],
+      "testIds": [
+        "REQ-9"
+      ],
+      "confidence": "high"
+    },
+    {
+      "featureId": "feature-add-a-simple-code-based-configuration-point-for-footer-social-links-e-g-a-single-exported-object-array-in-a-new-frontend-config-file-so-non-developers-can-update-social-urls-by-editing-one-place-without-touching-the-footer-component-markup",
+      "featureTitle": "Add a simple, code-based configuration point for footer social links (e.g., a single exported object/array in a new frontend config file) so non-developers can update social URLs by editing one place without touching the Footer component markup.",
+      "files": [
+        "frontend/src/components/Footer.tsx",
+        "frontend/src/config/footerSocialLinks.ts"
+      ],
+      "components": [
+        "http-outcalls@3.0.0",
+        "blob-storage@4.0.0",
+        "core-infrastructure@1.0.2",
+        "shadcn-ui@1.0.0",
+        "build-template-react@1.0.0",
+        "initial-app@1.0.0",
+        "authorization@4.0.0",
+        "github-export-icp-cli@1.0.0",
+        "invite-links@3.0.0"
+      ],
+      "testIds": [
+        "REQ-10"
+      ],
+      "confidence": "high"
+    }
+  ]
 }

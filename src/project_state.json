@@ -1,6 +1,6 @@
 {
   "schemaVersion": "1.0.0",
-  "projectStateVersion": 9,
+  "projectStateVersion": 11,
   "summary": "New project",
   "architectural_notes": [
     "Email sending is not enabled; provide itinerary sharing via shareable links and downloadable PDFs instead of sending emails directly."
@@ -65,18 +65,28 @@
         "REQ-8"
       ],
       "version": 1
+    },
+    {
+      "id": "feature-update-the-site-footer-social-icons-so-they-link-to-configurable-social-media-urls-instead-of-using-placeholder-href-links",
+      "title": "Update the site footer social icons so they link to configurable social media URLs instead of using placeholder href=\"#\" links.",
+      "reqIds": [
+        "REQ-9"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-add-a-simple-code-based-configuration-point-for-footer-social-links-e-g-a-single-exported-object-array-in-a-new-frontend-config-file-so-non-developers-can-update-social-urls-by-editing-one-place-without-touching-the-footer-component-markup",
+      "title": "Add a simple, code-based configuration point for footer social links (e.g., a single exported object/array in a new frontend config file) so non-developers can update social URLs by editing one place without touching the Footer component markup.",
+      "reqIds": [
+        "REQ-10"
+      ],
+      "version": 1
     }
   ],
   "new_feature_requests": [
     {
       "id": "AR-1",
       "summary": "Add interactive Admin Training Mode (guided walkthrough) for the admin dashboard",
-      "reqIds": [],
-      "status": "pending"
-    },
-    {
-      "id": "AR-2",
-      "summary": "Update the phone number in the page footer to 434-238-8796",
       "reqIds": [],
       "status": "pending"
     },
@@ -98,6 +108,12 @@
       "reqIds": [
         "REQ-6"
       ],
+      "status": "pending"
+    },
+    {
+      "id": "AR-7",
+      "summary": "Add social media links/icons to the site footer (configurable URLs)",
+      "reqIds": [],
       "status": "pending"
     }
   ],

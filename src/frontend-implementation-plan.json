@@ -1,6 +1,44 @@
 {
   "kind": "implementation_plan",
   "version": "1.0",
-  "title": "Update footer phone number",
-  "requirements": []
+  "title": "Configurable social media links in footer (Next Time Vacations)",
+  "requirements": [
+    {
+      "id": "REQ-9",
+      "summary": "Replace placeholder footer social icon links with real, accessible links that open in a new tab.",
+      "acceptanceCriteria": [
+        "The Facebook/X/Instagram/LinkedIn icons in the footer link to real URLs (not \"#\").",
+        "Each social link opens in a new tab and uses rel=\"noopener noreferrer\".",
+        "Each icon link has an accessible label (e.g., aria-label) describing the destination social network."
+      ],
+      "file_operations": [
+        {
+          "path": "frontend/src/components/Footer.tsx",
+          "operation": "modify",
+          "description": "Update the footer social icon anchors to use configured URLs, add target=\"_blank\" and rel=\"noopener noreferrer\", and add per-network accessible labels (e.g., aria-label). Ensure the existing phone number text \"Call us: 434-238-8796\" remains unchanged."
+        }
+      ]
+    },
+    {
+      "id": "REQ-10",
+      "summary": "Introduce a single, code-based configuration export for footer social URLs and render only links with defined URLs.",
+      "acceptanceCriteria": [
+        "There is a single, clearly named config export (e.g., SOCIAL_LINKS) that contains the footer social URLs.",
+        "Footer.tsx reads social URLs from this config rather than hardcoding them inline.",
+        "If a social URL is empty/undefined, its icon is not rendered in the footer."
+      ],
+      "file_operations": [
+        {
+          "path": "frontend/src/config/footerSocialLinks.ts",
+          "operation": "create",
+          "description": "Create a clearly named exported configuration (e.g., SOCIAL_LINKS) containing the footer social URLs for Facebook, X, Instagram, and LinkedIn so updates happen in one place without editing Footer markup."
+        },
+        {
+          "path": "frontend/src/components/Footer.tsx",
+          "operation": "modify",
+          "description": "Import the SOCIAL_LINKS config and render the social icon links by reading from the config; conditionally omit any icon whose configured URL is empty/undefined. Keep footer layout and the phone number display unchanged."
+        }
+      ]
+    }
+  ]
 }

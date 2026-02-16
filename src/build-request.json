@@ -1,19 +1,66 @@
 {
   "kind": "build_request",
-  "title": "Update footer phone number",
+  "title": "Add configurable social media links to the site footer",
   "projectName": "Next Time Vacations",
   "priority": "normal",
-  "requirements": [],
+  "requirements": [
+    {
+      "id": "REQ-9",
+      "text": "Update the site footer social icons so they link to configurable social media URLs instead of using placeholder href=\"#\" links.",
+      "target": "frontend",
+      "source": {
+        "messageIds": [
+          "msg-1"
+        ],
+        "quotes": [
+          "How can i add my social media links to the footer?"
+        ]
+      },
+      "acceptanceCriteria": [
+        "The Facebook/X/Instagram/LinkedIn icons in the footer link to real URLs (not \"#\").",
+        "Each social link opens in a new tab and uses rel=\"noopener noreferrer\".",
+        "Each icon link has an accessible label (e.g., aria-label) describing the destination social network."
+      ]
+    },
+    {
+      "id": "REQ-10",
+      "text": "Add a simple, code-based configuration point for footer social links (e.g., a single exported object/array in a new frontend config file) so non-developers can update social URLs by editing one place without touching the Footer component markup.",
+      "target": "frontend",
+      "source": {
+        "messageIds": [
+          "msg-1"
+        ],
+        "quotes": [
+          "How can i add my social media links to the footer?"
+        ]
+      },
+      "acceptanceCriteria": [
+        "There is a single, clearly named config export (e.g., SOCIAL_LINKS) that contains the footer social URLs.",
+        "Footer.tsx reads social URLs from this config rather than hardcoding them inline.",
+        "If a social URL is empty/undefined, its icon is not rendered in the footer."
+      ]
+    }
+  ],
   "constraints": [
-    "Do not modify any files under frontend/src/components/ui (read-only components).",
-    "Keep all backend logic within the single Motoko actor (backend/main.mo); do not introduce additional backend services."
+    "Do not edit files under frontend/src/hooks/useInternetIdentity.ts, frontend/src/hooks/useInternetIdentity.tsx, frontend/src/hooks/useActor.ts, frontend/src/main.tsx, or any files in frontend/src/components/ui (compose them only).",
+    "Keep the existing footer phone number display (\"Call us: 434-238-8796\") unchanged."
   ],
   "nonGoals": [
-    "Do not change any other footer content (links, social icons, branding text) beyond the phone number.",
-    "Do not change shared itinerary branding settings or any admin configuration flows."
+    "Adding third-party social API integrations (e.g., fetching posts/feeds).",
+    "Adding backend persistence/admin UI for social links (this change should be achievable via frontend configuration only)."
   ],
   "imageRequirements": {
     "required": [],
     "edits": []
+  },
+  "userProfileUpdate": {
+    "goalsToAdd": [],
+    "goalsToRemove": [],
+    "preferencesToAdd": [],
+    "preferencesToRemove": [],
+    "miscToAdd": [],
+    "miscToRemove": [],
+    "fieldsToSet": {},
+    "fieldsToDelete": []
   }
 }
