@@ -1,88 +1,37 @@
 {
   "kind": "spec_vs_diff_report",
   "version": "1.0",
-  "generatedAt": "2026-02-16T22:01:02.336Z",
-  "summary": "Branding UI and Shared Itinerary page updates were added, along with new branding-related utilities and backend branding settings type/defaults. However, several BuildRequest specifics are either not evidenced in the diff summary (notably the exact backend APIs and admin-only enforcement) or appear mismatched (backend branding record/defaults differ from requested fields/default values), and some extra unrequested branding fields were introduced.",
-  "missing_requirements": [
-    {
-      "id": "REQ-6",
-      "requirement": "Backend defines a single global branding settings record containing exactly: brandName, tagline, phoneNumber, logoUrl, primaryColor, accentColor (and returns sensible defaults matching the existing shared page).",
-      "reason": "The backend `BrandingSettings` type shown contains many different/extra fields (e.g., `backgroundColor`, `footerText`, `fontColor`, `showLogo`, social links, analytics, etc.) and the default values shown do not match the requested defaults for the shared itinerary page (e.g., default `footerText` is \"© 2023 Cruise Island\" and `bannerText` is \"Your Dream Cruise Awaits!\" / \"Your Dream Cruise Awaits!\"). This does not clearly implement the required record shape and default values.",
-      "evidence": [
-        "backend/main.mo",
-        "frontend/src/utils/sharedItineraryBranding.ts"
-      ]
-    },
-    {
-      "id": "REQ-6",
-      "requirement": "Backend provides a public query method to fetch branding settings without authentication, and an admin-only update method that rejects non-admin callers.",
-      "reason": "The diff summary shows the `BrandingSettings` type and a `brandingSettings` variable, but does not show any public query function or an admin-only update function (nor evidence of rejecting non-admin callers).",
-      "evidence": [
-        "backend/main.mo",
-        "frontend/src/hooks/useQueries.ts"
-      ]
-    },
-    {
-      "id": "REQ-5",
-      "requirement": "Admin UI includes a “Reset to defaults” action that persists defaults after confirmation.",
-      "reason": "The new tab implements `handleReset` and imports `AlertDialog` components, but the truncated diff does not show an actual confirmation dialog wiring before resetting/persisting.",
-      "evidence": [
-        "frontend/src/components/SharedPageBrandingSettingsTab.tsx"
-      ]
-    },
-    {
-      "id": "REQ-7",
-      "requirement": "Shared itinerary page replaces the contact phone number with configured value (with fallback to defaults).",
-      "reason": "The shared page now fetches branding settings and uses them for the header/brand name/tagline and logo, but the provided snippet does not show the contact card/phone number being rendered from `branding.phoneNumber` (the phone number usage is not evidenced in the truncated portion).",
-      "evidence": [
-        "frontend/src/components/SharedItineraryPage.tsx"
-      ]
-    },
-    {
-      "id": "REQ-8",
-      "requirement": "Primary/accent color application maintains readability in both light and dark mode; invalid/missing values fall back to existing ocean/sunset styling tokens.",
-      "reason": "There is validation and fallback to Tailwind classes (`text-ocean-700 dark:text-ocean-400`, `text-ocean-600`) when invalid, but no evidence of any contrast/readability safeguards beyond basic validation (e.g., ensuring sufficient contrast in dark mode) as required by the acceptance criteria.",
-      "evidence": [
-        "frontend/src/utils/colorValidation.ts",
-        "frontend/src/components/SharedItineraryPage.tsx"
-      ]
-    }
-  ],
+  "generatedAt": "2026-02-16T22:14:52.698Z",
+  "summary": "The diff updates the footer phone number as requested, but also modifies unrelated files (including backend/main.mo and project_state.json) that were not part of the BuildRequest.",
+  "missing_requirements": [],
   "hallucinated_features": [
     {
-      "description": "Backend branding settings expanded to include many additional fields (social links, analytics, newsletter signup, custom CSS, multiple hero/banner fields, etc.) beyond the requested 6 fields.",
-      "reason": "BuildRequest explicitly scoped branding settings to brand name, tagline, phone number, logo URL, primary color, accent color; the diff shows a much larger settings record.",
+      "description": "Backend actor file modified even though the request was only to update the footer phone number (a frontend-only change).",
+      "reason": "BuildRequest scope is updating the footer phone number and explicitly includes a non-goal of not changing other areas; no backend changes were requested or implied.",
       "evidence": [
         "backend/main.mo"
       ]
     },
     {
-      "description": "Default backend branding values appear to introduce unrelated branding (e.g., \"© 2023 Cruise Island\", Spotify-green accent `#1db954`) not requested for the shared itinerary page defaults.",
-      "reason": "Acceptance criteria require defaults matching the existing shared itinerary page’s current text/styling intent (e.g., Next Time Vacations and current phone number). The shown backend defaults do not align.",
+      "description": "Project metadata/state updated to include multiple features/REQ IDs unrelated to the requested footer phone number update.",
+      "reason": "BuildRequest lists Requirements: none and only asks for a footer phone number update; updating feature tracking/state content is not requested.",
       "evidence": [
-        "backend/main.mo"
+        "project_state.json"
       ]
     },
     {
-      "description": "Added a backend stable-state migration module (`backend/migration.mo`).",
-      "reason": "BuildRequest allows adding `backend/migration.mo` only if a stable-state upgrade is required; the diff summary does not provide evidence that such an upgrade was necessary (it may be justified, but it is not evidenced here).",
+      "description": "Frontend file summaries index modified (documentation/metadata) without being requested.",
+      "reason": "BuildRequest does not request updating any documentation/summary files; only the footer phone number was in scope.",
       "evidence": [
-        "backend/migration.mo",
-        "backend/main.mo"
+        "frontend-file-summaries.txt"
       ]
     }
   ],
-  "confidence": 0.62,
+  "confidence": 0.72,
   "changed_files": [
     "backend/main.mo",
-    "backend/migration.mo",
     "frontend-file-summaries.txt",
-    "frontend/src/components/AdminDashboardDialog.tsx",
-    "frontend/src/components/SharedItineraryPage.tsx",
-    "frontend/src/components/SharedPageBrandingSettingsTab.tsx",
-    "frontend/src/hooks/useQueries.ts",
-    "frontend/src/utils/colorValidation.ts",
-    "frontend/src/utils/sharedItineraryBranding.ts",
+    "frontend/src/components/Footer.tsx",
     "project_state.json"
   ]
 }

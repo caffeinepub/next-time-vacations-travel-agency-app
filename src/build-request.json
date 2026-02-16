@@ -1,107 +1,19 @@
 {
   "kind": "build_request",
-  "title": "Add branding customization for the public Shared Itinerary page",
+  "title": "Update footer phone number",
   "projectName": "Next Time Vacations",
   "priority": "normal",
-  "requirements": [
-    {
-      "id": "REQ-5",
-      "text": "Add an admin-accessible UI in the Admin Dashboard to edit and save branding settings for the public shared itinerary page, including: brand name (text), tagline/subtitle (text), contact phone number (text), logo image URL (text), and primary/accent color values (text inputs that accept CSS color strings such as hex).",
-      "target": "frontend",
-      "source": {
-        "messageIds": [
-          "msg-4"
-        ],
-        "quotes": [
-          "yes please"
-        ]
-      },
-      "acceptanceCriteria": [
-        "Admin Dashboard includes a new section/tab for “Shared Page Branding” (or equivalent) that is visible to admins only.",
-        "The form includes inputs for: brand name, tagline/subtitle, contact phone number, logo image URL, primary color, accent color.",
-        "Clicking “Save” persists the settings via a backend call and shows a success toast; failures show an error toast.",
-        "A “Reset to defaults” action restores the current default branding values used today (e.g., Next Time Vacations and the current phone number) and persists them after confirmation."
-      ]
-    },
-    {
-      "id": "REQ-6",
-      "text": "Add backend storage and APIs for shared itinerary page branding settings, including: a public query to fetch the current branding settings and an admin-only update method to set them.",
-      "target": "backend",
-      "source": {
-        "messageIds": [
-          "msg-4"
-        ],
-        "quotes": [
-          "yes please"
-        ]
-      },
-      "acceptanceCriteria": [
-        "Backend defines a single branding settings record (global app settings) containing: brandName, tagline, phoneNumber, logoUrl, primaryColor, accentColor.",
-        "A public query method returns the current branding settings without requiring authentication (so shared links can render for anonymous visitors).",
-        "An admin-only update method persists branding settings and rejects non-admin callers.",
-        "If branding settings have never been set, the backend returns sensible defaults that match the existing shared itinerary page text and styling intent (e.g., default brand name and phone number currently shown on the page)."
-      ]
-    },
-    {
-      "id": "REQ-7",
-      "text": "Update the public Shared Itinerary page to use the stored branding settings instead of hardcoded values, including replacing the brand name text (“Next Time Vacations”), the tagline/subtitle, the contact phone number, and displaying the logo when provided.",
-      "target": "frontend",
-      "source": {
-        "messageIds": [
-          "msg-4"
-        ],
-        "quotes": [
-          "yes please"
-        ]
-      },
-      "acceptanceCriteria": [
-        "Shared itinerary header uses the configured brand name and tagline (with fallback to defaults when unset).",
-        "The contact card uses the configured phone number (with fallback to defaults when unset).",
-        "If a logo URL is configured, the shared itinerary page renders the logo in the header area with appropriate sizing and accessible alt text.",
-        "If logo URL is empty/invalid, the page still renders cleanly without broken layout."
-      ]
-    },
-    {
-      "id": "REQ-8",
-      "text": "Apply configurable primary/accent colors from branding settings to the Shared Itinerary page in a controlled way (e.g., header/title accents, icon accent colors, and key UI highlights) while maintaining readability in both light and dark mode.",
-      "target": "frontend",
-      "source": {
-        "messageIds": [
-          "msg-4"
-        ],
-        "quotes": [
-          "yes please"
-        ]
-      },
-      "acceptanceCriteria": [
-        "Primary/accent color settings influence prominent accents on the Shared Itinerary page (e.g., title text and/or section icon highlights) without reducing contrast below readable levels.",
-        "If color values are missing/invalid, the page falls back to the existing ocean/sunset styling tokens.",
-        "Dark mode remains readable and visually coherent after applying branding colors."
-      ]
-    }
-  ],
+  "requirements": [],
   "constraints": [
-    "Do not edit any files under frontend/src/components/ui (Shadcn components must be composed, not modified).",
-    "Do not edit frontend/src/hooks/useInternetIdentity.ts, frontend/src/hooks/useInternetIdentity.tsx, frontend/src/hooks/useActor.ts, or frontend/src/main.tsx (immutable paths).",
-    "Backend must remain a single Motoko actor with all logic in backend/main.mo; only add backend/migration.mo if a stable-state upgrade is required."
+    "Do not modify any files under frontend/src/components/ui (read-only components).",
+    "Keep all backend logic within the single Motoko actor (backend/main.mo); do not introduce additional backend services."
   ],
   "nonGoals": [
-    "Do not add per-itinerary or per-share-link branding overrides (branding is global for the shared itinerary experience).",
-    "Do not add third-party authentication providers; keep Internet Identity as-is.",
-    "Do not add external databases or services for theme storage."
+    "Do not change any other footer content (links, social icons, branding text) beyond the phone number.",
+    "Do not change shared itinerary branding settings or any admin configuration flows."
   ],
   "imageRequirements": {
     "required": [],
     "edits": []
-  },
-  "userProfileUpdate": {
-    "goalsToAdd": [],
-    "goalsToRemove": [],
-    "preferencesToAdd": [],
-    "preferencesToRemove": [],
-    "miscToAdd": [],
-    "miscToRemove": [],
-    "fieldsToSet": {},
-    "fieldsToDelete": []
   }
 }

@@ -1,6 +1,6 @@
 {
   "schemaVersion": "1.0.0",
-  "projectStateVersion": 7,
+  "projectStateVersion": 9,
   "summary": "New project",
   "architectural_notes": [
     "Email sending is not enabled; provide itinerary sharing via shareable links and downloadable PDFs instead of sending emails directly."

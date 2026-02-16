@@ -57,7 +57,7 @@ export function Footer() {
               </a>
             </div>
             <p className="text-sm text-white/80">
-              Call us: 1-800-CRUISE-NOW
+              Call us: 434-238-8796
             </p>
           </div>
         </div>

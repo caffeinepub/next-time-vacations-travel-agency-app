@@ -12,9 +12,9 @@ import InviteLinksModule "invite-links/invite-links-module";
 import MixinAuthorization "authorization/MixinAuthorization";
 import AccessControl "authorization/access-control";
 import MixinStorage "blob-storage/Mixin";
-import Migration "migration";
 
-(with migration = Migration.run)
+
+
 actor {
   include MixinStorage();
 
@@ -809,6 +809,10 @@ actor {
   };
 
   public shared ({ caller }) func createShareableLink(itineraryId : Text) : async Text {
+    if (not (AccessControl.hasPermission(accessControlState, caller, #user))) {
+      Runtime.trap("Unauthorized: Only authenticated users can create shareable links");
+    };
+
     switch (itineraries.get(itineraryId)) {
       case (null) { Runtime.trap("Itinerary not found") };
       case (?itinerary) {
