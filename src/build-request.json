@@ -1,55 +1,57 @@
 {
   "kind": "build_request",
-  "title": "Restore persistent full-screen cruise ship image on homepage",
+  "title": "Fix missing homepage hero image asset and rendering",
   "projectName": "Next Time Vacations",
   "priority": "high",
   "requirements": [
     {
       "id": "REQ-1",
-      "text": "Update the homepage Hero (frontend/src/components/Hero.tsx) so the cruise ship image is the single, full-viewport background for the entire front page hero area (covering width and height) and does not disappear after updates/deploys.",
+      "text": "Ensure the homepage Hero background image file exists in the deployed frontend static assets at the exact public path \"/assets/generated/cruise-ship-hero.dim_1600x900.jpg\" so it loads reliably after builds/deploys.",
       "target": "frontend",
       "source": {
         "messageIds": [
-          "msg-3"
+          "recent-messages-4"
         ],
         "quotes": [
-          "The picture is gone again.  Can we get the cruise ship picture for the entire front page"
+          "There is no picture on the front page"
         ]
       },
       "acceptanceCriteria": [
-        "On the home page (no share link present), the Hero section renders a cruise ship photo that covers the full viewport (no letterboxing) using a cover-style layout.",
-        "The cruise ship image remains visible after a rebuild/redeploy (no regression where it disappears).",
-        "If the cruise ship image cannot be loaded, the UI shows a graceful visual fallback (e.g., a solid/gradient background) rather than an empty/blank hero area."
+        "The file is present in the repo at frontend/public/assets/generated/cruise-ship-hero.dim_1600x900.jpg.",
+        "Loading the homepage triggers a successful (HTTP 200) request for /assets/generated/cruise-ship-hero.dim_1600x900.jpg (no 404/failed request in browser devtools).",
+        "The cruise ship image is visible as a full-viewport background in the Hero section on the homepage."
       ]
     },
     {
       "id": "REQ-2",
-      "text": "Ensure the cruise ship hero image asset is available as a static public asset and referenced consistently from the Hero component using the exact path /assets/generated/cruise-ship-hero.dim_1600x900.jpg.",
+      "text": "Update the Hero component (frontend/src/components/Hero.tsx) to handle image load failures in a user-visible way while preserving the intended full-screen background behavior (e.g., show the existing gradient fallback plus a small, readable message indicating the image failed to load).",
       "target": "frontend",
       "source": {
         "messageIds": [
-          "msg-3"
+          "recent-messages-4"
         ],
         "quotes": [
-          "Can we get the cruise ship picture for the entire front page"
+          "There is no picture on the front page"
         ]
       },
       "acceptanceCriteria": [
-        "The file frontend/public/assets/generated/cruise-ship-hero.dim_1600x900.jpg exists in the project and is served by the frontend.",
-        "The Hero component uses /assets/generated/cruise-ship-hero.dim_1600x900.jpg as the background source (no broken links / 404s in browser devtools)."
+        "If the hero image fails to load, the page shows the existing gradient fallback background and an English message indicating the hero image could not be loaded.",
+        "If the hero image loads successfully, it displays behind the overlay as a full-viewport background (object-cover) with no layout shift or disappearance on refresh/reload."
       ]
     }
   ],
   "constraints": [
-    "Do not modify any files under frontend/src/components/ui or other paths listed as immutable in SYSTEM_CONTEXT."
+    "Do not change any files under frontend/src/components/ui (read-only).",
+    "Keep the Hero image reference path exactly \"/assets/generated/cruise-ship-hero.dim_1600x900.jpg\" (as used in frontend/src/components/Hero.tsx).",
+    "Do not route the hero image through the backend; it must be a frontend public static asset."
   ],
   "nonGoals": [
-    "No changes to backend canister logic or data models.",
-    "No changes to the shared itinerary page rendering (when a share link is present)."
+    "Adding new homepage sections or changing the overall homepage content beyond what is needed to restore/confirm the hero image visibility.",
+    "Implementing third-party image hosting/CDN integrations."
   ],
   "imageRequirements": {
     "required": [
-      "Cruise ship hero photo at sea, wide landscape (cruise-ship-hero.dim_1600x900.jpg)"
+      "Cruise ship hero photo at sea, wide landscape (cruise-ship-hero.dim_1600x900.jpg, 1600x900)"
     ],
     "edits": []
   },

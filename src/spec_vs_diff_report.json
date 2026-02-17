@@ -1,36 +1,35 @@
 {
   "kind": "spec_vs_diff_report",
   "version": "1.0",
-  "generatedAt": "2026-02-17T03:01:59.826Z",
-  "summary": "Hero component was updated to render a full-viewport, object-cover cruise ship background with a gradient fallback on load error and a readability overlay. However, the required static image asset was not added to the public assets path in the diff, and there are additional unrelated metadata/file-summary updates not requested.",
+  "generatedAt": "2026-02-17T03:08:18.095Z",
+  "summary": "REQ-2 (Hero load-failure handling with a user-visible message and gradient fallback) appears implemented in Hero.tsx. REQ-1 (ensuring the actual hero image asset exists at the required public path) is not evidenced by the diff, and unrelated metadata/state files were modified without being requested.",
   "missing_requirements": [
     {
-      "id": "REQ-2",
-      "requirement": "Ensure the cruise ship hero image asset is available as a static public asset at frontend/public/assets/generated/cruise-ship-hero.dim_1600x900.jpg and referenced consistently from the Hero component using the exact path /assets/generated/cruise-ship-hero.dim_1600x900.jpg.",
-      "reason": "The Hero component references the required path, but the diff shows no new file added under frontend/public/assets/generated/, so the required asset’s existence/serving cannot be verified from the changes.",
+      "id": "REQ-1",
+      "requirement": "Ensure the homepage Hero background image file exists in the repo at frontend/public/assets/generated/cruise-ship-hero.dim_1600x900.jpg so it is deployed and loads at /assets/generated/cruise-ship-hero.dim_1600x900.jpg.",
+      "reason": "The diff shows no added file under frontend/public/assets/generated/ and explicitly reports no added files; therefore there is no evidence the required image asset was added to the repo at the specified path.",
       "evidence": [
-        "File diff summary shows ADDED FILES: none",
-        "frontend/src/components/Hero.tsx (uses const CRUISE_SHIP_IMAGE = '/assets/generated/cruise-ship-hero.dim_1600x900.jpg';)"
+        "File diff summary: \"Added: 0\" / \"ADDED FILES: - none\""
       ]
     }
   ],
   "hallucinated_features": [
     {
-      "description": "Updated project metadata/state tracking entries for AR-1/AR-2/AR-3 in project_state.json.",
-      "reason": "BuildRequest only asked for Hero and public asset changes; updating project_state.json is not requested as part of implementing the UI/asset requirements.",
+      "description": "Modified project_state.json to add/track new_feature_requests (AR-1/AR-2) and other metadata changes.",
+      "reason": "The BuildRequest only asks to fix the hero asset and update Hero.tsx; it does not request changes to project tracking/state files.",
       "evidence": [
         "project_state.json"
       ]
     },
     {
-      "description": "Updated/generated frontend-file-summaries.txt content describing multiple components.",
-      "reason": "Not requested by the BuildRequest; appears to be documentation/summary maintenance rather than implementing REQ-1/REQ-2.",
+      "description": "Modified frontend-file-summaries.txt with updated descriptions (including Hero/other components).",
+      "reason": "The BuildRequest does not request generating/updating file summary documentation.",
       "evidence": [
         "frontend-file-summaries.txt"
       ]
     }
   ],
-  "confidence": 0.72,
+  "confidence": 0.76,
   "changed_files": [
     "frontend-file-summaries.txt",
     "frontend/src/components/Hero.tsx",

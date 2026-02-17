@@ -1,6 +1,6 @@
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { Button } from '@/components/ui/button';
-import { Ship, MapPin, Calendar } from 'lucide-react';
+import { Ship, MapPin, Calendar, AlertCircle } from 'lucide-react';
 
 const CRUISE_SHIP_IMAGE = '/assets/generated/cruise-ship-hero.dim_1600x900.jpg';
 
@@ -8,31 +8,33 @@ export function Hero() {
   const [imageLoaded, setImageLoaded] = useState(false);
   const [imageError, setImageError] = useState(false);
 
-  useEffect(() => {
-    // Preload the cruise ship image
-    const img = new Image();
-    img.onload = () => setImageLoaded(true);
-    img.onerror = () => setImageError(true);
-    img.src = CRUISE_SHIP_IMAGE;
-  }, []);
-
   return (
     <section id="home" className="relative h-screen min-h-screen flex items-center justify-center overflow-hidden">
-      {/* Cruise ship hero image - full screen cover background */}
+      {/* Gradient background - always present as fallback */}
+      <div className="absolute inset-0 bg-gradient-to-br from-ocean-900 via-ocean-700 to-ocean-500" />
+      
+      {/* Cruise ship hero image - full screen cover background with fade-in */}
       {!imageError && (
         <div className="absolute inset-0">
           <img 
             src={CRUISE_SHIP_IMAGE}
             alt="Cruise ship sailing on the ocean"
-            className="absolute inset-0 w-full h-full object-cover"
+            className={`absolute inset-0 w-full h-full object-cover transition-opacity duration-700 ${
+              imageLoaded ? 'opacity-100' : 'opacity-0'
+            }`}
             loading="eager"
+            onLoad={() => setImageLoaded(true)}
+            onError={() => setImageError(true)}
           />
         </div>
       )}
       
-      {/* Fallback gradient background if image fails to load */}
+      {/* Error message if image fails to load */}
       {imageError && (
-        <div className="absolute inset-0 bg-gradient-to-br from-ocean-900 via-ocean-700 to-ocean-500" />
+        <div className="absolute top-4 left-1/2 -translate-x-1/2 z-20 bg-red-500/90 text-white px-4 py-2 rounded-lg shadow-lg flex items-center gap-2 text-sm">
+          <AlertCircle className="h-4 w-4" />
+          <span>Hero image could not be loaded</span>
+        </div>
       )}
       
       {/* Enhanced gradient overlay for text readability in both light and dark modes */}

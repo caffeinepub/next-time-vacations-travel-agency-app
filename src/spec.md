@@ -1,11 +1,10 @@
 # Specification
 
 ## Summary
-**Goal:** Restore a persistent, full-viewport cruise ship hero background image on the homepage.
+**Goal:** Restore and harden the homepage Hero background image so it reliably displays after builds/deploys.
 
 **Planned changes:**
-- Update `frontend/src/components/Hero.tsx` so the homepage Hero uses a single cruise ship photo as a full-viewport background (covering width and height with a cover-style layout).
-- Ensure the hero image is referenced consistently from `/assets/generated/cruise-ship-hero.dim_1600x900.jpg` and is served as a static public asset.
-- Add a graceful visual fallback (e.g., solid/gradient background) when the image cannot be loaded, to avoid a blank hero area.
+- Add/verify the Hero background image exists at `frontend/public/assets/generated/cruise-ship-hero.dim_1600x900.jpg` so the public path `/assets/generated/cruise-ship-hero.dim_1600x900.jpg` returns successfully.
+- Update `frontend/src/components/Hero.tsx` to detect hero image load failure and show the existing gradient fallback plus a small, readable English message, while keeping the full-viewport background behavior when the image loads.
 
-**User-visible outcome:** On the homepage (without a share link), users see a cruise ship photo filling the entire hero area and it remains visible after rebuilds/redeploys, with a non-blank fallback if the image fails to load.
+**User-visible outcome:** The homepage shows the cruise ship hero image as a full-screen background; if it fails to load, users see the gradient fallback and a clear message indicating the image couldn’t be loaded.
