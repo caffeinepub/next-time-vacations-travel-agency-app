@@ -3,46 +3,48 @@
   "projectStateVersion": 3,
   "summary": "New project",
   "architectural_notes": [],
-  "known_issues": [],
-  "isFixRequest": false,
-  "imageRequirements": "## Edit Images\n- Crop/resize the uploaded photo to a wide hero format (cruise-290913_1280.jpg > cruise-ship-hero.dim_1600x900.jpg)",
-  "existing_features": [],
+  "known_issues": [
+    "Image upload/attachment is not being received/processed reliably (user reports 'still no picture' after multiple attempts)."
+  ],
+  "isFixRequest": true,
+  "existing_features": [
+    {
+      "id": "feature-add-frontend-admin-ui-to-upload-and-manage-the-homepage-hero-image-from-inside-the-app-do-not-rely-on-chat-attachments-including-file-picker-validation-must-be-an-image-max-5mb-preview-save-action-and-a-reset-to-default-action",
+      "title": "Add frontend admin UI to upload and manage the homepage hero image from inside the app (do not rely on chat attachments), including: file picker, validation (must be an image; max 5MB), preview, save action, and a reset-to-default action.",
+      "reqIds": [
+        "REQ-2"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-update-the-hero-component-to-use-the-admin-uploaded-homepage-hero-image-when-available-otherwise-fall-back-to-the-existing-static-asset-path-assets-generated-cruise-ship-hero-dim-1600x900-jpg-and-keep-existing-load-fallback-diagnostics-behavior",
+      "title": "Update the Hero component to use the admin-uploaded homepage hero image when available; otherwise fall back to the existing static asset path \"/assets/generated/cruise-ship-hero.dim_1600x900.jpg\" and keep existing load/fallback diagnostics behavior.",
+      "reqIds": [
+        "REQ-3"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-add-react-query-hooks-for-getting-and-updating-the-homepage-hero-image-following-existing-hooks-patterns-used-for-cruise-line-logos-query-invalidation-after-updates-so-the-hero-refreshes-without-a-hard-reload",
+      "title": "Add React Query hooks for getting and updating the homepage hero image, following existing hooks patterns used for cruise line logos (query invalidation after updates so the Hero refreshes without a hard reload).",
+      "reqIds": [
+        "REQ-4"
+      ],
+      "version": 1
+    }
+  ],
   "new_feature_requests": [
     {
       "id": "AR-1",
-      "summary": "Add/set the provided picture as the front page (hero) image and ensure it displays correctly (with appropriate fill/layout)",
+      "summary": "Add support for placing an uploaded picture on the front page (front-page image upload/selection)",
       "reqIds": [],
       "status": "pending"
     },
     {
       "id": "AR-2",
-      "summary": "Add the uploaded image \"cruise-290913_1280.jpg\" to the deployed frontend static assets as the homepage hero image file at the exact public path \"/assets/generated/cruise-ship-hero.dim_1600x900.jpg\" (1600x900).",
+      "summary": "Add backend support for an admin-managed homepage hero image that can be uploaded in-app and later retrieved by the frontend (store the image as a data URL string or equivalent persisted value), with access control enforced so only admins can change it.",
       "reqIds": [
         "REQ-1"
-      ],
-      "status": "pending"
-    },
-    {
-      "id": "AR-3",
-      "summary": "Ensure the homepage hero section uses the hero image from \"/assets/generated/cruise-ship-hero.dim_1600x900.jpg\" and displays it as a full-screen background with a sensible cover/fill behavior across common viewport sizes.",
-      "reqIds": [
-        "REQ-2"
-      ],
-      "status": "pending"
-    },
-    {
-      "id": "AR-4",
-      "summary": "Keep (or add if missing) the current resilient fallback behavior for the homepage hero: if the hero image fails to load, the gradient background remains visible and a small readable error message is shown without breaking layout.",
-      "reqIds": [
-        "REQ-3"
-      ],
-      "status": "pending"
-    },
-    {
-      "id": "AR-5",
-      "summary": "Ensure the HTML preload link (if present) matches the hero image path exactly so the browser preloads the correct asset: \"/assets/generated/cruise-ship-hero.dim_1600x900.jpg\".",
-      "reqIds": [
-        "REQ-4"
       ],
       "status": "pending"
     }

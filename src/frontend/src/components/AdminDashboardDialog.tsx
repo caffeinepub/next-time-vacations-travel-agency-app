@@ -4,7 +4,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Skeleton } from '@/components/ui/skeleton';
-import { Ship, Calendar, DollarSign, Bed, Bell, Shield, Image as ImageIcon, Palette } from 'lucide-react';
+import { Ship, Calendar, DollarSign, Bed, Bell, Shield, Image as ImageIcon, Palette, Home } from 'lucide-react';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { toast } from 'sonner';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
@@ -13,6 +13,7 @@ import type { Booking, AdminAlert } from '../backend';
 import { useEffect } from 'react';
 import { CruiseLineLogosManagement } from './CruiseLineLogosManagement';
 import { SharedPageBrandingSettingsTab } from './SharedPageBrandingSettingsTab';
+import { HomepageHeroImageManagement } from './HomepageHeroImageManagement';
 
 interface AdminDashboardDialogProps {
   open: boolean;
@@ -49,7 +50,7 @@ export function AdminDashboardDialog({ open, onOpenChange }: AdminDashboardDialo
         </DialogHeader>
 
         <Tabs defaultValue="alerts" className="w-full">
-          <TabsList className="grid w-full grid-cols-4">
+          <TabsList className="grid w-full grid-cols-5">
             <TabsTrigger value="alerts" className="relative">
               <Bell className="mr-2 h-4 w-4" />
               Alerts
@@ -70,6 +71,10 @@ export function AdminDashboardDialog({ open, onOpenChange }: AdminDashboardDialo
             <TabsTrigger value="branding">
               <Palette className="mr-2 h-4 w-4" />
               Branding
+            </TabsTrigger>
+            <TabsTrigger value="hero">
+              <Home className="mr-2 h-4 w-4" />
+              Hero
             </TabsTrigger>
           </TabsList>
 
@@ -161,6 +166,12 @@ export function AdminDashboardDialog({ open, onOpenChange }: AdminDashboardDialo
           <TabsContent value="branding" className="mt-4">
             <ScrollArea className="h-[55vh] pr-4">
               <SharedPageBrandingSettingsTab />
+            </ScrollArea>
+          </TabsContent>
+
+          <TabsContent value="hero" className="mt-4">
+            <ScrollArea className="h-[55vh] pr-4">
+              <HomepageHeroImageManagement />
             </ScrollArea>
           </TabsContent>
         </Tabs>

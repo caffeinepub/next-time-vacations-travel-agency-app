@@ -1,45 +1,38 @@
 {
   "kind": "spec_vs_diff_report",
   "version": "1.0",
-  "generatedAt": "2026-02-17T03:16:25.733Z",
-  "summary": "Diff only updates project_state.json to track pending feature requests; no frontend assets, hero styling/behavior, fallback handling, or preload link changes were implemented.",
+  "generatedAt": "2026-02-17T03:36:42.011Z",
+  "summary": "Frontend changes add an Admin Dashboard tab and UI for uploading/resetting a homepage hero image (with validation, preview, and toasts), and the Hero component now attempts to use a custom hero image from a query hook with fallback to the existing static asset plus diagnostics. However, the diff summary does not show corresponding backend API/state changes needed to persist and securely manage the hero image (admin-only update, query fetch, upgrade persistence). Also, a backend migration module was added even though the provided diff evidence does not show it being required for preserving existing state or including the new hero image state.",
   "missing_requirements": [
     {
       "id": "REQ-1",
-      "requirement": "Add the uploaded image \"cruise-290913_1280.jpg\" to the deployed frontend static assets as the homepage hero image file at the exact public path \"/assets/generated/cruise-ship-hero.dim_1600x900.jpg\" (1600x900).",
-      "reason": "No new image file was added under frontend/public/assets/generated, and no other files besides project_state.json were modified.",
+      "requirement": "Backend support for an admin-managed homepage hero image: query method to fetch current image (none/empty when not set), admin-only update method to set/replace it, non-admin authorization error, and persistence across upgrades.",
+      "reason": "The diff summary shows backend/main.mo was modified and a migration module was added, but there is no visible evidence of new hero-image-specific stable state or new public methods (get/set/reset) with admin authorization checks. The added backend/migration.mo also does not include any hero image field/state to preserve across upgrades.",
       "evidence": [
-        "project_state.json"
-      ]
-    },
-    {
-      "id": "REQ-2",
-      "requirement": "Ensure the homepage hero section uses the hero image from \"/assets/generated/cruise-ship-hero.dim_1600x900.jpg\" and displays it as a full-screen background with a sensible cover/fill behavior.",
-      "reason": "No homepage/hero component or CSS files were modified; only project_state.json changed.",
-      "evidence": [
-        "project_state.json"
-      ]
-    },
-    {
-      "id": "REQ-3",
-      "requirement": "Keep/add fallback behavior for the homepage hero: gradient remains visible and a small readable error message is shown if the hero image fails to load.",
-      "reason": "No UI code was changed to implement or verify fallback rendering/error messaging; only project_state.json changed.",
-      "evidence": [
-        "project_state.json"
-      ]
-    },
-    {
-      "id": "REQ-4",
-      "requirement": "Ensure the HTML preload link (if present) matches the hero image path exactly: \"/assets/generated/cruise-ship-hero.dim_1600x900.jpg\".",
-      "reason": "No HTML/template files were modified to add/update a preload link; only project_state.json changed.",
-      "evidence": [
-        "project_state.json"
+        "backend/main.mo",
+        "backend/migration.mo"
       ]
     }
   ],
-  "hallucinated_features": [],
-  "confidence": 0.93,
+  "hallucinated_features": [
+    {
+      "description": "Added backend migration module and wired it into the actor upgrade path.",
+      "reason": "The BuildRequest constraint says to only generate backend/migration.mo if required to preserve existing persisted state during upgrade. The diff adds backend/migration.mo and integrates it via `import Migration \"migration\"; (with migration = Migration.run)` but the provided diff evidence does not show a state-change requiring migration, nor does the migration include new homepage hero image state.",
+      "evidence": [
+        "backend/migration.mo",
+        "backend/main.mo"
+      ]
+    }
+  ],
+  "confidence": 0.64,
   "changed_files": [
+    "backend/main.mo",
+    "backend/migration.mo",
+    "frontend-file-summaries.txt",
+    "frontend/src/components/AdminDashboardDialog.tsx",
+    "frontend/src/components/Hero.tsx",
+    "frontend/src/components/HomepageHeroImageManagement.tsx",
+    "frontend/src/hooks/useQueries.ts",
     "project_state.json"
   ]
 }

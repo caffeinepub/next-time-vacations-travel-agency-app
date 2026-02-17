@@ -1,65 +1,61 @@
 {
   "kind": "implementation_plan",
   "version": "1.0",
-  "title": "Next Time Vacations: Set cruise photo as homepage hero image",
+  "title": "Next Time Vacations — In-app admin-managed homepage hero image",
   "requirements": [
     {
-      "id": "REQ-1",
-      "summary": "Add the resized cruise photo as a deployed static asset at the exact generated hero image path.",
-      "acceptanceCriteria": [
-        "A file exists in the built/deployed frontend at frontend/public/assets/generated/cruise-ship-hero.dim_1600x900.jpg.",
-        "The image is 1600x900 and loads successfully at /assets/generated/cruise-ship-hero.dim_1600x900.jpg in the browser (no 404)."
-      ],
-      "file_operations": [
-        {
-          "path": "frontend/public/assets/generated/cruise-ship-hero.dim_1600x900.jpg",
-          "operation": "create",
-          "description": "Add the cropped/resized hero image asset (1600x900) to the deployed static assets at this exact path (derived from uploaded cruise-290913_1280.jpg)."
-        }
-      ]
-    },
-    {
       "id": "REQ-2",
-      "summary": "Ensure the homepage hero section uses the new hero image as a full-screen cover background with fade-in and gradient overlay readability.",
+      "summary": "Add admin UI in the Admin Dashboard to upload/preview/save/reset the homepage hero image with image-only + 5MB validation and English toasts/errors.",
       "acceptanceCriteria": [
-        "On the homepage, the hero background renders the cruise photo and covers the hero area without distortion (object-fit: cover behavior).",
-        "The hero image continues to fade in when it loads, and the existing gradient overlay keeps the headline readable on top of the photo."
+        "An admin can open the Admin Dashboard and find a section/tab for managing the homepage hero image.",
+        "Uploading a valid image shows a preview before saving.",
+        "Attempting to upload a non-image file shows an English error message and does not save.",
+        "Attempting to upload an image larger than 5MB shows an English error message and does not save.",
+        "Saving the image triggers a success toast in English and the new image is persisted.",
+        "A reset action clears the custom hero image so the app falls back to the default static hero image."
       ],
       "file_operations": [
         {
-          "path": "frontend/src/components/Hero.tsx",
+          "path": "frontend/src/components/HomepageHeroImageManagement.tsx",
+          "operation": "create",
+          "description": "Create an admin-only management panel for the homepage hero image: file picker (accept image/*), validation (must be image; max 5MB), preview (data URL), Save action (calls update mutation), and Reset-to-default action (calls reset mutation). Use the existing toast system (sonner) for English success/error messages. Verify the component's usage instructions before implementing."
+        },
+        {
+          "path": "frontend/src/components/AdminDashboardDialog.tsx",
           "operation": "modify",
-          "description": "Confirm the hero image source is exactly /assets/generated/cruise-ship-hero.dim_1600x900.jpg and that the hero uses full-viewport sizing with object-fit cover behavior, preserves the existing fade-in transition, and keeps the gradient overlay for text readability."
+          "description": "Add a new Admin Dashboard tab/section for managing the homepage hero image and wire it to render the new HomepageHeroImageManagement component. Update the TabsList layout (e.g., grid columns) to include the new tab, keeping English labels. Verify the component's usage instructions before implementing."
         }
       ]
     },
     {
       "id": "REQ-3",
-      "summary": "Preserve resilient hero fallback: gradient remains visible and an error message appears if the hero image fails to load.",
+      "summary": "Update the Hero component to prefer the admin-uploaded homepage hero image when present, otherwise use the existing static hero asset while keeping diagnostics/fallback behavior.",
       "acceptanceCriteria": [
-        "If the hero image URL is invalid or the file is missing, the page still renders the hero with the gradient background and a readable error message.",
-        "No layout shifting or blank/white hero section occurs when the image fails to load."
+        "When a custom hero image is set, the homepage renders it as the hero background successfully without requiring a redeploy of static assets.",
+        "When no custom hero image is set, the homepage continues to load the existing static hero image from \"/assets/generated/cruise-ship-hero.dim_1600x900.jpg\".",
+        "If the hero image fails to load, the current on-screen diagnostics banner still appears and includes the attempted URLs/current URL as it does today."
       ],
       "file_operations": [
         {
           "path": "frontend/src/components/Hero.tsx",
           "operation": "modify",
-          "description": "Ensure image load error handling keeps the gradient fallback visible at all times and shows a small, readable, non-layout-breaking (absolutely positioned) error message when the hero image fails to load."
+          "description": "Integrate the homepage hero image query hook and update image selection logic: when a custom image value exists, attempt to load it first; if it fails, fall back through the existing static asset fallback URLs (using the current diagnostics/attempted URL tracking and banner). When no custom value exists, keep current behavior using the static asset and existing fallback diagnostics. Verify the component's usage instructions before implementing."
         }
       ]
     },
     {
       "id": "REQ-4",
-      "summary": "Ensure the HTML preload link (if present) matches the hero image path exactly so the browser preloads the correct asset.",
+      "summary": "Add React Query hooks to fetch and update/reset the homepage hero image with query invalidation so the Hero refreshes without full reload.",
       "acceptanceCriteria": [
-        "The preload href equals /assets/generated/cruise-ship-hero.dim_1600x900.jpg.",
-        "After deployment, network waterfall shows the correct hero image preloading (or at minimum no preload 404)."
+        "A query hook exists to fetch the current homepage hero image value and is used by the Hero/admin UI.",
+        "A mutation hook exists to set/reset the homepage hero image and invalidates the relevant query keys on success.",
+        "After saving a new hero image, the homepage hero updates without requiring a full page refresh."
       ],
       "file_operations": [
         {
-          "path": "frontend/index.html",
+          "path": "frontend/src/hooks/useQueries.ts",
           "operation": "modify",
-          "description": "Verify (and update if needed) the existing preload link href to exactly /assets/generated/cruise-ship-hero.dim_1600x900.jpg so the browser preloads the correct hero asset."
+          "description": "Add React Query hooks following existing patterns used for cruise line logos: (1) a query hook to fetch the current homepage hero image value, and (2) a mutation hook to set/replace and reset/clear the value. Ensure successful mutations invalidate the hero image query key so components (Hero and admin UI) update immediately without hard reload. Verify the component's usage instructions before implementing."
         }
       ]
     }

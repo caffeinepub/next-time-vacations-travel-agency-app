@@ -672,44 +672,6 @@ export function useDeactivateShareableLink() {
   });
 }
 
-export function useGetShareableLinksByUser() {
-  const { actor, isFetching } = useActor();
-  const { identity } = useInternetIdentity();
-
-  return useQuery<ShareableLink[]>({
-    queryKey: ['shareableLinks'],
-    queryFn: async () => {
-      if (!actor) return [];
-      try {
-        return await actor.getShareableLinksByUser({});
-      } catch (error) {
-        console.error('Error fetching shareable links:', error);
-        return [];
-      }
-    },
-    enabled: !!actor && !isFetching && !!identity,
-  });
-}
-
-export function useGetAllShareableLinks() {
-  const { actor, isFetching } = useActor();
-  const { identity } = useInternetIdentity();
-
-  return useQuery<ShareableLink[]>({
-    queryKey: ['allShareableLinks'],
-    queryFn: async () => {
-      if (!actor) return [];
-      try {
-        return await actor.getAllShareableLinks({});
-      } catch (error) {
-        console.error('Error fetching all shareable links:', error);
-        return [];
-      }
-    },
-    enabled: !!actor && !isFetching && !!identity,
-  });
-}
-
 // Branding Settings Queries
 export function useGetBrandingSettings() {
   const { actor, isFetching } = useActor();
@@ -734,6 +696,68 @@ export function useUpdateBrandingSettings() {
       return actor.updateBrandingSettings(settings);
     },
     onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['brandingSettings'] });
+    },
+  });
+}
+
+// Homepage Hero Image Queries
+export function useGetHomepageHeroImage() {
+  const { actor, isFetching } = useActor();
+
+  return useQuery<string>({
+    queryKey: ['homepageHeroImage'],
+    queryFn: async () => {
+      if (!actor) return '';
+      try {
+        const settings = await actor.getBrandingSettings();
+        return settings.heroBannerImage || '';
+      } catch (error) {
+        console.error('Error fetching homepage hero image:', error);
+        return '';
+      }
+    },
+    enabled: !!actor && !isFetching,
+  });
+}
+
+export function useUpdateHomepageHeroImage() {
+  const { actor } = useActor();
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: async (imageDataUrl: string) => {
+      if (!actor) throw new Error('Actor not initialized');
+      const currentSettings = await actor.getBrandingSettings();
+      const updatedSettings: BrandingSettings = {
+        ...currentSettings,
+        heroBannerImage: imageDataUrl,
+      };
+      return actor.updateBrandingSettings(updatedSettings);
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['homepageHeroImage'] });
+      queryClient.invalidateQueries({ queryKey: ['brandingSettings'] });
+    },
+  });
+}
+
+export function useResetHomepageHeroImage() {
+  const { actor } = useActor();
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: async () => {
+      if (!actor) throw new Error('Actor not initialized');
+      const currentSettings = await actor.getBrandingSettings();
+      const updatedSettings: BrandingSettings = {
+        ...currentSettings,
+        heroBannerImage: '',
+      };
+      return actor.updateBrandingSettings(updatedSettings);
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['homepageHeroImage'] });
       queryClient.invalidateQueries({ queryKey: ['brandingSettings'] });
     },
   });

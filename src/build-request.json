@@ -1,100 +1,103 @@
 {
   "kind": "build_request",
-  "title": "Set uploaded cruise photo as homepage hero image",
+  "title": "Add reliable in-app hero image upload for the front page",
   "projectName": "Next Time Vacations",
   "priority": "normal",
   "requirements": [
     {
       "id": "REQ-1",
-      "text": "Add the uploaded image \"cruise-290913_1280.jpg\" to the deployed frontend static assets as the homepage hero image file at the exact public path \"/assets/generated/cruise-ship-hero.dim_1600x900.jpg\" (1600x900).",
-      "target": "frontend",
+      "text": "Add backend support for an admin-managed homepage hero image that can be uploaded in-app and later retrieved by the frontend (store the image as a data URL string or equivalent persisted value), with access control enforced so only admins can change it.",
+      "target": "backend",
       "source": {
         "messageIds": [
-          "msg-4"
+          "msg-user-1",
+          "msg-user-2"
         ],
         "quotes": [
-          "this is the picture to put on the front page"
+          "i just sent you the picture again",
+          "for the second time"
         ]
       },
       "acceptanceCriteria": [
-        "A file exists in the built/deployed frontend at frontend/public/assets/generated/cruise-ship-hero.dim_1600x900.jpg.",
-        "The image is 1600x900 and loads successfully at /assets/generated/cruise-ship-hero.dim_1600x900.jpg in the browser (no 404)."
+        "Backend exposes a query method to fetch the current homepage hero image (returns empty/none when not set).",
+        "Backend exposes an admin-only update method to set/replace the homepage hero image value.",
+        "Non-admin callers attempting to update the homepage hero image receive an authorization error.",
+        "The stored homepage hero image survives canister upgrades (add migration logic only if required by existing stable state)."
       ]
     },
     {
       "id": "REQ-2",
-      "text": "Ensure the homepage hero section uses the hero image from \"/assets/generated/cruise-ship-hero.dim_1600x900.jpg\" and displays it as a full-screen background with a sensible cover/fill behavior across common viewport sizes.",
+      "text": "Add frontend admin UI to upload and manage the homepage hero image from inside the app (do not rely on chat attachments), including: file picker, validation (must be an image; max 5MB), preview, save action, and a reset-to-default action.",
       "target": "frontend",
       "source": {
         "messageIds": [
-          "msg-4"
+          "msg-user-1",
+          "msg-user-2"
         ],
         "quotes": [
-          "this is the picture to put on the front page"
+          "i just sent you the picture again",
+          "for the second time"
         ]
       },
       "acceptanceCriteria": [
-        "On the homepage, the hero background renders the cruise photo and covers the hero area without distortion (object-fit: cover behavior).",
-        "The hero image continues to fade in when it loads, and the existing gradient overlay keeps the headline readable on top of the photo."
+        "An admin can open the Admin Dashboard and find a section/tab for managing the homepage hero image.",
+        "Uploading a valid image shows a preview before saving.",
+        "Attempting to upload a non-image file shows an English error message and does not save.",
+        "Attempting to upload an image larger than 5MB shows an English error message and does not save.",
+        "Saving the image triggers a success toast in English and the new image is persisted.",
+        "A reset action clears the custom hero image so the app falls back to the default static hero image."
       ]
     },
     {
       "id": "REQ-3",
-      "text": "Keep (or add if missing) the current resilient fallback behavior for the homepage hero: if the hero image fails to load, the gradient background remains visible and a small readable error message is shown without breaking layout.",
+      "text": "Update the Hero component to use the admin-uploaded homepage hero image when available; otherwise fall back to the existing static asset path \"/assets/generated/cruise-ship-hero.dim_1600x900.jpg\" and keep existing load/fallback diagnostics behavior.",
       "target": "frontend",
       "source": {
         "messageIds": [
-          "msg-4"
+          "msg-user-1"
         ],
         "quotes": [
-          "this is the picture to put on the front page"
+          "i just sent you the picture again"
         ]
       },
       "acceptanceCriteria": [
-        "If the hero image URL is invalid or the file is missing, the page still renders the hero with the gradient background and a readable error message.",
-        "No layout shifting or blank/white hero section occurs when the image fails to load."
+        "When a custom hero image is set, the homepage renders it as the hero background successfully without requiring a redeploy of static assets.",
+        "When no custom hero image is set, the homepage continues to load the existing static hero image from \"/assets/generated/cruise-ship-hero.dim_1600x900.jpg\".",
+        "If the hero image fails to load, the current on-screen diagnostics banner still appears and includes the attempted URLs/current URL as it does today."
       ]
     },
     {
       "id": "REQ-4",
-      "text": "Ensure the HTML preload link (if present) matches the hero image path exactly so the browser preloads the correct asset: \"/assets/generated/cruise-ship-hero.dim_1600x900.jpg\".",
+      "text": "Add React Query hooks for getting and updating the homepage hero image, following existing hooks patterns used for cruise line logos (query invalidation after updates so the Hero refreshes without a hard reload).",
       "target": "frontend",
       "source": {
         "messageIds": [
-          "msg-4"
+          "msg-user-1"
         ],
         "quotes": [
-          "this is the picture to put on the front page"
+          "i just sent you the picture again"
         ]
       },
       "acceptanceCriteria": [
-        "The preload href equals /assets/generated/cruise-ship-hero.dim_1600x900.jpg.",
-        "After deployment, network waterfall shows the correct hero image preloading (or at minimum no preload 404)."
+        "A query hook exists to fetch the current homepage hero image value and is used by the Hero/admin UI.",
+        "A mutation hook exists to set/reset the homepage hero image and invalidates the relevant query keys on success.",
+        "After saving a new hero image, the homepage hero updates without requiring a full page refresh."
       ]
     }
   ],
   "constraints": [
-    "Do not edit files under frontend/src/components/ui (read-only).",
-    "Do not edit immutable hook files under frontend/src/hooks/useInternetIdentity.ts(x), frontend/src/hooks/useActor.ts, or frontend/src/main.tsx."
+    "Backend must remain a single Motoko actor (all logic in backend/main.mo).",
+    "Only generate backend/migration.mo if required to preserve existing persisted state during upgrade.",
+    "Do not edit files under frontend immutable paths (frontend/src/hooks/useInternetIdentity.ts, frontend/src/hooks/useInternetIdentity.tsx, frontend/src/hooks/useActor.ts, frontend/src/main.tsx, frontend/src/components/ui/*).",
+    "Use English for all user-facing UI text."
   ],
   "nonGoals": [
-    "Changing backend data models or adding backend endpoints for serving the hero image.",
-    "Adding user-configurable hero image management in the admin dashboard."
+    "Do not implement chat-based image attachment processing.",
+    "Do not add third-party image hosting or external storage services.",
+    "Do not introduce additional backend canisters or databases."
   ],
   "imageRequirements": {
     "required": [],
-    "edits": [
-      "Crop/resize the uploaded photo to a wide hero format (cruise-290913_1280.jpg > cruise-ship-hero.dim_1600x900.jpg)"
-    ]
-  },
-  "userProfileUpdate": {
-    "goalsToAdd": [],
-    "goalsToRemove": [],
-    "preferencesToAdd": [],
-    "preferencesToRemove": [],
-    "miscToAdd": [],
-    "miscToRemove": [],
-    "fieldsToSet": {},
-    "fieldsToDelete": []
+    "edits": []
   }
 }

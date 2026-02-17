@@ -1,57 +1,70 @@
 {
   "kind": "coverage_report",
   "version": "1.0",
-  "generatedAt": "2026-02-17T03:16:25.735Z",
+  "generatedAt": "2026-02-17T03:36:42.013Z",
   "sources": {
     "buildRequest": true,
     "implementationPlan": true
   },
   "requirements": {
     "total": 4,
-    "implemented": 0,
+    "implemented": 3,
     "items": [
       {
         "id": "REQ-1",
-        "summary": "Add the uploaded image \"cruise-290913_1280.jpg\" to the deployed frontend static assets as the homepage hero image file at the exact public path \"/assets/generated/cruise-ship-hero.dim_1600x900.jpg\" (1600x900).",
-        "status": "missing",
-        "plannedFiles": [
-          "frontend/public/assets/generated/cruise-ship-hero.dim_1600x900.jpg"
-        ],
+        "summary": "Add backend support for an admin-managed homepage hero image that can be uploaded in-app and later retrieved by the frontend (store the image as a data URL string or equivalent persisted value), with access control enforced so only admins can change it.",
+        "status": "unknown",
+        "plannedFiles": [],
         "matchedFiles": []
       },
       {
         "id": "REQ-2",
-        "summary": "Ensure the homepage hero section uses the hero image from \"/assets/generated/cruise-ship-hero.dim_1600x900.jpg\" and displays it as a full-screen background with a sensible cover/fill behavior across common viewport sizes.",
-        "status": "missing",
+        "summary": "Add frontend admin UI to upload and manage the homepage hero image from inside the app (do not rely on chat attachments), including: file picker, validation (must be an image; max 5MB), preview, save action, and a reset-to-default action.",
+        "status": "implemented",
         "plannedFiles": [
-          "frontend/src/components/Hero.tsx"
+          "frontend/src/components/HomepageHeroImageManagement.tsx",
+          "frontend/src/components/AdminDashboardDialog.tsx"
         ],
-        "matchedFiles": []
+        "matchedFiles": [
+          "frontend/src/components/HomepageHeroImageManagement.tsx",
+          "frontend/src/components/AdminDashboardDialog.tsx"
+        ]
       },
       {
         "id": "REQ-3",
-        "summary": "Keep (or add if missing) the current resilient fallback behavior for the homepage hero: if the hero image fails to load, the gradient background remains visible and a small readable error message is shown without breaking layout.",
-        "status": "missing",
+        "summary": "Update the Hero component to use the admin-uploaded homepage hero image when available; otherwise fall back to the existing static asset path \"/assets/generated/cruise-ship-hero.dim_1600x900.jpg\" and keep existing load/fallback diagnostics behavior.",
+        "status": "implemented",
         "plannedFiles": [
           "frontend/src/components/Hero.tsx"
         ],
-        "matchedFiles": []
+        "matchedFiles": [
+          "frontend/src/components/Hero.tsx"
+        ]
       },
       {
         "id": "REQ-4",
-        "summary": "Ensure the HTML preload link (if present) matches the hero image path exactly so the browser preloads the correct asset: \"/assets/generated/cruise-ship-hero.dim_1600x900.jpg\".",
-        "status": "missing",
+        "summary": "Add React Query hooks for getting and updating the homepage hero image, following existing hooks patterns used for cruise line logos (query invalidation after updates so the Hero refreshes without a hard reload).",
+        "status": "implemented",
         "plannedFiles": [
-          "frontend/index.html"
+          "frontend/src/hooks/useQueries.ts"
         ],
-        "matchedFiles": []
+        "matchedFiles": [
+          "frontend/src/hooks/useQueries.ts"
+        ]
       }
     ]
   },
   "changedFiles": [
+    "backend/main.mo",
+    "backend/migration.mo",
     "build-request.json",
     "feature_evidence.json",
+    "frontend-file-summaries.txt",
     "frontend-implementation-plan.json",
+    "frontend/src/components/AdminDashboardDialog.tsx",
+    "frontend/src/components/Hero.tsx",
+    "frontend/src/components/HomepageHeroImageManagement.tsx",
+    "frontend/src/hooks/useQueries.ts",
     "project_state.json",
     "scratch/component-selection.json",
     "spec.md",
