@@ -1,68 +1,34 @@
 {
   "kind": "coverage_report",
   "version": "1.0",
-  "generatedAt": "2026-02-17T02:35:35.622Z",
+  "generatedAt": "2026-02-17T02:57:02.517Z",
   "sources": {
     "buildRequest": true,
     "implementationPlan": true
   },
   "requirements": {
-    "total": 3,
-    "implemented": 3,
+    "total": 1,
+    "implemented": 1,
     "items": [
       {
         "id": "REQ-1",
-        "summary": "Add an in-app “App Status / Live Link” section that clearly shows the current app URL (derived from window.location.origin + window.location.pathname) and provides a one-click “Copy link” action, so a user can always obtain a working link without relying on any placeholder URL.",
+        "summary": "Update the homepage Hero section (frontend/src/components/Hero.tsx) so the cruise ship picture fills the full screen (full viewport height and width) while maintaining aspect ratio using a cover-style layout.",
         "status": "implemented",
         "plannedFiles": [
-          "frontend/src/components/AppStatusLiveLinkSection.tsx",
-          "frontend/src/components/AdminSettingsDialog.tsx"
+          "frontend/src/components/Hero.tsx"
         ],
         "matchedFiles": [
-          "frontend/src/components/AppStatusLiveLinkSection.tsx",
-          "frontend/src/components/AdminSettingsDialog.tsx"
-        ]
-      },
-      {
-        "id": "REQ-2",
-        "summary": "Expose a lightweight backend query that returns deployment diagnostics (at minimum: backend canister principal and a backend-reported timestamp/version string), and surface that information in the “App Status / Live Link” section to help confirm the live deployment is serving the expected backend.",
-        "status": "implemented",
-        "plannedFiles": [
-          "frontend/src/hooks/useQueries.ts",
-          "frontend/src/components/AppStatusLiveLinkSection.tsx"
-        ],
-        "matchedFiles": [
-          "frontend/src/hooks/useQueries.ts",
-          "frontend/src/components/AppStatusLiveLinkSection.tsx"
-        ]
-      },
-      {
-        "id": "REQ-3",
-        "summary": "Add a short, English “Going Live Checklist” panel in the “App Status / Live Link” section that explains how to verify the app is live (e.g., open the copied link in a private/incognito window, confirm content loads, confirm diagnostics values appear), without referencing or depending on builder UI controls.",
-        "status": "implemented",
-        "plannedFiles": [
-          "frontend/src/components/AppStatusLiveLinkSection.tsx"
-        ],
-        "matchedFiles": [
-          "frontend/src/components/AppStatusLiveLinkSection.tsx"
+          "frontend/src/components/Hero.tsx"
         ]
       }
     ]
   },
   "changedFiles": [
-    "backend/main.mo",
-    "backend/migration.mo",
     "build-request.json",
     "feature_evidence.json",
     "frontend-file-summaries.txt",
     "frontend-implementation-plan.json",
-    "frontend/src/backend.d.ts",
-    "frontend/src/backend.ts",
-    "frontend/src/components/AdminSettingsDialog.tsx",
-    "frontend/src/components/AppStatusLiveLinkSection.tsx",
-    "frontend/src/declarations/backend.did.d.ts",
-    "frontend/src/declarations/backend.did.js",
-    "frontend/src/hooks/useQueries.ts",
+    "frontend/src/components/Hero.tsx",
     "project_state.json",
     "scratch/component-selection.json",
     "spec.md",

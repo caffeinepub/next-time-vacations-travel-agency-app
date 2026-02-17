@@ -1,53 +1,36 @@
 {
   "kind": "spec_vs_diff_report",
   "version": "1.0",
-  "generatedAt": "2026-02-17T02:35:35.619Z",
-  "summary": "REQ-1 appears implemented via a new App Status & Live Link section in the Admin Settings dialog with runtime-derived URL and copy-to-clipboard toast. Evidence for REQ-2 (backend public diagnostics query returning canister principal + version/timestamp and frontend hook wiring) and REQ-3 (Going Live Checklist panel) is not present in the provided diff excerpts, so they cannot be verified as implemented.",
-  "missing_requirements": [
-    {
-      "id": "REQ-2",
-      "requirement": "Expose a backend query that returns deployment diagnostics (at minimum: backend canister principal and a backend-reported timestamp/version string), and surface it in the “App Status / Live Link” section with non-blocking error handling.",
-      "reason": "The frontend section references `useGetBackendDiagnostics()` and renders version/timestamp, but the diff excerpt does not show the hook implementation nor any backend `public query` method that returns canister principal + a backend-generated string/timestamp. With the provided truncated evidence, the required backend API and the actor/react-query wiring cannot be confirmed.",
-      "evidence": [
-        "frontend/src/components/AppStatusLiveLinkSection.tsx",
-        "frontend/src/hooks/useQueries.ts",
-        "backend/main.mo"
-      ]
-    },
-    {
-      "id": "REQ-3",
-      "requirement": "Add a short, English “Going Live Checklist” panel in the “App Status / Live Link” section (incognito/private verification + diagnostics should load note; no builder UI references).",
-      "reason": "The provided AppStatusLiveLinkSection excerpt shows Live URL and Backend Diagnostics UI, but no checklist panel text is visible in the truncated content, so this requirement cannot be verified as implemented.",
-      "evidence": [
-        "frontend/src/components/AppStatusLiveLinkSection.tsx"
-      ]
-    }
-  ],
+  "generatedAt": "2026-02-17T02:57:02.514Z",
+  "summary": "REQ-1 appears implemented in Hero.tsx: the hero section now uses full viewport height (h-screen/min-h-screen) and the cruise ship image is positioned to cover the full area via object-cover with overlays to keep text readable. However, the diff also introduces an additional sunset background image layer and updates meta/state files that were not requested.",
+  "missing_requirements": [],
   "hallucinated_features": [
     {
-      "description": "Added an \"Open\" button/link that opens the current app URL in a new tab.",
-      "reason": "REQ-1 only asks for displaying the URL and providing a one-click \"Copy link\" action with a success toast; opening the link in a new tab was not requested.",
+      "description": "Added an additional full-screen background 'sunset' image layer behind the cruise ship hero image (potentially an unrequested visual change beyond adjusting layout/fit behavior).",
+      "reason": "BuildRequest asked only to make the existing cruise ship hero image full-screen with cover behavior; it did not request adding a second background image asset/layer.",
       "evidence": [
-        "frontend/src/components/AppStatusLiveLinkSection.tsx"
+        "frontend/src/components/Hero.tsx (adds backgroundImage: 'url(/assets/generated/hero-cruise-sunset.dim_1200x600.jpg)')"
       ]
     },
     {
-      "description": "Introduced a backend state migration and a persistent `backendVersion` field initialized to \"1.0.0\".",
-      "reason": "REQ-2 requires a diagnostics query returning principal and a backend-generated display string; it does not explicitly require a schema migration or storing the version in stable state. This may be implementation detail, but it is not directly requested in the BuildRequest.",
+      "description": "Modified project tracking/state metadata (project_state.json) marking/recording feature requests.",
+      "reason": "Not part of REQ-1 implementation (styling/layout-only change) and not requested in the BuildRequest.",
       "evidence": [
-        "backend/migration.mo",
-        "backend/main.mo"
+        "project_state.json"
+      ]
+    },
+    {
+      "description": "Updated/added a generated frontend file summary listing many components/features.",
+      "reason": "Not requested as part of implementing the hero full-screen image behavior.",
+      "evidence": [
+        "frontend-file-summaries.txt"
       ]
     }
   ],
-  "confidence": 0.6,
+  "confidence": 0.86,
   "changed_files": [
-    "backend/main.mo",
-    "backend/migration.mo",
     "frontend-file-summaries.txt",
-    "frontend/src/components/AdminSettingsDialog.tsx",
-    "frontend/src/components/AppStatusLiveLinkSection.tsx",
-    "frontend/src/hooks/useQueries.ts",
+    "frontend/src/components/Hero.tsx",
     "project_state.json"
   ]
 }

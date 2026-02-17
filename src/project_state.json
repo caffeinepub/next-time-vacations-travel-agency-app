@@ -3,39 +3,26 @@
   "projectStateVersion": 3,
   "summary": "New project",
   "architectural_notes": [],
-  "known_issues": [
-    "User cannot find/see the 'Push/Publish to Live' control in the builder UI; preview panel appears to lack Draft/Live toolbar/dropdown, preventing publishing the app live.",
-    "Provided live URL is a placeholder (https://_YOUR_APP_URL_/live) and does not open; user cannot obtain/share a working live link until app is successfully published."
-  ],
+  "known_issues": [],
   "isFixRequest": true,
   "existing_features": [
     {
-      "id": "feature-add-an-in-app-app-status-live-link-section-that-clearly-shows-the-current-app-url-derived-from-window-location-origin-window-location-pathname-and-provides-a-one-click-copy-link-action-so-a-user-can-always-obtain-a-working-link-without-relying-on-any-placeholder-url",
-      "title": "Add an in-app “App Status / Live Link” section that clearly shows the current app URL (derived from window.location.origin + window.location.pathname) and provides a one-click “Copy link” action, so a user can always obtain a working link without relying on any placeholder URL.",
+      "id": "feature-update-the-homepage-hero-section-frontend-src-components-hero-tsx-so-the-cruise-ship-picture-fills-the-full-screen-full-viewport-height-and-width-while-maintaining-aspect-ratio-using-a-cover-style-layout",
+      "title": "Update the homepage Hero section (frontend/src/components/Hero.tsx) so the cruise ship picture fills the full screen (full viewport height and width) while maintaining aspect ratio using a cover-style layout.",
       "reqIds": [
         "REQ-1"
       ],
       "version": 1
-    },
-    {
-      "id": "feature-expose-a-lightweight-backend-query-that-returns-deployment-diagnostics-at-minimum-backend-canister-principal-and-a-backend-reported-timestamp-version-string-and-surface-that-information-in-the-app-status-live-link-section-to-help-confirm-the-live-deployment-is-serving-the-expected-backend",
-      "title": "Expose a lightweight backend query that returns deployment diagnostics (at minimum: backend canister principal and a backend-reported timestamp/version string), and surface that information in the “App Status / Live Link” section to help confirm the live deployment is serving the expected backend.",
-      "reqIds": [
-        "REQ-2"
-      ],
-      "version": 1
-    },
-    {
-      "id": "feature-add-a-short-english-going-live-checklist-panel-in-the-app-status-live-link-section-that-explains-how-to-verify-the-app-is-live-e-g-open-the-copied-link-in-a-private-incognito-window-confirm-content-loads-confirm-diagnostics-values-appear-without-referencing-or-depending-on-builder-ui-controls",
-      "title": "Add a short, English “Going Live Checklist” panel in the “App Status / Live Link” section that explains how to verify the app is live (e.g., open the copied link in a private/incognito window, confirm content loads, confirm diagnostics values appear), without referencing or depending on builder UI controls.",
-      "reqIds": [
-        "REQ-3"
-      ],
-      "version": 1
     }
   ],
-  "new_feature_requests": [],
-  "gameProjectType": "none",
+  "new_feature_requests": [
+    {
+      "id": "AR-1",
+      "summary": "Make the cruise ship picture on the homepage display full screen",
+      "reqIds": [],
+      "status": "pending"
+    }
+  ],
   "projectName": "Next Time Vacations",
   "clarification_mode": "instant",
   "clarification_rounds": 0

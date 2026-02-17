@@ -1,5 +1,6 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useSearchCruisesWithFilters, useGetAllCruiseDeals } from '../hooks/useQueries';
+import { useDebouncedValue } from '../hooks/useDebouncedValue';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
@@ -14,12 +15,52 @@ import type { SearchFilters } from '../backend';
 export function SearchSection() {
   const [searchQuery, setSearchQuery] = useState('');
   const [showFilters, setShowFilters] = useState(false);
-  const [filters, setFilters] = useState<SearchFilters>({});
+  
+  // UI state for filter controls
+  const [selectedDestination, setSelectedDestination] = useState<string>('');
+  const [selectedCruiseLine, setSelectedCruiseLine] = useState<string>('');
+  const [selectedMonth, setSelectedMonth] = useState<string>('');
   const [priceRange, setPriceRange] = useState<[number, number]>([0, 10000]);
   const [durationRange, setDurationRange] = useState<[number, number]>([1, 30]);
 
+  // Debounce search query for automatic updates
+  const debouncedSearchQuery = useDebouncedValue(searchQuery, 400);
+
   const { data: allDeals } = useGetAllCruiseDeals();
-  const { data: results, isLoading } = useSearchCruisesWithFilters(searchQuery, filters);
+
+  // Build backend-safe SearchFilters from UI state
+  const buildFilters = (): SearchFilters => {
+    const filters: SearchFilters = {};
+    
+    if (selectedDestination) {
+      filters.destination = selectedDestination;
+    }
+    if (selectedCruiseLine) {
+      filters.cruiseLine = selectedCruiseLine;
+    }
+    if (selectedMonth) {
+      filters.departureMonth = selectedMonth;
+    }
+    if (durationRange[0] > 1) {
+      filters.minDuration = BigInt(durationRange[0]);
+    }
+    if (durationRange[1] < 30) {
+      filters.maxDuration = BigInt(durationRange[1]);
+    }
+    if (priceRange[0] > 0) {
+      filters.minPrice = BigInt(priceRange[0]);
+    }
+    if (priceRange[1] < 10000) {
+      filters.maxPrice = BigInt(priceRange[1]);
+    }
+
+    return filters;
+  };
+
+  // Automatically update filters when any control changes
+  const activeFilters = buildFilters();
+  
+  const { data: results, isLoading } = useSearchCruisesWithFilters(debouncedSearchQuery, activeFilters);
 
   // Extract unique values for filter dropdowns
   const destinations = Array.from(new Set(allDeals?.map(d => d.destination) || []));
@@ -29,30 +70,27 @@ export function SearchSection() {
     'July', 'August', 'September', 'October', 'November', 'December'
   ];
 
-  const handleSearch = () => {
-    const newFilters: SearchFilters = {};
-    
-    if (filters.destination) newFilters.destination = filters.destination;
-    if (filters.cruiseLine) newFilters.cruiseLine = filters.cruiseLine;
-    if (filters.departureMonth) newFilters.departureMonth = filters.departureMonth;
-    
-    if (durationRange[0] > 1) newFilters.minDuration = BigInt(durationRange[0]);
-    if (durationRange[1] < 30) newFilters.maxDuration = BigInt(durationRange[1]);
-    
-    if (priceRange[0] > 0) newFilters.minPrice = BigInt(priceRange[0]);
-    if (priceRange[1] < 10000) newFilters.maxPrice = BigInt(priceRange[1]);
-
-    setFilters(newFilters);
-  };
-
   const clearFilters = () => {
-    setFilters({});
+    setSelectedDestination('');
+    setSelectedCruiseLine('');
+    setSelectedMonth('');
     setPriceRange([0, 10000]);
     setDurationRange([1, 30]);
     setSearchQuery('');
   };
 
-  const hasActiveFilters = Object.keys(filters).length > 0 || searchQuery.length > 0;
+  const hasActiveFilters = 
+    selectedDestination || 
+    selectedCruiseLine || 
+    selectedMonth || 
+    priceRange[0] > 0 || 
+    priceRange[1] < 10000 || 
+    durationRange[0] > 1 || 
+    durationRange[1] < 30 || 
+    searchQuery.length > 0;
+
+  // Display all deals when no filters are active
+  const displayResults = hasActiveFilters ? results : allDeals;
 
   return (
     <section id="search" className="py-16 bg-muted/30">
@@ -74,7 +112,6 @@ export function SearchSection() {
                 placeholder="Search destinations or cruise lines..."
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                onKeyPress={(e) => e.key === 'Enter' && handleSearch()}
                 className="pl-10 h-12"
               />
             </div>
@@ -85,12 +122,6 @@ export function SearchSection() {
             >
               <Filter className="mr-2 h-4 w-4" />
               Filters
-            </Button>
-            <Button 
-              onClick={handleSearch}
-              className="bg-ocean-600 hover:bg-ocean-700 text-white h-12 px-8"
-            >
-              Search
             </Button>
           </div>
 
@@ -118,8 +149,8 @@ export function SearchSection() {
                     <div className="space-y-2">
                       <Label>Destination</Label>
                       <Select
-                        value={filters.destination || ''}
-                        onValueChange={(value) => setFilters({ ...filters, destination: value || undefined })}
+                        value={selectedDestination}
+                        onValueChange={setSelectedDestination}
                       >
                         <SelectTrigger>
                           <SelectValue placeholder="Any destination" />
@@ -138,8 +169,8 @@ export function SearchSection() {
                     <div className="space-y-2">
                       <Label>Cruise Line</Label>
                       <Select
-                        value={filters.cruiseLine || ''}
-                        onValueChange={(value) => setFilters({ ...filters, cruiseLine: value || undefined })}
+                        value={selectedCruiseLine}
+                        onValueChange={setSelectedCruiseLine}
                       >
                         <SelectTrigger>
                           <SelectValue placeholder="Any cruise line" />
@@ -158,8 +189,8 @@ export function SearchSection() {
                     <div className="space-y-2">
                       <Label>Departure Month</Label>
                       <Select
-                        value={filters.departureMonth || ''}
-                        onValueChange={(value) => setFilters({ ...filters, departureMonth: value || undefined })}
+                        value={selectedMonth}
+                        onValueChange={setSelectedMonth}
                       >
                         <SelectTrigger>
                           <SelectValue placeholder="Any month" />
@@ -217,20 +248,20 @@ export function SearchSection() {
           </div>
         )}
 
-        {!isLoading && results && results.length > 0 && (
+        {!isLoading && displayResults && displayResults.length > 0 && (
           <div>
             <p className="text-sm text-muted-foreground mb-4">
-              Found {results.length} cruise{results.length !== 1 ? 's' : ''}
+              {hasActiveFilters ? `Found ${displayResults.length}` : `Showing all ${displayResults.length}`} cruise{displayResults.length !== 1 ? 's' : ''}
             </p>
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-              {results.map((deal) => (
+              {displayResults.map((deal) => (
                 <CruiseCard key={deal.id} deal={deal} />
               ))}
             </div>
           </div>
         )}
 
-        {!isLoading && hasActiveFilters && results && results.length === 0 && (
+        {!isLoading && hasActiveFilters && displayResults && displayResults.length === 0 && (
           <div className="text-center py-12">
             <p className="text-muted-foreground mb-4">
               No cruises found matching your criteria.

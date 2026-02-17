@@ -61,14 +61,56 @@ export function useSearchItineraries(searchText: string) {
   });
 }
 
+// Helper function to normalize SearchFilters for backend compatibility
+function normalizeSearchFilters(filters: SearchFilters): SearchFilters {
+  const normalized: SearchFilters = {};
+  
+  // Only include fields that have actual values (not undefined or empty strings)
+  if (filters.destination) {
+    normalized.destination = filters.destination;
+  }
+  if (filters.cruiseLine) {
+    normalized.cruiseLine = filters.cruiseLine;
+  }
+  if (filters.departureMonth) {
+    normalized.departureMonth = filters.departureMonth;
+  }
+  if (filters.minDuration !== undefined) {
+    normalized.minDuration = filters.minDuration;
+  }
+  if (filters.maxDuration !== undefined) {
+    normalized.maxDuration = filters.maxDuration;
+  }
+  if (filters.minPrice !== undefined) {
+    normalized.minPrice = filters.minPrice;
+  }
+  if (filters.maxPrice !== undefined) {
+    normalized.maxPrice = filters.maxPrice;
+  }
+  
+  return normalized;
+}
+
+// Helper to create stable query key from filters
+function createFiltersKey(filters: SearchFilters): string {
+  const normalized = normalizeSearchFilters(filters);
+  return JSON.stringify(normalized, (_, value) =>
+    typeof value === 'bigint' ? value.toString() : value
+  );
+}
+
 export function useSearchCruisesWithFilters(searchText: string, filters: SearchFilters) {
   const { actor, isFetching } = useActor();
+  
+  // Normalize filters to ensure backend compatibility
+  const normalizedFilters = normalizeSearchFilters(filters);
+  const filtersKey = createFiltersKey(filters);
 
   return useQuery<CruiseDeal[]>({
-    queryKey: ['searchCruisesWithFilters', searchText, filters],
+    queryKey: ['searchCruisesWithFilters', searchText, filtersKey],
     queryFn: async () => {
       if (!actor) return [];
-      return actor.searchCruisesWithFilters(searchText, filters);
+      return actor.searchCruisesWithFilters(searchText, normalizedFilters);
     },
     enabled: !!actor && !isFetching,
   });
@@ -612,6 +654,59 @@ export function useCreateShareableLink() {
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['shareableLinks'] });
     },
+  });
+}
+
+export function useDeactivateShareableLink() {
+  const { actor } = useActor();
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: async (linkId: string) => {
+      if (!actor) throw new Error('Actor not initialized');
+      return actor.deactivateShareableLink(linkId);
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['shareableLinks'] });
+    },
+  });
+}
+
+export function useGetShareableLinksByUser() {
+  const { actor, isFetching } = useActor();
+  const { identity } = useInternetIdentity();
+
+  return useQuery<ShareableLink[]>({
+    queryKey: ['shareableLinks'],
+    queryFn: async () => {
+      if (!actor) return [];
+      try {
+        return await actor.getShareableLinksByUser({});
+      } catch (error) {
+        console.error('Error fetching shareable links:', error);
+        return [];
+      }
+    },
+    enabled: !!actor && !isFetching && !!identity,
+  });
+}
+
+export function useGetAllShareableLinks() {
+  const { actor, isFetching } = useActor();
+  const { identity } = useInternetIdentity();
+
+  return useQuery<ShareableLink[]>({
+    queryKey: ['allShareableLinks'],
+    queryFn: async () => {
+      if (!actor) return [];
+      try {
+        return await actor.getAllShareableLinks({});
+      } catch (error) {
+        console.error('Error fetching all shareable links:', error);
+        return [];
+      }
+    },
+    enabled: !!actor && !isFetching && !!identity,
   });
 }
 

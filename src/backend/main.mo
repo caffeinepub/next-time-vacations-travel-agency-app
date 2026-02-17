@@ -14,9 +14,8 @@ import MixinAuthorization "authorization/MixinAuthorization";
 import MixinStorage "blob-storage/Mixin";
 import InviteLinksModule "invite-links/invite-links-module";
 
-import Migration "migration";
 
-(with migration = Migration.run)
+
 actor {
   include MixinStorage();
 
@@ -395,6 +394,22 @@ actor {
     };
   };
 
+  func filterByDepartureMonth(deals : [CruiseDeal], month : Text) : [CruiseDeal] {
+    deals.filter(func(deal) { hasMonth(deal.id, month) });
+  };
+
+  func hasMonth(cruiseId : Text, month : Text) : Bool {
+    let matchingItineraries = itineraries.filter(
+      func(_, itinerary) { itinerary.id == cruiseId }
+    );
+
+    let itineraryArray = matchingItineraries.values().toArray();
+
+    not itineraryArray.isEmpty() and itineraryArray[0].departureDate.contains(
+      #text month
+    );
+  };
+
   public query func searchCruisesWithFilters(searchText : Text, filters : SearchFilters) : async [CruiseDeal] {
     let allDeals = cruiseDeals.values().toArray();
 
@@ -425,7 +440,14 @@ actor {
       }
     );
 
-    filtered.sort(CruiseDeal.compareByPrice);
+    let sortedFiltered = filtered.sort(CruiseDeal.compareByPrice);
+
+    switch (filters.departureMonth) {
+      case (?month) {
+        filterByDepartureMonth(sortedFiltered, month);
+      };
+      case (null) { sortedFiltered };
+    };
   };
 
   public shared ({ caller }) func submitReview(cruiseId : Text, rating : Nat, title : Text, comment : Text) : async () {
