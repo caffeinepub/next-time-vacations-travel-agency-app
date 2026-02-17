@@ -1,22 +1,41 @@
 {
   "kind": "implementation_plan",
   "version": "1.0",
-  "title": "Next Time Vacations — Full-screen homepage cruise ship hero",
+  "title": "Restore persistent full-screen cruise ship hero background on homepage",
   "requirements": [
     {
       "id": "REQ-1",
-      "summary": "Make the homepage Hero cruise ship image fill the full viewport using a cover layout while keeping overlay text readable in light/dark mode.",
+      "summary": "Make the homepage Hero use the cruise ship image as the single full-viewport background with a graceful fallback and no post-deploy disappearance.",
       "acceptanceCriteria": [
-        "On the homepage, the hero area uses the full viewport height (e.g., equivalent to Tailwind's h-screen/min-h-screen) instead of a fixed height.",
-        "The cruise ship image (/assets/generated/cruise-ship-hero.dim_1600x900.jpg) visually covers the full hero area (no empty side space), cropping as needed rather than letterboxing.",
-        "Hero text/CTAs remain visible on top of the full-screen image and are still readable in both light and dark modes.",
-        "No changes are required in the backend; this is a styling/layout-only update."
+        "On the home page (no share link present), the Hero section renders a cruise ship photo that covers the full viewport (no letterboxing) using a cover-style layout.",
+        "The cruise ship image remains visible after a rebuild/redeploy (no regression where it disappears).",
+        "If the cruise ship image cannot be loaded, the UI shows a graceful visual fallback (e.g., a solid/gradient background) rather than an empty/blank hero area."
       ],
       "file_operations": [
         {
           "path": "frontend/src/components/Hero.tsx",
           "operation": "modify",
-          "description": "Update the Hero layout to use full viewport sizing (replace the fixed h-[600px] with h-screen/min-h-screen and ensure full-width behavior), and change the cruise ship <img> positioning/sizing from h-full w-auto to a true cover-style layout (e.g., absolute inset-0 with w-full h-full object-cover) so /assets/generated/cruise-ship-hero.dim_1600x900.jpg covers the entire hero area without side gaps. Ensure overlays/gradients keep the text and CTAs readable in both light and dark modes."
+          "description": "Refactor Hero background rendering so the cruise ship image is the single, full-viewport (w/h) cover background for the hero area; remove/disable the competing sunset background layer; add a load-check (e.g., preloading via Image or an <img> with onError) to switch to a non-blank gradient/solid fallback when the image fails; keep existing overlays/text readability while ensuring the image is always present on the non-share homepage."
+        }
+      ]
+    },
+    {
+      "id": "REQ-2",
+      "summary": "Ensure the cruise ship hero image exists as a static public asset and is referenced consistently from Hero via the exact required path.",
+      "acceptanceCriteria": [
+        "The file frontend/public/assets/generated/cruise-ship-hero.dim_1600x900.jpg exists in the project and is served by the frontend.",
+        "The Hero component uses /assets/generated/cruise-ship-hero.dim_1600x900.jpg as the background source (no broken links / 404s in browser devtools)."
+      ],
+      "file_operations": [
+        {
+          "path": "frontend/public/assets/generated/cruise-ship-hero.dim_1600x900.jpg",
+          "operation": "create",
+          "description": "Add/commit the generated static hero image asset at this exact path so it is bundled and served reliably across rebuilds/redeploys."
+        },
+        {
+          "path": "frontend/src/components/Hero.tsx",
+          "operation": "modify",
+          "description": "Update Hero to reference the cruise ship hero asset using the exact required public path /assets/generated/cruise-ship-hero.dim_1600x900.jpg (centralize into a single constant to avoid regressions and inconsistent paths)."
         }
       ]
     }

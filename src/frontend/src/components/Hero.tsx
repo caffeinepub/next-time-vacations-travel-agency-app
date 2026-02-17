@@ -1,36 +1,50 @@
+import { useState, useEffect } from 'react';
 import { Button } from '@/components/ui/button';
 import { Ship, MapPin, Calendar } from 'lucide-react';
 
+const CRUISE_SHIP_IMAGE = '/assets/generated/cruise-ship-hero.dim_1600x900.jpg';
+
 export function Hero() {
+  const [imageLoaded, setImageLoaded] = useState(false);
+  const [imageError, setImageError] = useState(false);
+
+  useEffect(() => {
+    // Preload the cruise ship image
+    const img = new Image();
+    img.onload = () => setImageLoaded(true);
+    img.onerror = () => setImageError(true);
+    img.src = CRUISE_SHIP_IMAGE;
+  }, []);
+
   return (
     <section id="home" className="relative h-screen min-h-screen flex items-center justify-center overflow-hidden">
-      {/* Background sunset image */}
-      <div 
-        className="absolute inset-0 bg-cover bg-center bg-no-repeat"
-        style={{ backgroundImage: 'url(/assets/generated/hero-cruise-sunset.dim_1200x600.jpg)' }}
-      >
-        <div className="absolute inset-0 bg-gradient-to-r from-ocean-900/90 via-ocean-800/70 to-transparent" />
-      </div>
+      {/* Cruise ship hero image - full screen cover background */}
+      {!imageError && (
+        <div className="absolute inset-0">
+          <img 
+            src={CRUISE_SHIP_IMAGE}
+            alt="Cruise ship sailing on the ocean"
+            className="absolute inset-0 w-full h-full object-cover"
+            loading="eager"
+          />
+        </div>
+      )}
       
-      {/* Cruise ship hero image - full screen cover */}
-      <div className="absolute inset-0">
-        <img 
-          src="/assets/generated/cruise-ship-hero.dim_1600x900.jpg" 
-          alt="Cruise ship"
-          className="absolute inset-0 w-full h-full object-cover opacity-60 dark:opacity-50"
-        />
-      </div>
+      {/* Fallback gradient background if image fails to load */}
+      {imageError && (
+        <div className="absolute inset-0 bg-gradient-to-br from-ocean-900 via-ocean-700 to-ocean-500" />
+      )}
       
-      {/* Dark overlay for text readability */}
-      <div className="absolute inset-0 bg-gradient-to-r from-ocean-900/80 via-ocean-800/60 to-ocean-900/40" />
+      {/* Enhanced gradient overlay for text readability in both light and dark modes */}
+      <div className="absolute inset-0 bg-gradient-to-r from-ocean-900/85 via-ocean-800/65 to-ocean-900/50 dark:from-ocean-950/90 dark:via-ocean-900/75 dark:to-ocean-950/60" />
       
       <div className="container relative z-10 text-white">
         <div className="max-w-2xl space-y-6">
-          <h1 className="text-5xl md:text-6xl font-bold leading-tight drop-shadow-lg">
+          <h1 className="text-5xl md:text-6xl font-bold leading-tight drop-shadow-[0_4px_8px_rgba(0,0,0,0.8)]">
             Sail Into Your
             <span className="block text-sunset-400">Dream Vacation</span>
           </h1>
-          <p className="text-xl text-white/90 drop-shadow-md">
+          <p className="text-xl text-white/95 drop-shadow-[0_2px_6px_rgba(0,0,0,0.7)]">
             Discover incredible cruise deals to the world's most breathtaking destinations. 
             Your next adventure starts here.
           </p>
@@ -52,8 +66,8 @@ export function Hero() {
                 <Ship className="h-6 w-6 text-sunset-400" />
               </div>
               <div>
-                <div className="text-2xl font-bold drop-shadow-md">500+</div>
-                <div className="text-sm text-white/80 drop-shadow-sm">Cruise Options</div>
+                <div className="text-2xl font-bold drop-shadow-[0_2px_4px_rgba(0,0,0,0.8)]">500+</div>
+                <div className="text-sm text-white/90 drop-shadow-[0_1px_3px_rgba(0,0,0,0.7)]">Cruise Options</div>
               </div>
             </div>
             <div className="flex items-center gap-2">
@@ -61,8 +75,8 @@ export function Hero() {
                 <MapPin className="h-6 w-6 text-sunset-400" />
               </div>
               <div>
-                <div className="text-2xl font-bold drop-shadow-md">100+</div>
-                <div className="text-sm text-white/80 drop-shadow-sm">Destinations</div>
+                <div className="text-2xl font-bold drop-shadow-[0_2px_4px_rgba(0,0,0,0.8)]">100+</div>
+                <div className="text-sm text-white/90 drop-shadow-[0_1px_3px_rgba(0,0,0,0.7)]">Destinations</div>
               </div>
             </div>
           </div>

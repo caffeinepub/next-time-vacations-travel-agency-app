@@ -1,38 +1,66 @@
 {
   "kind": "build_request",
-  "title": "Make homepage cruise ship hero image full screen",
+  "title": "Restore persistent full-screen cruise ship image on homepage",
   "projectName": "Next Time Vacations",
-  "priority": "normal",
+  "priority": "high",
   "requirements": [
     {
       "id": "REQ-1",
-      "text": "Update the homepage Hero section (frontend/src/components/Hero.tsx) so the cruise ship picture fills the full screen (full viewport height and width) while maintaining aspect ratio using a cover-style layout.",
+      "text": "Update the homepage Hero (frontend/src/components/Hero.tsx) so the cruise ship image is the single, full-viewport background for the entire front page hero area (covering width and height) and does not disappear after updates/deploys.",
       "target": "frontend",
       "source": {
         "messageIds": [
-          "msg-4"
+          "msg-3"
         ],
         "quotes": [
-          "The picture of the cruise ship needs to be full screen"
+          "The picture is gone again.  Can we get the cruise ship picture for the entire front page"
         ]
       },
       "acceptanceCriteria": [
-        "On the homepage, the hero area uses the full viewport height (e.g., equivalent to Tailwind's h-screen/min-h-screen) instead of a fixed height.",
-        "The cruise ship image (/assets/generated/cruise-ship-hero.dim_1600x900.jpg) visually covers the full hero area (no empty side space), cropping as needed rather than letterboxing.",
-        "Hero text/CTAs remain visible on top of the full-screen image and are still readable in both light and dark modes.",
-        "No changes are required in the backend; this is a styling/layout-only update."
+        "On the home page (no share link present), the Hero section renders a cruise ship photo that covers the full viewport (no letterboxing) using a cover-style layout.",
+        "The cruise ship image remains visible after a rebuild/redeploy (no regression where it disappears).",
+        "If the cruise ship image cannot be loaded, the UI shows a graceful visual fallback (e.g., a solid/gradient background) rather than an empty/blank hero area."
+      ]
+    },
+    {
+      "id": "REQ-2",
+      "text": "Ensure the cruise ship hero image asset is available as a static public asset and referenced consistently from the Hero component using the exact path /assets/generated/cruise-ship-hero.dim_1600x900.jpg.",
+      "target": "frontend",
+      "source": {
+        "messageIds": [
+          "msg-3"
+        ],
+        "quotes": [
+          "Can we get the cruise ship picture for the entire front page"
+        ]
+      },
+      "acceptanceCriteria": [
+        "The file frontend/public/assets/generated/cruise-ship-hero.dim_1600x900.jpg exists in the project and is served by the frontend.",
+        "The Hero component uses /assets/generated/cruise-ship-hero.dim_1600x900.jpg as the background source (no broken links / 404s in browser devtools)."
       ]
     }
   ],
   "constraints": [
-    "Do not edit files under frontend/src/components/ui or any paths listed as immutable in SYSTEM_CONTEXT."
+    "Do not modify any files under frontend/src/components/ui or other paths listed as immutable in SYSTEM_CONTEXT."
   ],
   "nonGoals": [
-    "Changing the cruise ship image asset itself (only layout/fit behavior should change).",
-    "Adding new homepage sections or new backend endpoints."
+    "No changes to backend canister logic or data models.",
+    "No changes to the shared itinerary page rendering (when a share link is present)."
   ],
   "imageRequirements": {
-    "required": [],
+    "required": [
+      "Cruise ship hero photo at sea, wide landscape (cruise-ship-hero.dim_1600x900.jpg)"
+    ],
     "edits": []
+  },
+  "userProfileUpdate": {
+    "goalsToAdd": [],
+    "goalsToRemove": [],
+    "preferencesToAdd": [],
+    "preferencesToRemove": [],
+    "miscToAdd": [],
+    "miscToRemove": [],
+    "fieldsToSet": {},
+    "fieldsToDelete": []
   }
 }

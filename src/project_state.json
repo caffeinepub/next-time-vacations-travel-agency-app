@@ -3,14 +3,25 @@
   "projectStateVersion": 3,
   "summary": "New project",
   "architectural_notes": [],
-  "known_issues": [],
+  "known_issues": [
+    "Front page image intermittently disappears after updates/deploys (regression: previously full-screen image was live, then gone again)."
+  ],
   "isFixRequest": true,
+  "imageRequirements": "## Required Images\n- Cruise ship hero photo at sea, wide landscape (cruise-ship-hero.dim_1600x900.jpg)",
   "existing_features": [
     {
-      "id": "feature-update-the-homepage-hero-section-frontend-src-components-hero-tsx-so-the-cruise-ship-picture-fills-the-full-screen-full-viewport-height-and-width-while-maintaining-aspect-ratio-using-a-cover-style-layout",
-      "title": "Update the homepage Hero section (frontend/src/components/Hero.tsx) so the cruise ship picture fills the full screen (full viewport height and width) while maintaining aspect ratio using a cover-style layout.",
+      "id": "feature-update-the-homepage-hero-frontend-src-components-hero-tsx-so-the-cruise-ship-image-is-the-single-full-viewport-background-for-the-entire-front-page-hero-area-covering-width-and-height-and-does-not-disappear-after-updates-deploys",
+      "title": "Update the homepage Hero (frontend/src/components/Hero.tsx) so the cruise ship image is the single, full-viewport background for the entire front page hero area (covering width and height) and does not disappear after updates/deploys.",
       "reqIds": [
         "REQ-1"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-ensure-the-cruise-ship-hero-image-asset-is-available-as-a-static-public-asset-and-referenced-consistently-from-the-hero-component-using-the-exact-path-assets-generated-cruise-ship-hero-dim-1600x900-jpg",
+      "title": "Ensure the cruise ship hero image asset is available as a static public asset and referenced consistently from the Hero component using the exact path /assets/generated/cruise-ship-hero.dim_1600x900.jpg.",
+      "reqIds": [
+        "REQ-2"
       ],
       "version": 1
     }
@@ -18,11 +29,12 @@
   "new_feature_requests": [
     {
       "id": "AR-1",
-      "summary": "Make the cruise ship picture on the homepage display full screen",
+      "summary": "Set the cruise ship image as a full-screen/entire front page background image",
       "reqIds": [],
       "status": "pending"
     }
   ],
+  "gameProjectType": "none",
   "projectName": "Next Time Vacations",
   "clarification_mode": "instant",
   "clarification_rounds": 0

@@ -1,11 +1,11 @@
 # Specification
 
 ## Summary
-**Goal:** Make the homepage cruise ship hero image fill the full screen while maintaining aspect ratio using a cover-style layout.
+**Goal:** Restore a persistent, full-viewport cruise ship hero background image on the homepage.
 
 **Planned changes:**
-- Update `frontend/src/components/Hero.tsx` to use full viewport height/width for the hero container (e.g., `h-screen`/`min-h-screen`).
-- Adjust the hero image styling to use a cover-style fit so it fills the hero area without letterboxing (cropping as needed).
-- Ensure hero text and CTAs remain visible and readable on top of the full-screen image in both light and dark modes.
+- Update `frontend/src/components/Hero.tsx` so the homepage Hero uses a single cruise ship photo as a full-viewport background (covering width and height with a cover-style layout).
+- Ensure the hero image is referenced consistently from `/assets/generated/cruise-ship-hero.dim_1600x900.jpg` and is served as a static public asset.
+- Add a graceful visual fallback (e.g., solid/gradient background) when the image cannot be loaded, to avoid a blank hero area.
 
-**User-visible outcome:** The homepage hero displays the cruise ship image full-screen, with readable overlay text/CTAs on top.
+**User-visible outcome:** On the homepage (without a share link), users see a cruise ship photo filling the entire hero area and it remains visible after rebuilds/redeploys, with a non-blank fallback if the image fails to load.
