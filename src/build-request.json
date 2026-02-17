@@ -1,59 +1,91 @@
 {
   "kind": "build_request",
-  "title": "Fix missing homepage hero image asset and rendering",
+  "title": "Set uploaded cruise photo as homepage hero image",
   "projectName": "Next Time Vacations",
-  "priority": "high",
+  "priority": "normal",
   "requirements": [
     {
       "id": "REQ-1",
-      "text": "Ensure the homepage Hero background image file exists in the deployed frontend static assets at the exact public path \"/assets/generated/cruise-ship-hero.dim_1600x900.jpg\" so it loads reliably after builds/deploys.",
+      "text": "Add the uploaded image \"cruise-290913_1280.jpg\" to the deployed frontend static assets as the homepage hero image file at the exact public path \"/assets/generated/cruise-ship-hero.dim_1600x900.jpg\" (1600x900).",
       "target": "frontend",
       "source": {
         "messageIds": [
-          "recent-messages-4"
+          "msg-4"
         ],
         "quotes": [
-          "There is no picture on the front page"
+          "this is the picture to put on the front page"
         ]
       },
       "acceptanceCriteria": [
-        "The file is present in the repo at frontend/public/assets/generated/cruise-ship-hero.dim_1600x900.jpg.",
-        "Loading the homepage triggers a successful (HTTP 200) request for /assets/generated/cruise-ship-hero.dim_1600x900.jpg (no 404/failed request in browser devtools).",
-        "The cruise ship image is visible as a full-viewport background in the Hero section on the homepage."
+        "A file exists in the built/deployed frontend at frontend/public/assets/generated/cruise-ship-hero.dim_1600x900.jpg.",
+        "The image is 1600x900 and loads successfully at /assets/generated/cruise-ship-hero.dim_1600x900.jpg in the browser (no 404)."
       ]
     },
     {
       "id": "REQ-2",
-      "text": "Update the Hero component (frontend/src/components/Hero.tsx) to handle image load failures in a user-visible way while preserving the intended full-screen background behavior (e.g., show the existing gradient fallback plus a small, readable message indicating the image failed to load).",
+      "text": "Ensure the homepage hero section uses the hero image from \"/assets/generated/cruise-ship-hero.dim_1600x900.jpg\" and displays it as a full-screen background with a sensible cover/fill behavior across common viewport sizes.",
       "target": "frontend",
       "source": {
         "messageIds": [
-          "recent-messages-4"
+          "msg-4"
         ],
         "quotes": [
-          "There is no picture on the front page"
+          "this is the picture to put on the front page"
         ]
       },
       "acceptanceCriteria": [
-        "If the hero image fails to load, the page shows the existing gradient fallback background and an English message indicating the hero image could not be loaded.",
-        "If the hero image loads successfully, it displays behind the overlay as a full-viewport background (object-cover) with no layout shift or disappearance on refresh/reload."
+        "On the homepage, the hero background renders the cruise photo and covers the hero area without distortion (object-fit: cover behavior).",
+        "The hero image continues to fade in when it loads, and the existing gradient overlay keeps the headline readable on top of the photo."
+      ]
+    },
+    {
+      "id": "REQ-3",
+      "text": "Keep (or add if missing) the current resilient fallback behavior for the homepage hero: if the hero image fails to load, the gradient background remains visible and a small readable error message is shown without breaking layout.",
+      "target": "frontend",
+      "source": {
+        "messageIds": [
+          "msg-4"
+        ],
+        "quotes": [
+          "this is the picture to put on the front page"
+        ]
+      },
+      "acceptanceCriteria": [
+        "If the hero image URL is invalid or the file is missing, the page still renders the hero with the gradient background and a readable error message.",
+        "No layout shifting or blank/white hero section occurs when the image fails to load."
+      ]
+    },
+    {
+      "id": "REQ-4",
+      "text": "Ensure the HTML preload link (if present) matches the hero image path exactly so the browser preloads the correct asset: \"/assets/generated/cruise-ship-hero.dim_1600x900.jpg\".",
+      "target": "frontend",
+      "source": {
+        "messageIds": [
+          "msg-4"
+        ],
+        "quotes": [
+          "this is the picture to put on the front page"
+        ]
+      },
+      "acceptanceCriteria": [
+        "The preload href equals /assets/generated/cruise-ship-hero.dim_1600x900.jpg.",
+        "After deployment, network waterfall shows the correct hero image preloading (or at minimum no preload 404)."
       ]
     }
   ],
   "constraints": [
-    "Do not change any files under frontend/src/components/ui (read-only).",
-    "Keep the Hero image reference path exactly \"/assets/generated/cruise-ship-hero.dim_1600x900.jpg\" (as used in frontend/src/components/Hero.tsx).",
-    "Do not route the hero image through the backend; it must be a frontend public static asset."
+    "Do not edit files under frontend/src/components/ui (read-only).",
+    "Do not edit immutable hook files under frontend/src/hooks/useInternetIdentity.ts(x), frontend/src/hooks/useActor.ts, or frontend/src/main.tsx."
   ],
   "nonGoals": [
-    "Adding new homepage sections or changing the overall homepage content beyond what is needed to restore/confirm the hero image visibility.",
-    "Implementing third-party image hosting/CDN integrations."
+    "Changing backend data models or adding backend endpoints for serving the hero image.",
+    "Adding user-configurable hero image management in the admin dashboard."
   ],
   "imageRequirements": {
-    "required": [
-      "Cruise ship hero photo at sea, wide landscape (cruise-ship-hero.dim_1600x900.jpg, 1600x900)"
-    ],
-    "edits": []
+    "required": [],
+    "edits": [
+      "Crop/resize the uploaded photo to a wide hero format (cruise-290913_1280.jpg > cruise-ship-hero.dim_1600x900.jpg)"
+    ]
   },
   "userProfileUpdate": {
     "goalsToAdd": [],

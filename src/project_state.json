@@ -3,27 +3,46 @@
   "projectStateVersion": 3,
   "summary": "New project",
   "architectural_notes": [],
-  "known_issues": [
-    "Front page image is not displaying (expected full-width cruise ship image)."
-  ],
-  "isFixRequest": true,
-  "imageRequirements": "## Required Images\n- Cruise ship hero photo at sea, wide landscape (cruise-ship-hero.dim_1600x900.jpg, 1600x900)",
-  "existing_features": [
-    {
-      "id": "feature-update-the-hero-component-frontend-src-components-hero-tsx-to-handle-image-load-failures-in-a-user-visible-way-while-preserving-the-intended-full-screen-background-behavior-e-g-show-the-existing-gradient-fallback-plus-a-small-readable-message-indicating-the-image-failed-to-load",
-      "title": "Update the Hero component (frontend/src/components/Hero.tsx) to handle image load failures in a user-visible way while preserving the intended full-screen background behavior (e.g., show the existing gradient fallback plus a small, readable message indicating the image failed to load).",
-      "reqIds": [
-        "REQ-2"
-      ],
-      "version": 1
-    }
-  ],
+  "known_issues": [],
+  "isFixRequest": false,
+  "imageRequirements": "## Edit Images\n- Crop/resize the uploaded photo to a wide hero format (cruise-290913_1280.jpg > cruise-ship-hero.dim_1600x900.jpg)",
+  "existing_features": [],
   "new_feature_requests": [
     {
       "id": "AR-1",
-      "summary": "Ensure the homepage Hero background image file exists in the deployed frontend static assets at the exact public path \"/assets/generated/cruise-ship-hero.dim_1600x900.jpg\" so it loads reliably after builds/deploys.",
+      "summary": "Add/set the provided picture as the front page (hero) image and ensure it displays correctly (with appropriate fill/layout)",
+      "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-2",
+      "summary": "Add the uploaded image \"cruise-290913_1280.jpg\" to the deployed frontend static assets as the homepage hero image file at the exact public path \"/assets/generated/cruise-ship-hero.dim_1600x900.jpg\" (1600x900).",
       "reqIds": [
         "REQ-1"
+      ],
+      "status": "pending"
+    },
+    {
+      "id": "AR-3",
+      "summary": "Ensure the homepage hero section uses the hero image from \"/assets/generated/cruise-ship-hero.dim_1600x900.jpg\" and displays it as a full-screen background with a sensible cover/fill behavior across common viewport sizes.",
+      "reqIds": [
+        "REQ-2"
+      ],
+      "status": "pending"
+    },
+    {
+      "id": "AR-4",
+      "summary": "Keep (or add if missing) the current resilient fallback behavior for the homepage hero: if the hero image fails to load, the gradient background remains visible and a small readable error message is shown without breaking layout.",
+      "reqIds": [
+        "REQ-3"
+      ],
+      "status": "pending"
+    },
+    {
+      "id": "AR-5",
+      "summary": "Ensure the HTML preload link (if present) matches the hero image path exactly so the browser preloads the correct asset: \"/assets/generated/cruise-ship-hero.dim_1600x900.jpg\".",
+      "reqIds": [
+        "REQ-4"
       ],
       "status": "pending"
     }

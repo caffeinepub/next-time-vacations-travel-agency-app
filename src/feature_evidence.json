@@ -1,27 +1,4 @@
 {
   "kind": "feature_evidence_report",
-  "features": [
-    {
-      "featureId": "feature-update-the-hero-component-frontend-src-components-hero-tsx-to-handle-image-load-failures-in-a-user-visible-way-while-preserving-the-intended-full-screen-background-behavior-e-g-show-the-existing-gradient-fallback-plus-a-small-readable-message-indicating-the-image-failed-to-load",
-      "featureTitle": "Update the Hero component (frontend/src/components/Hero.tsx) to handle image load failures in a user-visible way while preserving the intended full-screen background behavior (e.g., show the existing gradient fallback plus a small, readable message indicating the image failed to load).",
-      "files": [
-        "frontend/src/components/Hero.tsx"
-      ],
-      "components": [
-        "http-outcalls@3.0.0",
-        "blob-storage@4.0.0",
-        "core-infrastructure@1.0.2",
-        "shadcn-ui@1.0.0",
-        "build-template-react@1.0.0",
-        "initial-app@1.0.0",
-        "authorization@4.0.0",
-        "github-export-icp-cli@1.0.0",
-        "invite-links@3.0.0"
-      ],
-      "testIds": [
-        "REQ-2"
-      ],
-      "confidence": "high"
-    }
-  ]
+  "features": []
 }

@@ -1,36 +1,65 @@
 {
   "kind": "implementation_plan",
   "version": "1.0",
-  "title": "Restore homepage hero image asset and add user-visible fallback on load failure",
+  "title": "Next Time Vacations: Set cruise photo as homepage hero image",
   "requirements": [
     {
       "id": "REQ-1",
-      "summary": "Add the missing hero background image to the frontend public static assets at the exact required path so it is deployed and loads reliably.",
+      "summary": "Add the resized cruise photo as a deployed static asset at the exact generated hero image path.",
       "acceptanceCriteria": [
-        "The file is present in the repo at frontend/public/assets/generated/cruise-ship-hero.dim_1600x900.jpg.",
-        "Loading the homepage triggers a successful (HTTP 200) request for /assets/generated/cruise-ship-hero.dim_1600x900.jpg (no 404/failed request in browser devtools).",
-        "The cruise ship image is visible as a full-viewport background in the Hero section on the homepage."
+        "A file exists in the built/deployed frontend at frontend/public/assets/generated/cruise-ship-hero.dim_1600x900.jpg.",
+        "The image is 1600x900 and loads successfully at /assets/generated/cruise-ship-hero.dim_1600x900.jpg in the browser (no 404)."
       ],
       "file_operations": [
         {
           "path": "frontend/public/assets/generated/cruise-ship-hero.dim_1600x900.jpg",
           "operation": "create",
-          "description": "Add the generated cruise ship hero image asset as a committed static file so the deployed frontend can serve it at the exact public path /assets/generated/cruise-ship-hero.dim_1600x900.jpg."
+          "description": "Add the cropped/resized hero image asset (1600x900) to the deployed static assets at this exact path (derived from uploaded cruise-290913_1280.jpg)."
         }
       ]
     },
     {
       "id": "REQ-2",
-      "summary": "Improve Hero image robustness by showing a user-visible message on image load failure while preserving full-viewport background behavior.",
+      "summary": "Ensure the homepage hero section uses the new hero image as a full-screen cover background with fade-in and gradient overlay readability.",
       "acceptanceCriteria": [
-        "If the hero image fails to load, the page shows the existing gradient fallback background and an English message indicating the hero image could not be loaded.",
-        "If the hero image loads successfully, it displays behind the overlay as a full-viewport background (object-cover) with no layout shift or disappearance on refresh/reload."
+        "On the homepage, the hero background renders the cruise photo and covers the hero area without distortion (object-fit: cover behavior).",
+        "The hero image continues to fade in when it loads, and the existing gradient overlay keeps the headline readable on top of the photo."
       ],
       "file_operations": [
         {
           "path": "frontend/src/components/Hero.tsx",
           "operation": "modify",
-          "description": "Update the hero background rendering to (1) always keep a gradient layer behind the image, (2) attach onLoad/onError handlers to the rendered <img> (not just the preloader) to reliably set imageLoaded/imageError, (3) use imageLoaded to fade the image in without layout shift (e.g., opacity transition) while keeping object-cover full-viewport behavior, and (4) when imageError is true, display a small readable English message over the gradient indicating the hero image could not be loaded. Keep the image reference path exactly \"/assets/generated/cruise-ship-hero.dim_1600x900.jpg\" and do not change any files under frontend/src/components/ui."
+          "description": "Confirm the hero image source is exactly /assets/generated/cruise-ship-hero.dim_1600x900.jpg and that the hero uses full-viewport sizing with object-fit cover behavior, preserves the existing fade-in transition, and keeps the gradient overlay for text readability."
+        }
+      ]
+    },
+    {
+      "id": "REQ-3",
+      "summary": "Preserve resilient hero fallback: gradient remains visible and an error message appears if the hero image fails to load.",
+      "acceptanceCriteria": [
+        "If the hero image URL is invalid or the file is missing, the page still renders the hero with the gradient background and a readable error message.",
+        "No layout shifting or blank/white hero section occurs when the image fails to load."
+      ],
+      "file_operations": [
+        {
+          "path": "frontend/src/components/Hero.tsx",
+          "operation": "modify",
+          "description": "Ensure image load error handling keeps the gradient fallback visible at all times and shows a small, readable, non-layout-breaking (absolutely positioned) error message when the hero image fails to load."
+        }
+      ]
+    },
+    {
+      "id": "REQ-4",
+      "summary": "Ensure the HTML preload link (if present) matches the hero image path exactly so the browser preloads the correct asset.",
+      "acceptanceCriteria": [
+        "The preload href equals /assets/generated/cruise-ship-hero.dim_1600x900.jpg.",
+        "After deployment, network waterfall shows the correct hero image preloading (or at minimum no preload 404)."
+      ],
+      "file_operations": [
+        {
+          "path": "frontend/index.html",
+          "operation": "modify",
+          "description": "Verify (and update if needed) the existing preload link href to exactly /assets/generated/cruise-ship-hero.dim_1600x900.jpg so the browser preloads the correct hero asset."
         }
       ]
     }

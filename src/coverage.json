@@ -1,18 +1,18 @@
 {
   "kind": "coverage_report",
   "version": "1.0",
-  "generatedAt": "2026-02-17T03:08:18.097Z",
+  "generatedAt": "2026-02-17T03:16:25.735Z",
   "sources": {
     "buildRequest": true,
     "implementationPlan": true
   },
   "requirements": {
-    "total": 2,
-    "implemented": 1,
+    "total": 4,
+    "implemented": 0,
     "items": [
       {
         "id": "REQ-1",
-        "summary": "Ensure the homepage Hero background image file exists in the deployed frontend static assets at the exact public path \"/assets/generated/cruise-ship-hero.dim_1600x900.jpg\" so it loads reliably after builds/deploys.",
+        "summary": "Add the uploaded image \"cruise-290913_1280.jpg\" to the deployed frontend static assets as the homepage hero image file at the exact public path \"/assets/generated/cruise-ship-hero.dim_1600x900.jpg\" (1600x900).",
         "status": "missing",
         "plannedFiles": [
           "frontend/public/assets/generated/cruise-ship-hero.dim_1600x900.jpg"
@@ -21,24 +21,37 @@
       },
       {
         "id": "REQ-2",
-        "summary": "Update the Hero component (frontend/src/components/Hero.tsx) to handle image load failures in a user-visible way while preserving the intended full-screen background behavior (e.g., show the existing gradient fallback plus a small, readable message indicating the image failed to load).",
-        "status": "implemented",
+        "summary": "Ensure the homepage hero section uses the hero image from \"/assets/generated/cruise-ship-hero.dim_1600x900.jpg\" and displays it as a full-screen background with a sensible cover/fill behavior across common viewport sizes.",
+        "status": "missing",
         "plannedFiles": [
           "frontend/src/components/Hero.tsx"
         ],
-        "matchedFiles": [
+        "matchedFiles": []
+      },
+      {
+        "id": "REQ-3",
+        "summary": "Keep (or add if missing) the current resilient fallback behavior for the homepage hero: if the hero image fails to load, the gradient background remains visible and a small readable error message is shown without breaking layout.",
+        "status": "missing",
+        "plannedFiles": [
           "frontend/src/components/Hero.tsx"
-        ]
+        ],
+        "matchedFiles": []
+      },
+      {
+        "id": "REQ-4",
+        "summary": "Ensure the HTML preload link (if present) matches the hero image path exactly so the browser preloads the correct asset: \"/assets/generated/cruise-ship-hero.dim_1600x900.jpg\".",
+        "status": "missing",
+        "plannedFiles": [
+          "frontend/index.html"
+        ],
+        "matchedFiles": []
       }
     ]
   },
   "changedFiles": [
     "build-request.json",
     "feature_evidence.json",
-    "frontend-file-summaries.txt",
     "frontend-implementation-plan.json",
-    "frontend/public/assets/generated/cruise-ship-hero.dim_1600x900.jpg, 1600x900",
-    "frontend/src/components/Hero.tsx",
     "project_state.json",
     "scratch/component-selection.json",
     "spec.md",

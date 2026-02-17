@@ -23,17 +23,23 @@ export function Hero() {
               imageLoaded ? 'opacity-100' : 'opacity-0'
             }`}
             loading="eager"
-            onLoad={() => setImageLoaded(true)}
-            onError={() => setImageError(true)}
+            onLoad={() => {
+              setImageLoaded(true);
+              setImageError(false);
+            }}
+            onError={() => {
+              setImageError(true);
+              setImageLoaded(false);
+            }}
           />
         </div>
       )}
       
-      {/* Error message if image fails to load */}
+      {/* Error message if image fails to load - positioned for visibility */}
       {imageError && (
-        <div className="absolute top-4 left-1/2 -translate-x-1/2 z-20 bg-red-500/90 text-white px-4 py-2 rounded-lg shadow-lg flex items-center gap-2 text-sm">
-          <AlertCircle className="h-4 w-4" />
-          <span>Hero image could not be loaded</span>
+        <div className="absolute top-8 left-1/2 -translate-x-1/2 z-20 bg-red-500/95 text-white px-6 py-3 rounded-lg shadow-xl flex items-center gap-3 text-sm font-medium max-w-md">
+          <AlertCircle className="h-5 w-5 flex-shrink-0" />
+          <span>Hero image could not be loaded. Please check that the image file exists at: {CRUISE_SHIP_IMAGE}</span>
         </div>
       )}
       
