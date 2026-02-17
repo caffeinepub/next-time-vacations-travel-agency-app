@@ -1,4 +1,3 @@
-import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { ThemeProvider } from 'next-themes';
 import { Toaster } from '@/components/ui/sonner';
 import { Header } from './components/Header';
@@ -12,58 +11,66 @@ import { CruiseLinePartners } from './components/CruiseLinePartners';
 import { SharedItineraryPage } from './components/SharedItineraryPage';
 import { useEffect, useState } from 'react';
 
-const queryClient = new QueryClient({
-  defaultOptions: {
-    queries: {
-      staleTime: 1000 * 60 * 5,
-      refetchOnWindowFocus: false,
-    },
-  },
-});
-
 function App() {
   const [shareLinkId, setShareLinkId] = useState<string | null>(null);
 
   useEffect(() => {
-    // Check for share link in URL
-    const urlParams = new URLSearchParams(window.location.search);
-    const shareParam = urlParams.get('share');
-    if (shareParam) {
+    // Function to extract share parameter from URL
+    const checkForShareLink = () => {
+      // Check both query string and hash for share parameter
+      const urlParams = new URLSearchParams(window.location.search);
+      const hashParams = new URLSearchParams(window.location.hash.substring(1));
+      
+      const shareParam = urlParams.get('share') || hashParams.get('share');
       setShareLinkId(shareParam);
-    }
+    };
+
+    // Check on mount
+    checkForShareLink();
+
+    // Listen for URL changes (back/forward navigation, manual URL changes)
+    const handlePopState = () => {
+      checkForShareLink();
+    };
+
+    window.addEventListener('popstate', handlePopState);
+    
+    // Also listen for hash changes
+    window.addEventListener('hashchange', checkForShareLink);
+
+    return () => {
+      window.removeEventListener('popstate', handlePopState);
+      window.removeEventListener('hashchange', checkForShareLink);
+    };
   }, []);
 
   // If there's a share link, show the shared itinerary page
   if (shareLinkId) {
     return (
-      <QueryClientProvider client={queryClient}>
-        <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
-          <SharedItineraryPage linkId={shareLinkId} />
-          <Toaster />
-        </ThemeProvider>
-      </QueryClientProvider>
+      <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
+        <SharedItineraryPage linkId={shareLinkId} />
+        <Toaster />
+      </ThemeProvider>
     );
   }
 
   // Otherwise, show the normal app
   return (
-    <QueryClientProvider client={queryClient}>
-      <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
-        <div className="min-h-screen bg-gradient-to-br from-ocean-50 to-sunset-50 dark:from-gray-900 dark:to-gray-800">
-          <Header />
-          <main>
-            <Hero />
-            <FeaturedDeals />
-            <CruiseLinePartners />
-            <SearchSection />
-          </main>
-          <Footer />
-          <ProfileSetupDialog />
-          <AdminAlertToast />
-          <Toaster />
-        </div>
-      </ThemeProvider>
-    </QueryClientProvider>
+    <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
+      <div className="min-h-screen bg-gradient-to-br from-ocean-50 to-sunset-50 dark:from-gray-900 dark:to-gray-800">
+        <Header />
+        <main>
+          <Hero />
+          <FeaturedDeals />
+          <CruiseLinePartners />
+          <SearchSection />
+        </main>
+        <Footer />
+        <ProfileSetupDialog />
+        <AdminAlertToast />
+        <Toaster />
+      </div>
+    </ThemeProvider>
   );
 }
 

@@ -1,6 +1,5 @@
 import { useGetShareableLink, useGetBrandingSettings } from '../hooks/useQueries';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Badge } from '@/components/ui/badge';
 import { Skeleton } from '@/components/ui/skeleton';
 import { Ship, MapPin, Calendar, Utensils, Music, Bed, Users, AlertCircle, Phone, Mail } from 'lucide-react';
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
@@ -21,7 +20,7 @@ export function SharedItineraryPage({ linkId }: SharedItineraryPageProps) {
     return (
       <div className="min-h-screen bg-gradient-to-br from-ocean-50 to-sunset-50 dark:from-gray-900 dark:to-gray-800 py-12 px-4">
         <div className="max-w-4xl mx-auto space-y-6">
-          <Skeleton className="h-12 w-3/4" />
+          <Skeleton className="h-12 w-3/4 mx-auto" />
           <Skeleton className="h-64 w-full" />
           <Skeleton className="h-32 w-full" />
         </div>
@@ -45,7 +44,23 @@ export function SharedItineraryPage({ linkId }: SharedItineraryPageProps) {
     );
   }
 
+  // Defensive checks for itinerary data
   const itinerary = shareableLink.itinerary;
+  if (!itinerary) {
+    return (
+      <div className="min-h-screen bg-gradient-to-br from-ocean-50 to-sunset-50 dark:from-gray-900 dark:to-gray-800 py-12 px-4">
+        <div className="max-w-4xl mx-auto">
+          <Alert variant="destructive">
+            <AlertCircle className="h-4 w-4" />
+            <AlertTitle>Itinerary Data Missing</AlertTitle>
+            <AlertDescription>
+              The itinerary data could not be loaded. Please try again later or contact support.
+            </AlertDescription>
+          </Alert>
+        </div>
+      </div>
+    );
+  }
 
   // Apply branding colors with fallbacks
   const titleColorProps = applyColorStyle(branding.primaryColor, 'text-ocean-700 dark:text-ocean-400');
@@ -89,72 +104,85 @@ export function SharedItineraryPage({ linkId }: SharedItineraryPageProps) {
                 src={image}
                 alt={`Cruise view ${idx + 1}`}
                 className="w-full h-48 object-cover rounded-lg shadow-md"
+                onError={(e) => {
+                  e.currentTarget.style.display = 'none';
+                }}
               />
             ))}
           </div>
         )}
 
         {/* Ship Specs */}
-        <Card>
-          <CardHeader>
-            <CardTitle className="flex items-center gap-2">
-              <Ship className="h-5 w-5" {...accentColorProps} />
-              Ship Specifications
-            </CardTitle>
-          </CardHeader>
-          <CardContent>
-            <p className="text-sm text-muted-foreground">{itinerary.shipSpecs}</p>
-          </CardContent>
-        </Card>
+        {itinerary.shipSpecs && (
+          <Card>
+            <CardHeader>
+              <CardTitle className="flex items-center gap-2">
+                <Ship className="h-5 w-5" {...accentColorProps} />
+                Ship Specifications
+              </CardTitle>
+            </CardHeader>
+            <CardContent>
+              <p className="text-sm text-muted-foreground">{itinerary.shipSpecs}</p>
+            </CardContent>
+          </Card>
+        )}
 
         {/* Dates */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-          <Card>
-            <CardContent className="pt-6">
-              <div className="flex items-center gap-2 mb-2">
-                <Calendar className="h-4 w-4" {...accentColorProps} />
-                <span className="text-sm font-medium">Departure</span>
-              </div>
-              <p className="text-lg font-bold">{itinerary.departureDate}</p>
-            </CardContent>
-          </Card>
-          <Card>
-            <CardContent className="pt-6">
-              <div className="flex items-center gap-2 mb-2">
-                <Calendar className="h-4 w-4" {...accentColorProps} />
-                <span className="text-sm font-medium">Return</span>
-              </div>
-              <p className="text-lg font-bold">{itinerary.returnDate}</p>
-            </CardContent>
-          </Card>
-        </div>
+        {(itinerary.departureDate || itinerary.returnDate) && (
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            {itinerary.departureDate && (
+              <Card>
+                <CardContent className="pt-6">
+                  <div className="flex items-center gap-2 mb-2">
+                    <Calendar className="h-4 w-4" {...accentColorProps} />
+                    <span className="text-sm font-medium">Departure</span>
+                  </div>
+                  <p className="text-lg font-bold">{itinerary.departureDate}</p>
+                </CardContent>
+              </Card>
+            )}
+            {itinerary.returnDate && (
+              <Card>
+                <CardContent className="pt-6">
+                  <div className="flex items-center gap-2 mb-2">
+                    <Calendar className="h-4 w-4" {...accentColorProps} />
+                    <span className="text-sm font-medium">Return</span>
+                  </div>
+                  <p className="text-lg font-bold">{itinerary.returnDate}</p>
+                </CardContent>
+              </Card>
+            )}
+          </div>
+        )}
 
         {/* Ports of Call */}
-        <Card>
-          <CardHeader>
-            <CardTitle className="flex items-center gap-2">
-              <MapPin className="h-5 w-5" {...accentColorProps} />
-              Ports of Call
-            </CardTitle>
-          </CardHeader>
-          <CardContent>
-            <div className="space-y-3">
-              {itinerary.portsOfCall.map((port, idx) => (
-                <div key={idx} className="flex items-start gap-3">
-                  <div 
-                    className="flex h-8 w-8 items-center justify-center rounded-full bg-ocean-100 dark:bg-ocean-900 font-semibold text-sm"
-                    {...applyColorStyle(branding.accentColor, 'text-ocean-700 dark:text-ocean-400')}
-                  >
-                    {idx + 1}
+        {itinerary.portsOfCall && itinerary.portsOfCall.length > 0 && (
+          <Card>
+            <CardHeader>
+              <CardTitle className="flex items-center gap-2">
+                <MapPin className="h-5 w-5" {...accentColorProps} />
+                Ports of Call
+              </CardTitle>
+            </CardHeader>
+            <CardContent>
+              <div className="space-y-3">
+                {itinerary.portsOfCall.map((port, idx) => (
+                  <div key={idx} className="flex items-start gap-3">
+                    <div 
+                      className="flex h-8 w-8 items-center justify-center rounded-full bg-ocean-100 dark:bg-ocean-900 font-semibold text-sm"
+                      {...applyColorStyle(branding.accentColor, 'text-ocean-700 dark:text-ocean-400')}
+                    >
+                      {idx + 1}
+                    </div>
+                    <div className="flex-1">
+                      <p className="font-medium">{port}</p>
+                    </div>
                   </div>
-                  <div className="flex-1">
-                    <p className="font-medium">{port}</p>
-                  </div>
-                </div>
-              ))}
-            </div>
-          </CardContent>
-        </Card>
+                ))}
+              </div>
+            </CardContent>
+          </Card>
+        )}
 
         {/* Cabins */}
         {itinerary.cabins && itinerary.cabins.length > 0 && (
@@ -171,16 +199,16 @@ export function SharedItineraryPage({ linkId }: SharedItineraryPageProps) {
                   <div key={idx} className="flex items-center justify-between p-4 border rounded-lg">
                     <div className="flex items-center gap-3">
                       <div>
-                        <h4 className="font-semibold">{cabin.category}</h4>
+                        <h4 className="font-semibold">{cabin.category || 'Standard Cabin'}</h4>
                         <p className="text-sm text-muted-foreground flex items-center gap-1">
                           <Users className="h-3 w-3" />
-                          {Number(cabin.availability)} cabins available
+                          {cabin.availability ? Number(cabin.availability) : 0} cabins available
                         </p>
                       </div>
                     </div>
                     <div className="text-right">
                       <p className="text-2xl font-bold text-sunset-600 dark:text-sunset-400">
-                        ${Number(cabin.price).toLocaleString()}
+                        ${cabin.price ? Number(cabin.price).toLocaleString() : '0'}
                       </p>
                       <p className="text-xs text-muted-foreground">per person</p>
                     </div>

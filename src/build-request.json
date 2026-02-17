@@ -1,66 +1,57 @@
 {
   "kind": "build_request",
-  "title": "Add configurable social media links to the site footer",
+  "title": "Publish current draft to live and reduce deployment failures",
   "projectName": "Next Time Vacations",
-  "priority": "normal",
+  "priority": "high",
   "requirements": [
     {
       "id": "REQ-9",
-      "text": "Update the site footer social icons so they link to configurable social media URLs instead of using placeholder href=\"#\" links.",
-      "target": "frontend",
+      "text": "Publish the currently deployed draft version as the public live version of the app.",
+      "target": "unknown",
       "source": {
         "messageIds": [
-          "msg-1"
+          "msg-user-push-live"
         ],
         "quotes": [
-          "How can i add my social media links to the footer?"
+          "push it live"
         ]
       },
       "acceptanceCriteria": [
-        "The Facebook/X/Instagram/LinkedIn icons in the footer link to real URLs (not \"#\").",
-        "Each social link opens in a new tab and uses rel=\"noopener noreferrer\".",
-        "Each icon link has an accessible label (e.g., aria-label) describing the destination social network."
+        "A live (non-preview) public URL is available for the app and loads successfully.",
+        "The live app renders the standard home page and can also render a shared itinerary page when opened with a valid share link parameter (e.g., ?share=<id>)."
       ]
     },
     {
       "id": "REQ-10",
-      "text": "Add a simple, code-based configuration point for footer social links (e.g., a single exported object/array in a new frontend config file) so non-developers can update social URLs by editing one place without touching the Footer component markup.",
-      "target": "frontend",
+      "text": "Investigate and fix any build/deploy issues that prevent the draft from successfully deploying, with the goal of making deployments reliably complete despite the known intermittent deployment failures.",
+      "target": "both",
       "source": {
         "messageIds": [
-          "msg-1"
+          "msg-user-push-live",
+          "msg-project-state-known-issues"
         ],
         "quotes": [
-          "How can i add my social media links to the footer?"
+          "push it live",
+          "Draft/app build intermittently fails or expires (e.g., 'draft app has expired', 'application creation unsuccessful'), requiring rebuild/retry."
         ]
       },
       "acceptanceCriteria": [
-        "There is a single, clearly named config export (e.g., SOCIAL_LINKS) that contains the footer social URLs.",
-        "Footer.tsx reads social URLs from this config rather than hardcoding them inline.",
-        "If a social URL is empty/undefined, its icon is not rendered in the footer."
+        "A clean build of the frontend succeeds without TypeScript errors.",
+        "A canister build/deploy succeeds end-to-end at least twice in succession without manual intervention (i.e., no intermittent deployment failure for these attempts).",
+        "If deployment still fails due to platform-side expiration, the app build process provides actionable error output identifying the failure stage (frontend build vs canister build vs deploy)."
       ]
     }
   ],
   "constraints": [
-    "Do not edit files under frontend/src/hooks/useInternetIdentity.ts, frontend/src/hooks/useInternetIdentity.tsx, frontend/src/hooks/useActor.ts, frontend/src/main.tsx, or any files in frontend/src/components/ui (compose them only).",
-    "Keep the existing footer phone number display (\"Call us: 434-238-8796\") unchanged."
+    "Backend must remain a single Motoko actor in backend/main.mo; only add backend/migration.mo if a stable-state upgrade is required.",
+    "Do not edit any files under frontend/src/components/ui or the immutable hook/bootstrap paths listed in SYSTEM_CONTEXT."
   ],
   "nonGoals": [
-    "Adding third-party social API integrations (e.g., fetching posts/feeds).",
-    "Adding backend persistence/admin UI for social links (this change should be achievable via frontend configuration only)."
+    "Adding new product features unrelated to going live (e.g., new booking flows, new admin tools).",
+    "Integrating third-party hosting/deployment providers or external databases."
   ],
   "imageRequirements": {
     "required": [],
     "edits": []
-  },
-  "userProfileUpdate": {
-    "goalsToAdd": [],
-    "goalsToRemove": [],
-    "preferencesToAdd": [],
-    "preferencesToRemove": [],
-    "miscToAdd": [],
-    "miscToRemove": [],
-    "fieldsToSet": {},
-    "fieldsToDelete": []
   }
 }

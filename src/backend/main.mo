@@ -13,8 +13,6 @@ import MixinAuthorization "authorization/MixinAuthorization";
 import AccessControl "authorization/access-control";
 import MixinStorage "blob-storage/Mixin";
 
-
-
 actor {
   include MixinStorage();
 
@@ -152,7 +150,6 @@ actor {
   var cruiseLineLogos = Map.empty<Text, CruiseLineLogo>();
   var shareableLinks = Map.empty<Text, ShareableLink>();
 
-  // Default branding settings
   var brandingSettings : BrandingSettings = {
     backgroundColor = "#ffffff";
     headerImage = "";
@@ -878,7 +875,6 @@ actor {
     shareableLinks.values().toArray();
   };
 
-  // New backend for branding settings
   public query func getBrandingSettings() : async BrandingSettings {
     brandingSettings;
   };

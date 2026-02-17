@@ -1,15 +1,37 @@
 {
   "kind": "spec_vs_diff_report",
   "version": "1.0",
-  "generatedAt": "2026-02-16T22:34:38.113Z",
-  "summary": "REQ-9 and REQ-10 appear fully implemented: footer social icon links now come from a single exported config (SOCIAL_LINKS), render only when URLs are present, and open in a new tab with proper rel and accessible aria-labels. The existing footer phone number line remains unchanged.",
-  "missing_requirements": [],
+  "generatedAt": "2026-02-17T01:18:27.355Z",
+  "summary": "The diff adds client-side handling to render a SharedItineraryPage when a `?share=<id>` (or hash `#share=<id>`) parameter is present, but it does not include evidence of changes that would publish the draft as a live public URL or improve deployment reliability/build diagnostics as requested.",
+  "missing_requirements": [
+    {
+      "id": "REQ-9",
+      "requirement": "Publish the currently deployed draft version as the public live version of the app (live non-preview public URL available and loads successfully).",
+      "reason": "No changes related to deployment configuration, canister/frontend hosting setup, or release/publish steps are shown in the diff; only in-app routing behavior is modified.",
+      "evidence": [
+        "frontend/src/App.tsx",
+        "frontend-file-summaries.txt",
+        "project_state.json"
+      ]
+    },
+    {
+      "id": "REQ-10",
+      "requirement": "Investigate and fix build/deploy issues to make deployments reliably complete; ensure clean frontend TypeScript build; provide actionable error output identifying failure stage if deploy fails.",
+      "reason": "The diff does not show changes to build tooling, CI/deploy scripts, dfx/canister deployment configuration, or logging/error staging. App code changes alone do not demonstrate improved deployment reliability or actionable stage-specific build/deploy errors.",
+      "evidence": [
+        "frontend/src/App.tsx",
+        "backend/main.mo",
+        "project_state.json"
+      ]
+    }
+  ],
   "hallucinated_features": [],
-  "confidence": 0.9,
+  "confidence": 0.62,
   "changed_files": [
+    "backend/main.mo",
     "frontend-file-summaries.txt",
-    "frontend/src/components/Footer.tsx",
-    "frontend/src/config/footerSocialLinks.ts",
+    "frontend/src/App.tsx",
+    "frontend/src/components/SharedItineraryPage.tsx",
     "project_state.json"
   ]
 }

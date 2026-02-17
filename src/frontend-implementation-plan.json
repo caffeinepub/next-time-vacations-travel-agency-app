@@ -1,42 +1,51 @@
 {
   "kind": "implementation_plan",
   "version": "1.0",
-  "title": "Configurable social media links in footer (Next Time Vacations)",
+  "title": "Next Time Vacations — Push live readiness and deployment reliability (frontend)",
   "requirements": [
     {
       "id": "REQ-9",
-      "summary": "Replace placeholder footer social icon links with real, accessible links that open in a new tab.",
+      "summary": "Ensure the live app loads the standard home view and correctly renders shared itineraries when opened with a valid share link parameter.",
       "acceptanceCriteria": [
-        "The Facebook/X/Instagram/LinkedIn icons in the footer link to real URLs (not \"#\").",
-        "Each social link opens in a new tab and uses rel=\"noopener noreferrer\".",
-        "Each icon link has an accessible label (e.g., aria-label) describing the destination social network."
+        "A live (non-preview) public URL is available for the app and loads successfully.",
+        "The live app renders the standard home page and can also render a shared itinerary page when opened with a valid share link parameter (e.g., ?share=<id>)."
       ],
       "file_operations": [
         {
-          "path": "frontend/src/components/Footer.tsx",
+          "path": "frontend/src/App.tsx",
           "operation": "modify",
-          "description": "Update the footer social icon anchors to use configured URLs, add target=\"_blank\" and rel=\"noopener noreferrer\", and add per-network accessible labels (e.g., aria-label). Ensure the existing phone number text \"Call us: 434-238-8796\" remains unchanged."
+          "description": "Harden share-link detection so it works consistently across query string and hash-based URLs by using the existing URL-param utility (instead of directly reading window.location.search). Also make the share-link view selection resilient to navigation changes (e.g., back/forward) so opening or removing ?share=<id> reliably switches between SharedItineraryPage and the standard home view."
         }
       ]
     },
     {
       "id": "REQ-10",
-      "summary": "Introduce a single, code-based configuration export for footer social URLs and render only links with defined URLs.",
+      "summary": "Reduce frontend build/deploy failures by eliminating provider duplication, tightening TypeScript/runtime safety, and improving diagnostic output during app startup.",
       "acceptanceCriteria": [
-        "There is a single, clearly named config export (e.g., SOCIAL_LINKS) that contains the footer social URLs.",
-        "Footer.tsx reads social URLs from this config rather than hardcoding them inline.",
-        "If a social URL is empty/undefined, its icon is not rendered in the footer."
+        "A clean build of the frontend succeeds without TypeScript errors.",
+        "A canister build/deploy succeeds end-to-end at least twice in succession without manual intervention (i.e., no intermittent deployment failure for these attempts).",
+        "If deployment still fails due to platform-side expiration, the app build process provides actionable error output identifying the failure stage (frontend build vs canister build vs deploy)."
       ],
       "file_operations": [
         {
-          "path": "frontend/src/config/footerSocialLinks.ts",
-          "operation": "create",
-          "description": "Create a clearly named exported configuration (e.g., SOCIAL_LINKS) containing the footer social URLs for Facebook, X, Instagram, and LinkedIn so updates happen in one place without editing Footer markup."
+          "path": "frontend/src/App.tsx",
+          "operation": "modify",
+          "description": "Remove the duplicate React Query client/provider creation inside App (QueryClient + QueryClientProvider) and rely on the single top-level provider from main.tsx to avoid subtle runtime/provider ordering issues that can contribute to nondeterministic behavior during deploy and hydration."
         },
         {
-          "path": "frontend/src/components/Footer.tsx",
+          "path": "frontend/src/main.tsx",
           "operation": "modify",
-          "description": "Import the SOCIAL_LINKS config and render the social icon links by reading from the config; conditionally omit any icon whose configured URL is empty/undefined. Keep footer layout and the phone number display unchanged."
+          "description": "Configure the single shared QueryClient here (including the defaultOptions currently set in App.tsx) and keep provider composition centralized. Add a lightweight top-level startup error boundary wrapper (or equivalent guarded rendering) so unexpected initialization errors produce clear, actionable console output distinguishing 'app startup' failures from backend/agent initialization failures."
+        },
+        {
+          "path": "frontend/src/hooks/useActor.ts",
+          "operation": "modify",
+          "description": "Add explicit stage-labeled error handling and logging around actor creation and access-control initialization so failures clearly indicate whether the break happened during 'frontend actor creation' vs 'access-control init' (improves actionable output when deploy intermittently fails and helps isolate frontend build/runtime failures from deploy issues). Ensure errors are surfaced predictably to React Query (rather than failing silently) to avoid inconsistent retry loops."
+        },
+        {
+          "path": "frontend/src/components/SharedItineraryPage.tsx",
+          "operation": "modify",
+          "description": "Add defensive rendering for the shared itinerary flow to prevent unexpected runtime exceptions (e.g., missing itinerary fields) from crashing the shared view; ensure invalid/inactive links always render the existing error state. This reduces the chance of live URL load failures for shared links due to partial/undefined data."
         }
       ]
     }

@@ -2,10 +2,10 @@
   "kind": "feature_evidence_report",
   "features": [
     {
-      "featureId": "feature-update-the-site-footer-social-icons-so-they-link-to-configurable-social-media-urls-instead-of-using-placeholder-href-links",
-      "featureTitle": "Update the site footer social icons so they link to configurable social media URLs instead of using placeholder href=\"#\" links.",
+      "featureId": "feature-publish-the-currently-deployed-draft-version-as-the-public-live-version-of-the-app",
+      "featureTitle": "Publish the currently deployed draft version as the public live version of the app.",
       "files": [
-        "frontend/src/components/Footer.tsx"
+        "frontend/src/App.tsx"
       ],
       "components": [
         "http-outcalls@3.0.0",
@@ -24,11 +24,11 @@
       "confidence": "high"
     },
     {
-      "featureId": "feature-add-a-simple-code-based-configuration-point-for-footer-social-links-e-g-a-single-exported-object-array-in-a-new-frontend-config-file-so-non-developers-can-update-social-urls-by-editing-one-place-without-touching-the-footer-component-markup",
-      "featureTitle": "Add a simple, code-based configuration point for footer social links (e.g., a single exported object/array in a new frontend config file) so non-developers can update social URLs by editing one place without touching the Footer component markup.",
+      "featureId": "feature-investigate-and-fix-any-build-deploy-issues-that-prevent-the-draft-from-successfully-deploying-with-the-goal-of-making-deployments-reliably-complete-despite-the-known-intermittent-deployment-failures",
+      "featureTitle": "Investigate and fix any build/deploy issues that prevent the draft from successfully deploying, with the goal of making deployments reliably complete despite the known intermittent deployment failures.",
       "files": [
-        "frontend/src/components/Footer.tsx",
-        "frontend/src/config/footerSocialLinks.ts"
+        "frontend/src/App.tsx",
+        "frontend/src/components/SharedItineraryPage.tsx"
       ],
       "components": [
         "http-outcalls@3.0.0",

@@ -1,13 +1,11 @@
 # Specification
 
 ## Summary
-**Goal:** Make the footer social media icons link to configurable, real social URLs instead of placeholder `#` links.
+**Goal:** Publish the currently deployed draft as the live public version and reduce intermittent build/deploy failures.
 
 **Planned changes:**
-- Add a single frontend config export (e.g., `SOCIAL_LINKS`) that defines the footer social network URLs in one place.
-- Update `Footer.tsx` to render Facebook/X/Instagram/LinkedIn icons using the config values (no hardcoded URLs in the footer markup).
-- Ensure each rendered social link opens in a new tab with `rel="noopener noreferrer"` and includes an accessible label (e.g., `aria-label`).
-- Hide (do not render) any social icon whose configured URL is empty/undefined.
-- Keep the existing footer phone number text (`Call us: 434-238-8796`) unchanged.
+- Promote the current draft deployment to a live (non-preview) public URL.
+- Diagnose and fix build/deploy issues that cause intermittent deployment failures, ensuring clean frontend builds and reliable end-to-end deployments.
+- Improve deployment/build error output so failures clearly indicate which stage failed (frontend build vs canister build vs deploy), if platform-side expiration still occurs.
 
-**User-visible outcome:** Footer social icons go to real social pages in a new tab, and site owners can update social URLs by editing a single config file.
+**User-visible outcome:** A public live URL loads successfully and shows the standard home page, and shared itinerary links (e.g., `?share=<id>`) open correctly; deployments complete more reliably.
