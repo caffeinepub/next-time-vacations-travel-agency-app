@@ -4,28 +4,38 @@
   "summary": "New project",
   "architectural_notes": [],
   "known_issues": [
-    "Deployments/builds may fail to complete (intermittent deployment error observed)."
+    "User cannot find/see the 'Push/Publish to Live' control in the builder UI; preview panel appears to lack Draft/Live toolbar/dropdown, preventing publishing the app live.",
+    "Provided live URL is a placeholder (https://_YOUR_APP_URL_/live) and does not open; user cannot obtain/share a working live link until app is successfully published."
   ],
-  "isFixRequest": false,
+  "isFixRequest": true,
   "existing_features": [
     {
-      "id": "feature-publish-the-currently-deployed-draft-version-as-the-public-live-version-of-the-app",
-      "title": "Publish the currently deployed draft version as the public live version of the app.",
+      "id": "feature-add-an-in-app-app-status-live-link-section-that-clearly-shows-the-current-app-url-derived-from-window-location-origin-window-location-pathname-and-provides-a-one-click-copy-link-action-so-a-user-can-always-obtain-a-working-link-without-relying-on-any-placeholder-url",
+      "title": "Add an in-app “App Status / Live Link” section that clearly shows the current app URL (derived from window.location.origin + window.location.pathname) and provides a one-click “Copy link” action, so a user can always obtain a working link without relying on any placeholder URL.",
       "reqIds": [
-        "REQ-9"
+        "REQ-1"
       ],
       "version": 1
     },
     {
-      "id": "feature-investigate-and-fix-any-build-deploy-issues-that-prevent-the-draft-from-successfully-deploying-with-the-goal-of-making-deployments-reliably-complete-despite-the-known-intermittent-deployment-failures",
-      "title": "Investigate and fix any build/deploy issues that prevent the draft from successfully deploying, with the goal of making deployments reliably complete despite the known intermittent deployment failures.",
+      "id": "feature-expose-a-lightweight-backend-query-that-returns-deployment-diagnostics-at-minimum-backend-canister-principal-and-a-backend-reported-timestamp-version-string-and-surface-that-information-in-the-app-status-live-link-section-to-help-confirm-the-live-deployment-is-serving-the-expected-backend",
+      "title": "Expose a lightweight backend query that returns deployment diagnostics (at minimum: backend canister principal and a backend-reported timestamp/version string), and surface that information in the “App Status / Live Link” section to help confirm the live deployment is serving the expected backend.",
       "reqIds": [
-        "REQ-10"
+        "REQ-2"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-add-a-short-english-going-live-checklist-panel-in-the-app-status-live-link-section-that-explains-how-to-verify-the-app-is-live-e-g-open-the-copied-link-in-a-private-incognito-window-confirm-content-loads-confirm-diagnostics-values-appear-without-referencing-or-depending-on-builder-ui-controls",
+      "title": "Add a short, English “Going Live Checklist” panel in the “App Status / Live Link” section that explains how to verify the app is live (e.g., open the copied link in a private/incognito window, confirm content loads, confirm diagnostics values appear), without referencing or depending on builder UI controls.",
+      "reqIds": [
+        "REQ-3"
       ],
       "version": 1
     }
   ],
   "new_feature_requests": [],
+  "gameProjectType": "none",
   "projectName": "Next Time Vacations",
   "clarification_mode": "instant",
   "clarification_rounds": 0

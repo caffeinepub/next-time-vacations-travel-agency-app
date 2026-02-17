@@ -1,51 +1,63 @@
 {
   "kind": "implementation_plan",
   "version": "1.0",
-  "title": "Next Time Vacations — Push live readiness and deployment reliability (frontend)",
+  "title": "In-app Live Link and Deployment Diagnostics in Admin Settings",
   "requirements": [
     {
-      "id": "REQ-9",
-      "summary": "Ensure the live app loads the standard home view and correctly renders shared itineraries when opened with a valid share link parameter.",
+      "id": "REQ-1",
+      "summary": "Show a runtime-derived live app URL in Admin Settings with one-click copy and success toast.",
       "acceptanceCriteria": [
-        "A live (non-preview) public URL is available for the app and loads successfully.",
-        "The live app renders the standard home page and can also render a shared itinerary page when opened with a valid share link parameter (e.g., ?share=<id>)."
+        "A user can open the Admin Settings dialog and see a labeled field showing the current app URL.",
+        "A “Copy link” button copies the displayed URL to the clipboard and shows a success toast.",
+        "The displayed URL never uses placeholder text (e.g., https://_YOUR_APP_URL_/live) and is computed from the current browser location at runtime."
       ],
       "file_operations": [
         {
-          "path": "frontend/src/App.tsx",
+          "path": "frontend/src/components/AppStatusLiveLinkSection.tsx",
+          "operation": "create",
+          "description": "Create an \"App Status / Live Link\" UI section component that computes the current app URL at runtime from window.location.origin + window.location.pathname, displays it in a labeled read-only field, and provides a \"Copy link\" action that writes to navigator.clipboard and shows a success toast via the existing sonner toast usage."
+        },
+        {
+          "path": "frontend/src/components/AdminSettingsDialog.tsx",
           "operation": "modify",
-          "description": "Harden share-link detection so it works consistently across query string and hash-based URLs by using the existing URL-param utility (instead of directly reading window.location.search). Also make the share-link view selection resilient to navigation changes (e.g., back/forward) so opening or removing ?share=<id> reliably switches between SharedItineraryPage and the standard home view."
+          "description": "Compose (do not modify) existing shadcn/ui components to render the new AppStatusLiveLinkSection within the Admin Settings dialog so users can always find and copy the current live URL."
         }
       ]
     },
     {
-      "id": "REQ-10",
-      "summary": "Reduce frontend build/deploy failures by eliminating provider duplication, tightening TypeScript/runtime safety, and improving diagnostic output during app startup.",
+      "id": "REQ-2",
+      "summary": "Fetch and display backend deployment diagnostics in the App Status / Live Link section with graceful error handling.",
       "acceptanceCriteria": [
-        "A clean build of the frontend succeeds without TypeScript errors.",
-        "A canister build/deploy succeeds end-to-end at least twice in succession without manual intervention (i.e., no intermittent deployment failure for these attempts).",
-        "If deployment still fails due to platform-side expiration, the app build process provides actionable error output identifying the failure stage (frontend build vs canister build vs deploy)."
+        "Backend provides a public query method that returns (a) the canister principal and (b) a backend-generated string suitable for display (e.g., last-updated timestamp or build/version identifier).",
+        "Frontend calls this query via the existing actor/react-query pattern and renders the returned values in the “App Status / Live Link” section.",
+        "If the diagnostics call fails, the UI shows a non-blocking error state (no app crash) with an English message indicating diagnostics could not be loaded."
       ],
       "file_operations": [
         {
-          "path": "frontend/src/App.tsx",
+          "path": "frontend/src/hooks/useQueries.ts",
           "operation": "modify",
-          "description": "Remove the duplicate React Query client/provider creation inside App (QueryClient + QueryClientProvider) and rely on the single top-level provider from main.tsx to avoid subtle runtime/provider ordering issues that can contribute to nondeterministic behavior during deploy and hydration."
+          "description": "Add a new react-query hook (using the existing actor/react-query pattern) to query backend diagnostics via the existing actor method getBackendDiagnostics(), with safe defaults and non-throwing behavior suitable for UI rendering."
         },
         {
-          "path": "frontend/src/main.tsx",
+          "path": "frontend/src/components/AppStatusLiveLinkSection.tsx",
           "operation": "modify",
-          "description": "Configure the single shared QueryClient here (including the defaultOptions currently set in App.tsx) and keep provider composition centralized. Add a lightweight top-level startup error boundary wrapper (or equivalent guarded rendering) so unexpected initialization errors produce clear, actionable console output distinguishing 'app startup' failures from backend/agent initialization failures."
-        },
+          "description": "Use the new diagnostics query hook to render deployment diagnostics values in the \"App Status / Live Link\" section; include a non-blocking error UI state with an English message (e.g., \"Diagnostics could not be loaded\") when the diagnostics query fails."
+        }
+      ]
+    },
+    {
+      "id": "REQ-3",
+      "summary": "Add an English Going Live Checklist panel near the live link with practical verification steps.",
+      "acceptanceCriteria": [
+        "Checklist text is visible in the UI near the live link and is written in clear English.",
+        "Checklist includes at least: incognito/private window verification, and a note that diagnostics should load if the backend is reachable.",
+        "No checklist step references internal builder UI elements like a Draft/Live toolbar or a Push to Live button."
+      ],
+      "file_operations": [
         {
-          "path": "frontend/src/hooks/useActor.ts",
+          "path": "frontend/src/components/AppStatusLiveLinkSection.tsx",
           "operation": "modify",
-          "description": "Add explicit stage-labeled error handling and logging around actor creation and access-control initialization so failures clearly indicate whether the break happened during 'frontend actor creation' vs 'access-control init' (improves actionable output when deploy intermittently fails and helps isolate frontend build/runtime failures from deploy issues). Ensure errors are surfaced predictably to React Query (rather than failing silently) to avoid inconsistent retry loops."
-        },
-        {
-          "path": "frontend/src/components/SharedItineraryPage.tsx",
-          "operation": "modify",
-          "description": "Add defensive rendering for the shared itinerary flow to prevent unexpected runtime exceptions (e.g., missing itinerary fields) from crashing the shared view; ensure invalid/inactive links always render the existing error state. This reduces the chance of live URL load failures for shared links due to partial/undefined data."
+          "description": "Add a \"Going Live Checklist\" panel within the \"App Status / Live Link\" section containing clear English steps (including incognito/private window verification and a note that diagnostics should load if the backend is reachable) without referencing any builder/publisher controls."
         }
       ]
     }

@@ -251,6 +251,7 @@ export interface backendInterface {
     getAllShareableLinks(arg0: {
     }): Promise<Array<ShareableLink>>;
     getAverageRatingByCruiseId(cruiseId: string): Promise<number>;
+    getBackendDiagnostics(): Promise<[Time, string]>;
     getBookingsByUser(arg0: {
     }): Promise<Array<Booking>>;
     getBrandingSettings(): Promise<BrandingSettings>;
@@ -637,6 +638,26 @@ export class Backend implements backendInterface {
         } else {
             const result = await this.actor.getAverageRatingByCruiseId(arg0);
             return result;
+        }
+    }
+    async getBackendDiagnostics(): Promise<[Time, string]> {
+        if (this.processError) {
+            try {
+                const result = await this.actor.getBackendDiagnostics();
+                return [
+                    result[0],
+                    result[1]
+                ];
+            } catch (e) {
+                this.processError(e);
+                throw new Error("unreachable");
+            }
+        } else {
+            const result = await this.actor.getBackendDiagnostics();
+            return [
+                result[0],
+                result[1]
+            ];
         }
     }
     async getBookingsByUser(arg0: {

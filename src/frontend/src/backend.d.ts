@@ -151,6 +151,7 @@ export interface backendInterface {
     getAllShareableLinks(arg0: {
     }): Promise<Array<ShareableLink>>;
     getAverageRatingByCruiseId(cruiseId: string): Promise<number>;
+    getBackendDiagnostics(): Promise<[Time, string]>;
     getBookingsByUser(arg0: {
     }): Promise<Array<Booking>>;
     getBrandingSettings(): Promise<BrandingSettings>;

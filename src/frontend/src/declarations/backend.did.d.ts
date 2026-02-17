@@ -187,6 +187,7 @@ export interface _SERVICE {
   'getAllRSVPs' : ActorMethod<[], Array<RSVP>>,
   'getAllShareableLinks' : ActorMethod<[{}], Array<ShareableLink>>,
   'getAverageRatingByCruiseId' : ActorMethod<[string], number>,
+  'getBackendDiagnostics' : ActorMethod<[], [Time, string]>,
   'getBookingsByUser' : ActorMethod<[{}], Array<Booking>>,
   'getBrandingSettings' : ActorMethod<[], BrandingSettings>,
   'getCallerUserProfile' : ActorMethod<[], [] | [UserProfile]>,

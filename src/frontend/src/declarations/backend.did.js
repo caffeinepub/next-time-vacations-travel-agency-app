@@ -210,6 +210,7 @@ export const idlService = IDL.Service({
       ['query'],
     ),
   'getAverageRatingByCruiseId' : IDL.Func([IDL.Text], [IDL.Float64], ['query']),
+  'getBackendDiagnostics' : IDL.Func([], [Time, IDL.Text], ['query']),
   'getBookingsByUser' : IDL.Func(
       [IDL.Record({})],
       [IDL.Vec(Booking)],
@@ -482,6 +483,7 @@ export const idlFactory = ({ IDL }) => {
         [IDL.Float64],
         ['query'],
       ),
+    'getBackendDiagnostics' : IDL.Func([], [Time, IDL.Text], ['query']),
     'getBookingsByUser' : IDL.Func(
         [IDL.Record({})],
         [IDL.Vec(Booking)],

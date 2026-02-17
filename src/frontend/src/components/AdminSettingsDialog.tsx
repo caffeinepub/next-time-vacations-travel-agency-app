@@ -7,6 +7,8 @@ import { UserRole } from '../backend';
 import { toast } from 'sonner';
 import { Badge } from '@/components/ui/badge';
 import { Alert, AlertDescription } from '@/components/ui/alert';
+import { Separator } from '@/components/ui/separator';
+import { AppStatusLiveLinkSection } from './AppStatusLiveLinkSection';
 
 interface AdminSettingsDialogProps {
   open: boolean;
@@ -41,18 +43,23 @@ export function AdminSettingsDialog({ open, onOpenChange }: AdminSettingsDialogP
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="sm:max-w-[500px]">
+      <DialogContent className="sm:max-w-[600px] max-h-[90vh] overflow-y-auto">
         <DialogHeader>
           <DialogTitle className="flex items-center gap-2">
             <Shield className="h-5 w-5 text-ocean-600" />
             Admin Settings
           </DialogTitle>
           <DialogDescription>
-            Manage your admin privileges and access control settings
+            Manage your admin privileges, access control settings, and view your live app link
           </DialogDescription>
         </DialogHeader>
 
         <div className="space-y-6 py-4">
+          {/* App Status & Live Link Section */}
+          <AppStatusLiveLinkSection />
+
+          <Separator />
+
           {/* Current Status */}
           <div className="space-y-3">
             <h3 className="text-sm font-medium">Current Status</h3>

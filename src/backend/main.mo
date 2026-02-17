@@ -1,18 +1,22 @@
 import Array "mo:core/Array";
-import Iter "mo:core/Iter";
-import Nat "mo:core/Nat";
 import Int "mo:core/Int";
+import Iter "mo:core/Iter";
 import Map "mo:core/Map";
+import Nat "mo:core/Nat";
+import Order "mo:core/Order";
+import Principal "mo:core/Principal";
+import Runtime "mo:core/Runtime";
 import Text "mo:core/Text";
 import Time "mo:core/Time";
-import Order "mo:core/Order";
-import Runtime "mo:core/Runtime";
-import Principal "mo:core/Principal";
-import InviteLinksModule "invite-links/invite-links-module";
-import MixinAuthorization "authorization/MixinAuthorization";
-import AccessControl "authorization/access-control";
-import MixinStorage "blob-storage/Mixin";
 
+import AccessControl "authorization/access-control";
+import MixinAuthorization "authorization/MixinAuthorization";
+import MixinStorage "blob-storage/Mixin";
+import InviteLinksModule "invite-links/invite-links-module";
+
+import Migration "migration";
+
+(with migration = Migration.run)
 actor {
   include MixinStorage();
 
@@ -20,6 +24,8 @@ actor {
   include MixinAuthorization(accessControlState);
 
   let inviteState = InviteLinksModule.initState();
+
+  var backendVersion : Text = "1.0.0";
 
   type CruiseDeal = {
     id : Text;
@@ -200,6 +206,10 @@ actor {
     public func compareByPrice(a : Cabin, b : Cabin) : Order.Order {
       Nat.compare(a.price, b.price);
     };
+  };
+
+  public query func getBackendDiagnostics() : async (Time.Time, Text) {
+    (Time.now(), backendVersion);
   };
 
   func joinTextArray(array : [Text], separator : Text) : Text {
